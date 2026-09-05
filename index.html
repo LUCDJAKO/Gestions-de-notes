@@ -39,12 +39,12 @@ table{border-collapse:separate;border-spacing:0;min-width:max-content;width:100%
 th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:3px 4px;text-align:center;white-space:nowrap;font-size:13px;color:var(--text)}
 thead th{position:sticky;top:0;z-index:3;background:var(--thead);vertical-align:top}
 tfoot td{position:sticky;bottom:0;z-index:3;background:var(--tfoot);font-weight:700}
-.st-num{position:sticky;left:0;z-index:2;background:var(--cell);min-width:34px;width:34px}
-.st-name{position:sticky;left:34px;z-index:2;background:var(--cell);text-align:left;min-width:230px;padding:6px}
+.st-num{position:sticky;left:0;z-index:2;background:var(--cell);min-width:32px;width:32px}
+.st-name{position:sticky;left:32px;z-index:2;background:var(--cell);text-align:left;padding:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 thead .st-num,thead .st-name{background:var(--thead);z-index:5}
 tfoot .st-num,tfoot .st-name{background:var(--tfoot);z-index:5}
 tbody tr:nth-child(even) td{background:var(--zebra)}
-input.name{width:100%;min-width:260px;padding:9px 6px;border:1px solid var(--line2);border-radius:4px;font-size:15px;background:var(--input);color:var(--text)}
+input.name{width:100%;min-width:240px;padding:9px 6px;border:1px solid var(--line2);border-radius:4px;font-size:15px;background:var(--input);color:var(--text)}
 input.big{width:84px;padding:9px 4px;border:2px solid var(--inputb);border-radius:6px;text-align:center;font-size:18px;font-weight:700;background:var(--input);color:var(--text)}
 input.big:focus{outline:3px solid var(--or)}
 .g{background:var(--ok)!important;color:var(--okt)!important;font-weight:700}
@@ -54,15 +54,17 @@ input.big:focus{outline:3px solid var(--or)}
 .hgold{background:var(--or2)!important;color:#1a1a1a!important}
 .ph{color:var(--ph)}
 .moy-big{font-size:18px;padding:8px 10px;min-width:90px}
-/* ---- vue d'ensemble : meilleure lisibilité ---- */
+
+/* ---- Vue d'ensemble : colonne nom compacte et notes mises en valeur ---- */
 .vue td,.vue th{border-right:1px solid var(--line2)}
-.vue td.nt{font-size:calc(17px*var(--z));font-weight:700;min-width:calc(56px*var(--z));padding:calc(9px*var(--z)) 6px}
-.vue .st-name{font-size:calc(15px*var(--z));font-weight:600;padding:8px 6px}
-.vue td.mo{font-size:calc(18px*var(--z));min-width:84px}
+.vue .st-name{font-size:calc(13px*var(--z));font-weight:600;padding:6px;max-width:calc(130px*var(--z));min-width:calc(110px*var(--z))}
+.vue.wide-names .st-name{max-width:calc(220px*var(--z));min-width:calc(200px*var(--z))}
+.vue td.nt{font-size:calc(16px*var(--z));font-weight:700;min-width:calc(46px*var(--z));padding:calc(7px*var(--z)) 4px}
+.vue td.mo{font-size:calc(17px*var(--z));min-width:76px}
 .vue tr.sel td{box-shadow:inset 0 3px 0 var(--or),inset 0 -3px 0 var(--or)}
 .vue tr.sel .st-name{color:var(--accent)}
-.colhead{display:flex;flex-direction:column;gap:2px;align-items:center;padding:5px 4px;border-radius:6px;cursor:pointer;min-width:56px;color:#1a1a1a}
-.colhead b{font-size:15px}
+.colhead{display:flex;flex-direction:column;gap:1px;align-items:center;padding:4px 2px;border-radius:6px;cursor:pointer;min-width:46px;color:#1a1a1a}
+.colhead b{font-size:14px}
 .colhead small{font-size:10px;font-weight:400}
 .chip{display:inline-block;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;margin:2px}
 .appr{display:inline-block;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap}
@@ -99,7 +101,7 @@ const TERMS={
   2:{label:'2e Trimestre',short:'T2',coef:2,color:'#8e24aa'},
   3:{label:'3e Trimestre',short:'T3',coef:2,color:'#f4511e'}
 };
-/* Appréciations automatiques (sur la moyenne /20) */
+/* Appréciations automatiques */
 const APPR=[
   {min:17,label:'Très bien',bg:'#1b5e20',fg:'#fff'},
   {min:14,label:'Bien',bg:'#43a047',fg:'#fff'},
@@ -129,7 +131,7 @@ const tcol=n=>n==null?'':(n>=10?'tok':'tko');
 const coefLabel=e=>e.scale===10?'Sur 10 — coef 0,5':'Sur 20 — coef '+e.coef;
 const nextCoef=e=>e.scale===10?{scale:20,coef:1}:e.coef===1?{scale:20,coef:2}:{scale:10,coef:0.5};
 const splitNames=t=>t.split(/\n/).map(x=>x.trim()).filter(Boolean).slice(0,NB_ELEVES);
-const ZOOMS=[1,1.2,1.4,1.6];
+const ZOOMS=[0.9,1,1.1,1.2,1.3];
 
 /* ================= CALCULS ================= */
 function calcMoyenne(student,evals,term){
@@ -160,7 +162,7 @@ const ERow=memo(function ERow({s,pos,value,placeholder,half,moy,onVal}){
   const n=parseNum(value);
   return(<tr>
     <td className="st-num">{pos}</td>
-    <td className="st-name">{s.name||<span className="ph">Élève {pos}</span>}</td>
+    <td className="st-name" title={s.name}>{s.name||<span className="ph">Élève {pos}</span>}</td>
     <td><input className={'big '+(half?col(n,half):'')} inputMode="decimal" value={value} placeholder={placeholder} onChange={e=>onVal(s.id,e.target.value)}/></td>
     <td className={col(moy,10)} style={{fontSize:15,minWidth:64}}>{fmt(moy)}</td>
   </tr>);
@@ -170,7 +172,7 @@ const ERow=memo(function ERow({s,pos,value,placeholder,half,moy,onVal}){
 const VRow=memo(function VRow({s,pos,evals,term,r,rank,sel,onSel,onClear}){
   return(<tr className={sel?'sel':''} onClick={()=>onSel(s.id)}>
     <td className="st-num">{pos}</td>
-    <td className="st-name">{s.name||<span className="ph">Élève {pos}</span>}</td>
+    <td className="st-name" title={s.name}>{s.name||<span className="ph">Élève {pos}</span>}</td>
     {evals.map((ev,i)=>{const v=s.notes[term][i];return <td key={i} className={'nt '+col(parseNum(v),ev.scale/2)}>{v||<span className="ph">·</span>}</td>;})}
     <td className="bonuscell">{s.bonus[term]||''}</td>
     <td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td>
@@ -186,7 +188,7 @@ function App(){
   const [data,setData]=useState(()=>{
     let d=null;try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)d=JSON.parse(raw);}catch(e){}
     if(!d||!Array.isArray(d.classes)||!d.classes.length){const c=newClass('6ème A');d={classes:[c],currentClassId:c.id,view:'eleves'};}
-    return{term:1,sort:'default',hideEmpty:false,view:'saisie',cur:0,dark:false,zoom:1,...d};
+    return{term:1,sort:'default',hideEmpty:false,view:'saisie',cur:0,dark:false,zoom:1,wideNames:false,...d};
   });
   const [lastSave,setLastSave]=useState(null);
   const [toast,setToast]=useState('');
@@ -202,7 +204,7 @@ function App(){
   const fileRef=useRef();
   const cls=data.classes.find(c=>c.id===data.currentClassId)||data.classes[0];
   const term=[1,2,3].includes(data.term)?data.term:1;
-  const {sort,hideEmpty,view,cur,dark}=data;
+  const {sort,hideEmpty,view,cur,dark,wideNames}=data;
   const zoom=ZOOMS.includes(data.zoom)?data.zoom:1;
   const isBonus=cur==='bonus';
   const showToast=m=>{setToast(m);setTimeout(()=>setToast(''),2500);};
@@ -349,10 +351,10 @@ function App(){
           </div>
           <p className="hint">Saisissez ici les noms et prénoms. Ils sont ensuite utilisés automatiquement dans toutes les pages.</p>
           <div className="tbl-wrap"><table>
-            <thead><tr><th className="st-num">N°</th><th className="st-name">Nom et prénom(s)</th><th className="noprint"></th></tr></thead>
+            <thead><tr><th className="st-num">N°</th><th className="st-name" style={{maxWidth:300}}>Nom et prénom(s)</th><th className="noprint"></th></tr></thead>
             <tbody>{cls.students.map((s,i)=>(hideEmpty&&!s.name.trim())?null:(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
-              <td className="st-name"><input className="name" value={s.name} placeholder={'Élève '+(i+1)} onChange={e=>onName(s.id,e.target.value)}/></td>
+              <td className="st-name" style={{maxWidth:300}}><input className="name" value={s.name} placeholder={'Élève '+(i+1)} onChange={e=>onName(s.id,e.target.value)}/></td>
               <td className="noprint"><button className="btn red" style={{padding:'3px 7px'}} onClick={()=>onClear(s.id)}>✕</button></td>
             </tr>))}</tbody>
           </table></div>
@@ -413,12 +415,12 @@ function App(){
           <div className="tbl-wrap"><table>
             <thead><tr>
               <th className="st-num">N°</th>
-              <th className="st-name">Nom et prénom(s)</th>
+              <th className="st-name" style={{maxWidth:180}}>Nom et prénom(s)</th>
               <th style={{background:isBonus?'#ffd54f':TYPES[curEval.type].color,color:'#1a1a1a',fontSize:14}}>{isBonus?'BONUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&curEval.date&&<br/>}{!isBonus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
               <th>Moyenne<br/>/20</th>
             </tr></thead>
             <tbody>{sorted.map(({s,i})=><ERow key={s.id} s={s} pos={i+1} value={isBonus?s.bonus[term]:s.notes[term][cur]} placeholder={isBonus?'0':'/'+curEval.scale} half={isBonus?null:curEval.scale/2} moy={results.map[s.id].moyenne} onVal={onVal}/>)}</tbody>
-            <tfoot><tr><td className="st-num"></td><td className="st-name">Moyenne de la classe</td><td className={isBonus?'':col(mean(curVals),curEval.scale/2)}>{fmt(mean(curVals))}</td><td className={col(colStats.moy,10)}>{fmt(colStats.moy)}</td></tr></tfoot>
+            <tfoot><tr><td className="st-num"></td><td className="st-name" style={{maxWidth:180}}>Moyenne de la classe</td><td className={isBonus?'':col(mean(curVals),curEval.scale/2)}>{fmt(mean(curVals))}</td><td className={col(colStats.moy,10)}>{fmt(colStats.moy)}</td></tr></tfoot>
           </table></div>
           <div className="row noprint" style={{marginTop:8,justifyContent:'space-between'}}>
             <button className="btn big" onClick={prevEval}>◀ Précédente</button>
@@ -432,6 +434,7 @@ function App(){
           {!tall&&<StatsBar/>}
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar/>
+            <button className="btn light" onClick={()=>set({wideNames:!wideNames})}>{wideNames?'Noms : Compact (130px)':'Noms : Large (220px)'}</button>
             <button className="btn light" onClick={zoomOut} disabled={zoom===ZOOMS[0]}>A−</button>
             <b>{Math.round(zoom*100)} %</b>
             <button className="btn light" onClick={zoomIn} disabled={zoom===ZOOMS[ZOOMS.length-1]}>A+</button>
@@ -454,12 +457,12 @@ function App(){
             <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
           </div>
           {!tall&&<p className="hint noprint">👆 Appuyez sur une ligne pour la surligner, sur l'en-tête d'une colonne (N1, N2… ou Bonus) pour ouvrir sa page de saisie.</p>}
-          <div className={'tbl-wrap vue'+(tall?' tall':'')} style={{'--z':zoom}}><table>
+          <div className={'tbl-wrap vue'+(tall?' tall':'')+(wideNames?' wide-names':'')} style={{'--z':zoom}}><table>
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name">Nom et prénom(s)</th>
               {evals.map((ev,i)=><th key={i} onClick={()=>goEval(i)}><div className="colhead" style={{background:TYPES[ev.type].color}}>
-                <b>N{i+1}</b><small>{TYPES[ev.type].short} /{ev.scale}</small><small>coef {ev.scale===10?'0,5':ev.coef}</small><small>📅 {fmtDate(ev.date)||'—'}</small>{ev.label&&<small style={{maxWidth:70,overflow:'hidden',textOverflow:'ellipsis'}}>{ev.label}</small>}
+                <b>N{i+1}</b><small>{TYPES[ev.type].short} /{ev.scale}</small><small>coef {ev.scale===10?'0,5':ev.coef}</small><small>📅 {fmtDate(ev.date)||'—'}</small>{ev.label&&<small style={{maxWidth:60,overflow:'hidden',textOverflow:'ellipsis'}}>{ev.label}</small>}
               </div></th>)}
               <th onClick={()=>goEval('bonus')}><div className="colhead" style={{background:'#ffd54f'}}><b>BONUS</b><small>points</small><small>✏️</small></div></th>
               <th>Total<br/>points</th><th>Σ coef</th>
@@ -491,7 +494,7 @@ function App(){
           <div className="tbl-wrap"><table>
             <thead><tr>
               <th className="st-num">N°</th>
-              <th className="st-name">Nom et prénom(s)</th>
+              <th className="st-name" style={{maxWidth:200}}>Nom et prénom(s)</th>
               {detail&&<React.Fragment><th className="hgold">Bonus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
               <th className="hgold" style={{fontSize:15}}>MOYENNE<br/>/20</th>
               <th style={{fontSize:14}}>Rang</th>
@@ -499,7 +502,7 @@ function App(){
             </tr></thead>
             <tbody>{sorted.map(({s,i})=>{const r=results.map[s.id];return(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
-              <td className="st-name" style={{fontSize:15}}>{s.name||<span className="ph">Élève {i+1}</span>}</td>
+              <td className="st-name" style={{fontSize:15,maxWidth:200}} title={s.name}>{s.name||<span className="ph">Élève {i+1}</span>}</td>
               {detail&&<React.Fragment><td className="bonuscell">{s.bonus[term]||''}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
               <td className={'moy-big '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
               <td style={{fontWeight:700,fontSize:15}}>{rankLabel(results.ranks[s.id])}</td>
@@ -507,7 +510,7 @@ function App(){
             </tr>);})}</tbody>
             <tfoot><tr>
               <td className="st-num"></td>
-              <td className="st-name">Moyenne de la classe</td>
+              <td className="st-name" style={{maxWidth:200}}>Moyenne de la classe</td>
               {detail&&<React.Fragment><td>{fmt(colStats.bonus)}</td><td></td><td></td></React.Fragment>}
               <td className={'moy-big '+col(colStats.moy,10)}>{fmt(colStats.moy)}</td>
               <td></td><td><Appr m={colStats.moy}/></td>
@@ -536,20 +539,20 @@ function App(){
           <p className="hint">Moyenne annuelle = (T1 × 1 + T2 × 2 + T3 × 2) ÷ 5. Si un trimestre n'a aucune note, elle est calculée avec les trimestres disponibles.</p>
           <div className="tbl-wrap"><table>
             <thead><tr>
-              <th className="st-num">N°</th><th className="st-name">Nom et prénom(s)</th>
+              <th className="st-num">N°</th><th className="st-name" style={{maxWidth:180}}>Nom et prénom(s)</th>
               {[1,2,3].map(t=><React.Fragment key={t}><th style={{background:TERMS[t].color,color:'#fff'}}>{TERMS[t].short}<br/><small>coef {TERMS[t].coef}</small></th><th style={{background:TERMS[t].color+'55'}}>Rang</th></React.Fragment>)}
               <th className="hgold" style={{fontSize:14}}>MOYENNE<br/>ANNUELLE</th><th className="hgold">Rang<br/>annuel</th><th>Appréciation<br/>annuelle</th>
             </tr></thead>
             <tbody>{sorted.map(({s,i})=>{const a=livret.annual[s.id];return(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
-              <td className="st-name">{s.name||<span className="ph">Élève {i+1}</span>}</td>
+              <td className="st-name" style={{maxWidth:180}} title={s.name}>{s.name||<span className="ph">Élève {i+1}</span>}</td>
               {[1,2,3].map(t=>{const m=livret.per[t][s.id];return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td>{rankLabel(livret.ranks[t][s.id])}</td></React.Fragment>;})}
               <td className={col(a,10)} style={{fontSize:15}}>{fmt(a)}</td>
               <td style={{fontWeight:700}}>{rankLabel(livret.rankA[s.id])}</td>
               <td><Appr m={a}/></td>
             </tr>);})}</tbody>
             <tfoot><tr>
-              <td className="st-num"></td><td className="st-name">Moyenne de la classe</td>
+              <td className="st-num"></td><td className="st-name" style={{maxWidth:180}}>Moyenne de la classe</td>
               {[1,2,3].map(t=>{const m=mean(cls.students.map(s=>livret.per[t][s.id]));return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td></td></React.Fragment>;})}
               {(()=>{const m=mean(cls.students.map(s=>livret.annual[s.id]));return <React.Fragment><td className={col(m,10)} style={{fontSize:15}}>{fmt(m)}</td><td></td><td><Appr m={m}/></td></React.Fragment>;})()}
             </tr></tfoot>
