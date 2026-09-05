@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestiNotes – Gestion des notes</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+:root{--vert:#1b5e20;--vert2:#2e7d32;--vert3:#e8f5e9;--or:#c9a227;--or2:#ffd54f;--or3:#fff8e1;}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Roboto,Arial,sans-serif;background:var(--vert3);color:#1a1a1a;font-size:14px}
+header{background:linear-gradient(135deg,var(--vert),var(--vert2));color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:4px solid var(--or)}
+header h1{margin:0;font-size:20px;color:var(--or2)}
+header small{display:block;font-size:11px;opacity:.9}
+.wrap{padding:8px}
+.card{background:#fff;border:1px solid #c8e6c9;border-radius:10px;padding:8px;margin-bottom:8px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.btn{border:none;border-radius:8px;padding:9px 11px;font-size:13px;font-weight:600;cursor:pointer;background:var(--vert2);color:#fff}
+.btn.or{background:var(--or);color:#1a1a1a}
+.btn.red{background:#c62828}
+.btn.grey{background:#78909c}
+.btn.light{background:#fff;color:var(--vert);border:2px solid var(--vert2)}
+.btn.active{outline:3px solid var(--or2)}
+.btn.big{font-size:15px;padding:12px 14px}
+select,input[type=text],input[type=date],textarea{padding:8px;border:1px solid #a5d6a7;border-radius:6px;font-size:15px;background:#fff}
+label.lbl{display:block;font-weight:700;color:var(--vert);margin:8px 0 3px;font-size:13px}
+.tab{padding:9px 12px;border-radius:8px 8px 0 0;font-weight:700;color:#fff;border:none;opacity:.55;cursor:pointer}
+.tab.on{opacity:1;box-shadow:0 -3px 0 var(--or) inset}
+.view{flex:1;padding:11px 2px;border-radius:8px;font-weight:700;font-size:12px;background:#fff;color:var(--vert);border:2px solid var(--vert2);cursor:pointer;min-width:60px}
+.view.on{background:var(--vert);color:var(--or2)}
+.tbl-wrap{overflow:auto;max-height:66vh;border:1px solid #c8e6c9;border-radius:8px;background:#fff}
+table{border-collapse:separate;border-spacing:0;min-width:max-content;width:100%}
+th,td{border-bottom:1px solid #e0e0e0;border-right:1px solid #eee;padding:3px 4px;text-align:center;white-space:nowrap;font-size:13px}
+thead th{position:sticky;top:0;z-index:3;background:var(--vert3);vertical-align:top}
+tfoot td{position:sticky;bottom:0;z-index:3;background:var(--or3);font-weight:700}
+.st-num{position:sticky;left:0;z-index:2;background:#fff;min-width:34px;width:34px}
+.st-name{position:sticky;left:34px;z-index:2;background:#fff;text-align:left;min-width:230px;padding:6px}
+thead .st-num,thead .st-name{background:var(--vert3);z-index:5}
+tfoot .st-num,tfoot .st-name{background:var(--or3);z-index:5}
+input.name{width:100%;min-width:260px;padding:9px 6px;border:1px solid #cfd8dc;border-radius:4px;font-size:15px}
+input.big{width:84px;padding:9px 4px;border:2px solid #a5d6a7;border-radius:6px;text-align:center;font-size:18px;font-weight:700;background:#fff}
+input.big:focus{outline:3px solid var(--or)}
+.g{background:#c8e6c9!important;color:#1b5e20!important;font-weight:700}
+.r{background:#ffcdd2!important;color:#b71c1c!important;font-weight:700}
+.moy-big{font-size:18px;padding:8px 10px;min-width:90px}
+.colhead{display:flex;flex-direction:column;gap:2px;align-items:center;padding:4px 3px;border-radius:6px;cursor:pointer;min-width:56px}
+.colhead small{font-size:10px;font-weight:400}
+.chip{display:inline-block;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;margin:2px}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--vert);color:var(--or2);padding:10px 18px;border-radius:20px;font-weight:700;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.stats{display:flex;flex-wrap:wrap;gap:6px}
+.stat{background:var(--or3);border:1px solid var(--or2);border-radius:8px;padding:6px 10px;font-size:12px}
+.stat b{display:block;font-size:16px;color:var(--vert)}
+.menu{position:absolute;background:#fff;border:2px solid var(--vert2);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.rel{position:relative}
+.panel{border:2px solid var(--or);background:var(--or3);border-radius:10px;padding:8px;margin-bottom:8px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
+.modal .box{background:#fff;border-radius:12px;padding:12px;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-top:6px solid var(--or)}
+.hint{font-size:12px;color:#555;margin:4px 0}
+.coefbtn{background:var(--vert);color:var(--or2);font-size:16px;padding:12px 16px;border-radius:10px;border:3px solid var(--or)}
+@media print{.noprint{display:none!important}.tbl-wrap{max-height:none;overflow:visible}body{background:#fff}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useCallback,useRef,memo}=React;
+
+/* ================= CONFIGURATION ================= */
+const NB_ELEVES=100, NB_NOTES=20, STORAGE_KEY='gestinotes_v1';
+const TYPES={
+  IE:{label:'Interrogation écrite',short:'IE',color:'#bbdefb'},
+  IO:{label:'Interrogation orale',short:'IO',color:'#f8bbd0'},
+  DC:{label:'Devoir de classe',short:'DC',color:'#ffe0b2'},
+  DN:{label:'Devoir de niveau',short:'DN',color:'#e1bee7'}
+};
+const TERMS={
+  1:{label:'1er Trimestre',short:'T1',coef:1,color:'#1e88e5'},
+  2:{label:'2e Trimestre',short:'T2',coef:2,color:'#8e24aa'},
+  3:{label:'3e Trimestre',short:'T3',coef:2,color:'#f4511e'}
+};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const newEval=()=>({type:'IE',scale:20,coef:1,label:'',date:''});
+const newEvals=()=>Array.from({length:NB_NOTES},newEval);
+const emptyNotes=()=>({1:Array(NB_NOTES).fill(''),2:Array(NB_NOTES).fill(''),3:Array(NB_NOTES).fill('')});
+const newStudent=(i,name='')=>({id:uid()+i,name,notes:emptyNotes(),bonus:{1:'',2:'',3:''}});
+const newClass=(name,names=[])=>({id:uid(),name,students:Array.from({length:NB_ELEVES},(_,i)=>newStudent(i,names[i]||'')),evals:{1:newEvals(),2:newEvals(),3:newEvals()}});
+const parseNum=v=>{if(v===''||v==null)return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
+const fmt=n=>n==null?'-':n.toFixed(2).replace('.',',');
+const fmtDate=d=>{if(!d)return'';const p=d.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0].slice(2):d;};
+const rankLabel=r=>!r?'-':(r.rank===1?'1er':r.rank+'e')+(r.ex?' ex':'');
+const validNum=v=>/^\d{0,2}([.,]\d{0,2})?$/.test(v);
+const col=(n,half)=>n==null?'':(n>=half?'g':'r');
+const coefLabel=e=>e.scale===10?'Sur 10 — coef 0,5':'Sur 20 — coef '+e.coef;
+const nextCoef=e=>e.scale===10?{scale:20,coef:1}:e.coef===1?{scale:20,coef:2}:{scale:10,coef:0.5};
+const splitNames=t=>t.split(/\n/).map(x=>x.trim()).filter(Boolean).slice(0,NB_ELEVES);
+
+/* ================= CALCULS ================= */
+function calcMoyenne(student,evals,term){
+  let total=0,sumCoef=0,count=0;const notes=student.notes[term];
+  evals.forEach((ev,i)=>{const n=parseNum(notes[i]);if(n==null)return;count++;
+    if(ev.scale===10){total+=n;sumCoef+=0.5;}else{total+=n*ev.coef;sumCoef+=ev.coef;}});
+  if(count===0)return{total:null,sumCoef:0,moyenne:null,count:0};
+  total+=parseNum(student.bonus[term])||0;
+  const m=Math.max(0,Math.min(20,total/sumCoef));
+  return{total:Math.round(total*100)/100,sumCoef,moyenne:Math.round(m*100)/100,count};
+}
+function computeRanks(list){
+  const vals=list.filter(x=>x.moyenne!=null).map(x=>x.moyenne);const r={};
+  list.forEach(x=>{if(x.moyenne==null){r[x.id]=null;return;}
+    const higher=vals.filter(v=>v>x.moyenne).length,ties=vals.filter(v=>v===x.moyenne).length;
+    r[x.id]={rank:higher+1,ex:ties>1};});
+  return r;
+}
+const mean=arr=>{const v=arr.filter(x=>x!=null);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length*100)/100:null;};
+
+/* ================= LOGO ================= */
+const Logo=()=>(<svg width="44" height="44" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#c9a227"/><circle cx="32" cy="32" r="26" fill="#1b5e20"/>
+<path d="M32 16 L52 25 L32 34 L12 25 Z" fill="#ffd54f"/><path d="M20 29 V39 Q32 47 44 39 V29 L32 34 Z" fill="#fff8e1"/>
+<path d="M52 25 V38" stroke="#ffd54f" strokeWidth="2.5"/><circle cx="52" cy="40" r="2.5" fill="#ffd54f"/></svg>);
+
+/* ================= LIGNE DE SAISIE ================= */
+const ERow=memo(function ERow({s,pos,value,placeholder,half,moy,onVal}){
+  const n=parseNum(value);
+  return(<tr>
+    <td className="st-num">{pos}</td>
+    <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {pos}</span>}</td>
+    <td><input className={'big '+(half?col(n,half):'')} inputMode="decimal" value={value} placeholder={placeholder} onChange={e=>onVal(s.id,e.target.value)}/></td>
+    <td className={col(moy,10)} style={{fontSize:15,minWidth:64}}>{fmt(moy)}</td>
+  </tr>);
+});
+
+/* ================= LIGNE DE VISUALISATION ================= */
+const VRow=memo(function VRow({s,pos,evals,term,r,rank,onClear}){
+  return(<tr>
+    <td className="st-num">{pos}</td>
+    <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {pos}</span>}</td>
+    {evals.map((ev,i)=>{const v=s.notes[term][i];return <td key={i} className={col(parseNum(v),ev.scale/2)} style={{fontSize:14,minWidth:44}}>{v||''}</td>;})}
+    <td style={{background:'#fff8e1',fontWeight:700}}>{s.bonus[term]||''}</td>
+    <td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td>
+    <td className={col(r.moyenne,10)} style={{fontSize:15}}>{fmt(r.moyenne)}</td>
+    <td style={{fontWeight:700}}>{rank}</td>
+    <td className="noprint"><button className="btn red" style={{padding:'3px 7px'}} onClick={()=>onClear(s.id)}>✕</button></td>
+  </tr>);
+});
+
+/* ================= APPLICATION ================= */
+function App(){
+  const [data,setData]=useState(()=>{
+    let d=null;try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)d=JSON.parse(raw);}catch(e){}
+    if(!d||!Array.isArray(d.classes)||!d.classes.length){const c=newClass('6ème A');d={classes:[c],currentClassId:c.id,view:'eleves'};}
+    return{term:1,sort:'default',hideEmpty:false,view:'saisie',cur:0,...d};
+  });
+  const [lastSave,setLastSave]=useState(null);
+  const [toast,setToast]=useState('');
+  const [delMenu,setDelMenu]=useState(false);
+  const [pasteOpen,setPasteOpen]=useState(false);
+  const [pasteTxt,setPasteTxt]=useState('');
+  const [createOpen,setCreateOpen]=useState(false);
+  const [newName,setNewName]=useState('');
+  const [newNames,setNewNames]=useState('');
+  const [detail,setDetail]=useState(false);
+  const fileRef=useRef();
+  const cls=data.classes.find(c=>c.id===data.currentClassId)||data.classes[0];
+  const term=[1,2,3].includes(data.term)?data.term:1;
+  const {sort,hideEmpty,view,cur}=data;
+  const isBonus=cur==='bonus';
+  const showToast=m=>{setToast(m);setTimeout(()=>setToast(''),2500);};
+
+  /* sauvegarde automatique */
+  useEffect(()=>{const t=setTimeout(()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));setLastSave(new Date());}catch(e){}},600);return()=>clearTimeout(t);},[data]);
+  const saveNow=()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));setLastSave(new Date());showToast('💾 Sauvegarde effectuée');}catch(e){showToast('⚠️ Échec de la sauvegarde');}};
+  const exportJSON=()=>{const blob=new Blob([JSON.stringify(data)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gestinotes-'+new Date().toISOString().slice(0,10)+'.json';a.click();showToast('📤 Fichier exporté');};
+  const importJSON=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.classes)throw 0;setData(x=>({...x,...d}));showToast('📥 Données importées');}catch(x){showToast('⚠️ Fichier invalide');}};r.readAsText(f);e.target.value='';};
+
+  /* mises à jour */
+  const set=(patch)=>setData(d=>({...d,...patch}));
+  const updateClass=useCallback(fn=>setData(d=>({...d,classes:d.classes.map(c=>c.id===d.currentClassId?fn(c):c)})),[]);
+  const updateStudent=useCallback((sid,fn)=>updateClass(c=>({...c,students:c.students.map(s=>s.id===sid?fn(s):s)})),[updateClass]);
+  const onName=useCallback((sid,v)=>updateStudent(sid,s=>({...s,name:v})),[updateStudent]);
+  const evals=cls.evals[term];
+  const curEval=isBonus?null:evals[cur];
+  const onVal=useCallback((sid,v)=>{
+    if(!validNum(v))return;
+    if(isBonus){updateStudent(sid,s=>({...s,bonus:{...s.bonus,[term]:v}}));return;}
+    const scale=curEval.scale;const n=parseNum(v);if(n!=null&&n>scale)v=String(scale);
+    updateStudent(sid,s=>({...s,notes:{...s.notes,[term]:s.notes[term].map((x,k)=>k===cur?v:x)}}));
+  },[updateStudent,term,cur,isBonus,curEval&&curEval.scale]);
+  const onClear=useCallback(sid=>{if(!confirm('Effacer le nom et toutes les notes de cet élève ?'))return;updateStudent(sid,s=>({...s,name:'',notes:emptyNotes(),bonus:{1:'',2:'',3:''}}));},[updateStudent]);
+  const setEval=(i,patch)=>updateClass(c=>({...c,evals:{...c.evals,[term]:c.evals[term].map((e,k)=>k===i?{...e,...patch}:e)}}));
+  const setAllType=t=>{updateClass(c=>({...c,evals:{...c.evals,[term]:c.evals[term].map(e=>({...e,type:t}))}}));showToast('Type appliqué aux 20 évaluations');};
+  const goEval=(i)=>set({cur:i,view:'saisie'});
+  const prevEval=()=>goEval(isBonus?NB_NOTES-1:Math.max(0,cur-1));
+  const nextEval=()=>goEval(isBonus?'bonus':(cur>=NB_NOTES-1?'bonus':cur+1));
+
+  /* classes */
+  const openCreate=()=>{setNewName('');setNewNames('');setCreateOpen(true);};
+  const createClass=()=>{const n=newName.trim();if(!n){alert('Indiquez le nom de la classe');return;}
+    const names=splitNames(newNames);const c=newClass(n,names);
+    setData(d=>({...d,classes:[...d.classes,c],currentClassId:c.id,view:'saisie',cur:0,term:1}));setCreateOpen(false);showToast('Classe « '+n+' » créée avec '+names.length+' élèves');};
+  const renameClass=()=>{const n=prompt('Nouveau nom de la classe :',cls.name);if(n)updateClass(c=>({...c,name:n.trim()}));};
+  const deleteClass=()=>{if(!confirm('Supprimer définitivement la classe « '+cls.name+' » ?'))return;setData(d=>{let rest=d.classes.filter(c=>c.id!==cls.id);if(!rest.length)rest=[newClass('Nouvelle classe')];return{...d,classes:rest,currentClassId:rest[0].id};});};
+  const resetClass=()=>{if(!confirm('RÉINITIALISER la classe « '+cls.name+' » ? Tous les noms, notes et réglages des 3 trimestres seront effacés.'))return;updateClass(c=>({...newClass(c.name),id:c.id}));showToast('♻️ Classe réinitialisée');};
+  const clearNames=()=>{if(!confirm('Effacer tous les noms des élèves ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,name:''}))}));setDelMenu(false);};
+  const clearNotes=()=>{if(!confirm('Effacer toutes les notes du '+TERMS[term].label+' ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,notes:{...s.notes,[term]:Array(NB_NOTES).fill('')}}))}));setDelMenu(false);};
+  const clearBonus=()=>{if(!confirm('Effacer tous les bonus du '+TERMS[term].label+' ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,bonus:{...s.bonus,[term]:''}}))}));setDelMenu(false);};
+  const clearCurrent=()=>{if(isBonus){clearBonus();return;}if(!confirm('Effacer toutes les notes de N'+(cur+1)+' ?'))return;
+    updateClass(c=>({...c,students:c.students.map(s=>({...s,notes:{...s.notes,[term]:s.notes[term].map((x,k)=>k===cur?'':x)}}))}));};
+  const applyPaste=()=>{const lines=splitNames(pasteTxt);updateClass(c=>({...c,students:c.students.map((s,i)=>i<lines.length?{...s,name:lines[i]}:s)}));setPasteOpen(false);setPasteTxt('');showToast(lines.length+' noms importés');};
+  const sortRoster=()=>{if(!confirm('Ranger définitivement la liste par ordre alphabétique (les notes suivent chaque élève) ?'))return;
+    updateClass(c=>({...c,students:[...c.students].sort((a,b)=>{const na=a.name.trim(),nb=b.name.trim();if(!na&&!nb)return 0;if(!na)return 1;if(!nb)return -1;return na.localeCompare(nb,'fr',{sensitivity:'base'});})}));showToast('Liste rangée par ordre alphabétique');};
+
+  /* calculs */
+  const results=useMemo(()=>{const map={};cls.students.forEach(s=>map[s.id]=calcMoyenne(s,evals,term));
+    const ranks=computeRanks(cls.students.map(s=>({id:s.id,moyenne:map[s.id].moyenne})));return{map,ranks};},[cls,term]);
+  const colStats=useMemo(()=>({
+    cols:evals.map((_,i)=>mean(cls.students.map(s=>parseNum(s.notes[term][i])))),
+    bonus:mean(cls.students.map(s=>parseNum(s.bonus[term]))),
+    moy:mean(cls.students.map(s=>results.map[s.id].moyenne))}),[cls,term,results]);
+  const livret=useMemo(()=>{const per={1:{},2:{},3:{}},ranks={},annual={};
+    [1,2,3].forEach(t=>{cls.students.forEach(s=>per[t][s.id]=calcMoyenne(s,cls.evals[t],t).moyenne);ranks[t]=computeRanks(cls.students.map(s=>({id:s.id,moyenne:per[t][s.id]})));});
+    cls.students.forEach(s=>{let num=0,den=0;[1,2,3].forEach(t=>{const m=per[t][s.id];if(m!=null){num+=m*TERMS[t].coef;den+=TERMS[t].coef;}});annual[s.id]=den?Math.round(num/den*100)/100:null;});
+    const rankA=computeRanks(cls.students.map(s=>({id:s.id,moyenne:annual[s.id]})));return{per,ranks,annual,rankA};},[cls]);
+
+  /* tri */
+  const isLivret=view==='livret';
+  const getMoy=s=>isLivret?livret.annual[s.id]:results.map[s.id].moyenne;
+  const sorted=useMemo(()=>{let arr=cls.students.map((s,i)=>({s,i}));
+    if(hideEmpty)arr=arr.filter(x=>x.s.name.trim());
+    if(sort==='merit')arr.sort((a,b)=>{const ma=getMoy(a.s),mb=getMoy(b.s);if(ma==null&&mb==null)return a.i-b.i;if(ma==null)return 1;if(mb==null)return -1;return mb-ma||a.i-b.i;});
+    else if(sort==='alpha')arr.sort((a,b)=>{const na=a.s.name.trim(),nb=b.s.name.trim();if(!na&&!nb)return a.i-b.i;if(!na)return 1;if(!nb)return -1;return na.localeCompare(nb,'fr',{sensitivity:'base'})||a.i-b.i;});
+    return arr;},[cls,sort,hideEmpty,results,livret,view]);
+
+  const named=cls.students.filter(s=>s.name.trim()).length;
+  const moyList=(isLivret?cls.students.map(s=>livret.annual[s.id]):cls.students.map(s=>results.map[s.id].moyenne)).filter(x=>x!=null);
+  const moyClasse=mean(moyList);
+  const hasTerm=view==='saisie'||view==='vue'||view==='moyennes';
+  const termColor=hasTerm?TERMS[term].color:'#c9a227';
+  const curVals=isBonus?cls.students.map(s=>parseNum(s.bonus[term])):cls.students.map(s=>parseNum(s.notes[term][cur]));
+  const curFilled=curVals.filter(x=>x!=null);
+  const titles={eleves:'Liste des élèves',saisie:TERMS[term].label,vue:TERMS[term].label+' — Vue d\'ensemble',moyennes:TERMS[term].label+' — Moyennes',livret:'Livret scolaire'};
+
+  const SortBar=({merit=true})=>(<React.Fragment>
+    {merit&&<button className={'btn or'+(sort==='merit'?' active':'')} onClick={()=>set({sort:'merit'})}>🏆 Ordre de mérite</button>}
+    <button className={'btn or'+(sort==='alpha'?' active':'')} onClick={()=>set({sort:'alpha'})}>🔤 Alphabétique</button>
+    <button className={'btn grey'+(sort==='default'?' active':'')} onClick={()=>set({sort:'default'})}>Ordre de saisie</button>
+    <button className={'btn grey'+(hideEmpty?' active':'')} onClick={()=>set({hideEmpty:!hideEmpty})}>{hideEmpty?'👁 Afficher les 100 lignes':'👁 Masquer les lignes vides'}</button>
+  </React.Fragment>);
+
+  const StatsBar=()=>(<div className="stats" style={{marginBottom:8}}>
+    <div className="stat">Effectif<b>{named}</b></div>
+    <div className="stat">Moyenne classe<b style={{color:moyClasse==null?'':moyClasse>=10?'#1b5e20':'#b71c1c'}}>{fmt(moyClasse)}</b></div>
+    <div className="stat">Plus forte<b>{moyList.length?fmt(Math.max(...moyList)):'-'}</b></div>
+    <div className="stat">Plus faible<b>{moyList.length?fmt(Math.min(...moyList)):'-'}</b></div>
+    <div className="stat">Moy. ≥ 10<b style={{color:'#1b5e20'}}>{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
+    <div className="stat">Moy. &lt; 10<b style={{color:'#b71c1c'}}>{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
+  </div>);
+
+  return(<div>
+    <header>
+      <Logo/>
+      <div style={{flex:1}}><h1>GestiNotes</h1><small>Notes • Moyennes • Rangs • Livret scolaire</small></div>
+      <div style={{textAlign:'right',fontSize:11}}>{lastSave?'✓ Auto-sauvegardé '+lastSave.toLocaleTimeString('fr-FR'):'…'}</div>
+    </header>
+
+    <div className="wrap">
+      {/* ---- Classes ---- */}
+      <div className="card row noprint">
+        <b style={{color:'var(--vert)'}}>Classe :</b>
+        <select value={cls.id} onChange={e=>set({currentClassId:e.target.value})}>{data.classes.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select>
+        <button className="btn or" onClick={openCreate}>+ Nouvelle classe</button>
+        <button className="btn light" onClick={renameClass}>✏️ Renommer</button>
+        <button className="btn red" onClick={deleteClass}>🗑 Supprimer la classe</button>
+      </div>
+
+      {/* ---- Choix de la page ---- */}
+      <div className="row noprint" style={{marginBottom:8,gap:4}}>
+        <button className={'view'+(view==='eleves'?' on':'')} onClick={()=>set({view:'eleves'})}>👥 Élèves</button>
+        <button className={'view'+(view==='saisie'?' on':'')} onClick={()=>set({view:'saisie'})}>✏️ Saisie</button>
+        <button className={'view'+(view==='vue'?' on':'')} onClick={()=>set({view:'vue'})}>📊 Ensemble</button>
+        <button className={'view'+(view==='moyennes'?' on':'')} onClick={()=>set({view:'moyennes'})}>📈 Moyennes</button>
+        <button className={'view'+(view==='livret'?' on':'')} onClick={()=>set({view:'livret'})}>📘 Livret</button>
+      </div>
+
+      {/* ---- Onglets trimestres ---- */}
+      {hasTerm&&<div className="row noprint" style={{gap:3}}>
+        {[1,2,3].map(t=><button key={t} className={'tab'+(term===t?' on':'')} style={{background:TERMS[t].color}} onClick={()=>set({term:t})}>{TERMS[t].label} (coef {TERMS[t].coef})</button>)}
+      </div>}
+
+      <div className="card" style={{borderTop:'5px solid '+termColor,borderRadius:hasTerm?'0 10px 10px 10px':10}}>
+        <h2 style={{margin:'0 0 8px',color:termColor,fontSize:18}}>{cls.name} — {titles[view]}</h2>
+
+        {/* ============ PAGE ÉLÈVES ============ */}
+        {view==='eleves'&&<div>
+          <div className="stats" style={{marginBottom:8}}><div className="stat">Élèves inscrits<b>{named} / {NB_ELEVES}</b></div></div>
+          <div className="row noprint" style={{marginBottom:8}}>
+            <button className="btn or" onClick={()=>setPasteOpen(true)}>📋 Coller une liste de noms</button>
+            <button className="btn light" onClick={sortRoster}>🔤 Ranger par ordre alphabétique</button>
+            <button className={'btn grey'+(hideEmpty?' active':'')} onClick={()=>set({hideEmpty:!hideEmpty})}>{hideEmpty?'👁 Afficher les 100 lignes':'👁 Masquer les lignes vides'}</button>
+            <button className="btn red" onClick={clearNames}>🗑 Effacer tous les noms</button>
+            <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
+          </div>
+          <p className="hint">Saisissez ici les noms et prénoms. Ils sont ensuite utilisés automatiquement dans toutes les pages.</p>
+          <div className="tbl-wrap"><table>
+            <thead><tr><th className="st-num">N°</th><th className="st-name">Nom et prénom(s)</th><th className="noprint"></th></tr></thead>
+            <tbody>{cls.students.map((s,i)=>(hideEmpty&&!s.name.trim())?null:(<tr key={s.id}>
+              <td className="st-num">{i+1}</td>
+              <td className="st-name"><input className="name" value={s.name} placeholder={'Élève '+(i+1)} onChange={e=>onName(s.id,e.target.value)}/></td>
+              <td className="noprint"><button className="btn red" style={{padding:'3px 7px'}} onClick={()=>onClear(s.id)}>✕</button></td>
+            </tr>))}</tbody>
+          </table></div>
+          <div className="row noprint" style={{marginTop:8,justifyContent:'flex-end'}}>
+            <button className="btn or big" onClick={()=>set({view:'saisie'})}>✏️ Passer à la saisie des notes ▶</button>
+          </div>
+        </div>}
+
+        {/* ============ PAGE DE SAISIE ============ */}
+        {view==='saisie'&&<div>
+          <div className="row noprint" style={{marginBottom:8}}>
+            <button className="btn big" onClick={prevEval}>◀</button>
+            <select value={cur} onChange={e=>goEval(e.target.value==='bonus'?'bonus':+e.target.value)} style={{flex:1,fontSize:16,fontWeight:700,minWidth:160}}>
+              {evals.map((ev,i)=><option key={i} value={i}>N{i+1} — {TYPES[ev.type].short} /{ev.scale} coef {ev.scale===10?'0,5':ev.coef}{ev.date?' — '+fmtDate(ev.date):''}{ev.label?' — '+ev.label:''}</option>)}
+              <option value="bonus">➕ BONUS</option>
+            </select>
+            <button className="btn big" onClick={nextEval}>▶</button>
+            <button className={'btn or big'+(isBonus?' active':'')} onClick={()=>goEval('bonus')}>➕ Bonus</button>
+          </div>
+
+          {!isBonus&&<div className="panel noprint" style={{background:TYPES[curEval.type].color+'66',borderColor:TYPES[curEval.type].color}}>
+            <div className="row" style={{marginBottom:6}}>
+              <b style={{fontSize:16}}>N{cur+1}</b>
+              <label style={{fontWeight:700}}>📅 Date :</label>
+              <input type="date" value={curEval.date||''} onChange={e=>setEval(cur,{date:e.target.value})}/>
+              <input type="text" placeholder="Intitulé (facultatif) : ex. Chapitre 3" value={curEval.label||''} onChange={e=>setEval(cur,{label:e.target.value})} style={{flex:1,minWidth:160}}/>
+            </div>
+            <div className="row" style={{marginBottom:6}}><b>Type :</b>
+              {Object.entries(TYPES).map(([k,t])=><button key={k} className={'btn'+(curEval.type===k?' active':'')} style={{background:t.color,color:'#1a1a1a'}} onClick={()=>setEval(cur,{type:k})}>{t.label}</button>)}
+            </div>
+            <div className="row" style={{marginBottom:6}}>
+              <b>Barème / coefficient :</b>
+              <button className="btn coefbtn" onClick={()=>setEval(cur,nextCoef(curEval))}>⚖️ {coefLabel(curEval)}</button>
+              <span className="hint">(appuyez pour changer : /10 coef 0,5 → /20 coef 1 → /20 coef 2)</span>
+            </div>
+            <button className="btn grey" onClick={()=>setAllType(curEval.type)}>Appliquer « {TYPES[curEval.type].label} » aux 20 évaluations du trimestre</button>
+          </div>}
+          {isBonus&&<div className="panel noprint">
+            <b style={{fontSize:16}}>➕ Bonus du {TERMS[term].label}</b>
+            <p className="hint">Les points de bonus sont <b>ajoutés au total des points</b> de l'élève avant la division par la somme des coefficients. Exemple : total 120 points, Σ coef 8, bonus 4 → (120 + 4) ÷ 8 = 15,50. La moyenne reste plafonnée à 20.</p>
+          </div>}
+
+          <div className="stats" style={{marginBottom:8}}>
+            <div className="stat">Saisies<b>{curFilled.length} / {named||'…'}</b></div>
+            <div className="stat">Moyenne {isBonus?'bonus':'N'+(cur+1)}<b>{fmt(mean(curVals))}</b></div>
+            <div className="stat">Max<b>{curFilled.length?fmt(Math.max(...curFilled)):'-'}</b></div>
+            <div className="stat">Min<b>{curFilled.length?fmt(Math.min(...curFilled)):'-'}</b></div>
+            {!isBonus&&<div className="stat">≥ {curEval.scale/2}<b>{curFilled.filter(v=>v>=curEval.scale/2).length} / {curFilled.length}</b></div>}
+          </div>
+
+          <div className="row noprint" style={{marginBottom:8}}>
+            <SortBar merit={false}/>
+            <button className="btn light" onClick={()=>set({view:'eleves'})}>👥 Modifier les noms</button>
+            <button className="btn red" onClick={clearCurrent}>🗑 Effacer {isBonus?'les bonus':'les notes de N'+(cur+1)}</button>
+            <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
+          </div>
+
+          <div className="tbl-wrap"><table>
+            <thead><tr>
+              <th className="st-num">N°</th>
+              <th className="st-name">Nom et prénom(s)</th>
+              <th style={{background:isBonus?'#ffd54f':TYPES[curEval.type].color,fontSize:14}}>{isBonus?'BONUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&curEval.date&&<br/>}{!isBonus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
+              <th>Moyenne<br/>/20</th>
+            </tr></thead>
+            <tbody>{sorted.map(({s,i})=><ERow key={s.id} s={s} pos={i+1} value={isBonus?s.bonus[term]:s.notes[term][cur]} placeholder={isBonus?'0':'/'+curEval.scale} half={isBonus?null:curEval.scale/2} moy={results.map[s.id].moyenne} onVal={onVal}/>)}</tbody>
+            <tfoot><tr><td className="st-num"></td><td className="st-name">Moyenne de la classe</td><td className={isBonus?'':col(mean(curVals),curEval.scale/2)}>{fmt(mean(curVals))}</td><td className={col(colStats.moy,10)}>{fmt(colStats.moy)}</td></tr></tfoot>
+          </table></div>
+          <div className="row noprint" style={{marginTop:8,justifyContent:'space-between'}}>
+            <button className="btn big" onClick={prevEval}>◀ Précédente</button>
+            <button className="btn or big" onClick={()=>set({view:'moyennes'})}>📈 Voir les moyennes</button>
+            <button className="btn big" onClick={nextEval}>Suivante ▶</button>
+          </div>
+        </div>}
+
+        {/* ============ PAGE VUE D'ENSEMBLE ============ */}
+        {view==='vue'&&<div>
+          <StatsBar/>
+          <div className="row noprint" style={{marginBottom:8}}>
+            <SortBar/>
+            <button className="btn or" onClick={()=>goEval('bonus')}>➕ Saisir les bonus</button>
+            <span className="rel">
+              <button className="btn red" onClick={()=>setDelMenu(!delMenu)}>🗑 Supprimer ▾</button>
+              {delMenu&&<div className="menu">
+                <button className="btn light" onClick={clearNames}>Effacer tous les noms</button>
+                <button className="btn light" onClick={clearNotes}>Effacer les notes du trimestre</button>
+                <button className="btn light" onClick={clearBonus}>Effacer les bonus du trimestre</button>
+                <button className="btn grey" onClick={()=>setDelMenu(false)}>Annuler</button>
+              </div>}
+            </span>
+            <button className="btn red" onClick={resetClass}>♻️ Réinitialiser</button>
+            <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
+            <button className="btn" onClick={exportJSON}>📤 Exporter</button>
+            <button className="btn" onClick={()=>fileRef.current.click()}>📥 Importer</button>
+            <input type="file" accept=".json" ref={fileRef} style={{display:'none'}} onChange={importJSON}/>
+            <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
+          </div>
+          <p className="hint noprint">👆 Appuyez sur l'en-tête d'une colonne (N1, N2… ou Bonus) pour ouvrir sa page de saisie.</p>
+          <div className="tbl-wrap"><table>
+            <thead><tr>
+              <th className="st-num">N°</th>
+              <th className="st-name">Nom et prénom(s)</th>
+              {evals.map((ev,i)=><th key={i} onClick={()=>goEval(i)}><div className="colhead" style={{background:TYPES[ev.type].color}}>
+                <b>N{i+1}</b><small>{TYPES[ev.type].short} /{ev.scale}</small><small>coef {ev.scale===10?'0,5':ev.coef}</small><small>📅 {fmtDate(ev.date)||'—'}</small>{ev.label&&<small style={{maxWidth:70,overflow:'hidden',textOverflow:'ellipsis'}}>{ev.label}</small>}
+              </div></th>)}
+              <th onClick={()=>goEval('bonus')}><div className="colhead" style={{background:'#ffd54f'}}><b>BONUS</b><small>points</small><small>✏️</small></div></th>
+              <th>Total<br/>points</th><th>Σ coef</th>
+              <th style={{background:'#ffd54f',fontSize:14}}>MOYENNE<br/>/20</th>
+              <th>Rang</th><th className="noprint"></th>
+            </tr></thead>
+            <tbody>{sorted.map(({s,i})=><VRow key={s.id} s={s} pos={i+1} evals={evals} term={term} r={results.map[s.id]} rank={rankLabel(results.ranks[s.id])} onClear={onClear}/>)}</tbody>
+            <tfoot><tr>
+              <td className="st-num"></td>
+              <td className="st-name">Moyenne de la classe par évaluation</td>
+              {colStats.cols.map((m,i)=><td key={i} className={col(m,evals[i].scale/2)}>{fmt(m)}</td>)}
+              <td>{fmt(colStats.bonus)}</td><td></td><td></td>
+              <td className={col(colStats.moy,10)} style={{fontSize:15}}>{fmt(colStats.moy)}</td>
+              <td colSpan="2" style={{fontSize:11}}>Moy. des moyennes</td>
+            </tr></tfoot>
+          </table></div>
+        </div>}
+
+        {/* ============ PAGE MOYENNES UNIQUEMENT ============ */}
+        {view==='moyennes'&&<div>
+          <StatsBar/>
+          <div className="row noprint" style={{marginBottom:8}}>
+            <SortBar/>
+            <button className={'btn light'+(detail?' active':'')} onClick={()=>setDetail(!detail)}>{detail?'Masquer le détail':'🔍 Afficher le détail (bonus, total, Σ coef)'}</button>
+            <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
+            <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
+          </div>
+          <div className="tbl-wrap"><table>
+            <thead><tr>
+              <th className="st-num">N°</th>
+              <th className="st-name">Nom et prénom(s)</th>
+              {detail&&<React.Fragment><th style={{background:'#ffd54f'}}>Bonus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
+              <th style={{background:'#ffd54f',fontSize:15}}>MOYENNE<br/>/20</th>
+              <th style={{fontSize:14}}>Rang</th>
+            </tr></thead>
+            <tbody>{sorted.map(({s,i})=>{const r=results.map[s.id];return(<tr key={s.id}>
+              <td className="st-num">{i+1}</td>
+              <td className="st-name" style={{fontSize:15}}>{s.name||<span style={{color:'#bbb'}}>Élève {i+1}</span>}</td>
+              {detail&&<React.Fragment><td style={{background:'#fff8e1',fontWeight:700}}>{s.bonus[term]||''}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
+              <td className={'moy-big '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
+              <td style={{fontWeight:700,fontSize:15}}>{rankLabel(results.ranks[s.id])}</td>
+            </tr>);})}</tbody>
+            <tfoot><tr>
+              <td className="st-num"></td>
+              <td className="st-name">Moyenne de la classe</td>
+              {detail&&<React.Fragment><td>{fmt(colStats.bonus)}</td><td></td><td></td></React.Fragment>}
+              <td className={'moy-big '+col(colStats.moy,10)}>{fmt(colStats.moy)}</td>
+              <td></td>
+            </tr></tfoot>
+          </table></div>
+          <div className="row noprint" style={{marginTop:8,justifyContent:'space-between'}}>
+            <button className="btn big" onClick={()=>set({view:'saisie'})}>✏️ Saisie</button>
+            <button className="btn or big" onClick={()=>set({view:'vue'})}>📊 Vue d'ensemble</button>
+            <button className="btn big" onClick={()=>set({view:'livret'})}>📘 Livret</button>
+          </div>
+        </div>}
+
+        {/* ============ LIVRET SCOLAIRE ============ */}
+        {isLivret&&<div>
+          <div className="stats" style={{marginBottom:8}}>
+            <div className="stat">Effectif<b>{named}</b></div>
+            <div className="stat">Moyenne annuelle classe<b style={{color:moyClasse==null?'':moyClasse>=10?'#1b5e20':'#b71c1c'}}>{fmt(moyClasse)}</b></div>
+            <div className="stat">Moy. ≥ 10<b style={{color:'#1b5e20'}}>{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
+            <div className="stat">Moy. &lt; 10<b style={{color:'#b71c1c'}}>{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
+          </div>
+          <div className="row noprint" style={{marginBottom:8}}>
+            <SortBar/>
+            <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
+          </div>
+          <p className="hint">Moyenne annuelle = (T1 × 1 + T2 × 2 + T3 × 2) ÷ 5. Si un trimestre n'a aucune note, elle est calculée avec les trimestres disponibles.</p>
+          <div className="tbl-wrap"><table>
+            <thead><tr>
+              <th className="st-num">N°</th><th className="st-name">Nom et prénom(s)</th>
+              {[1,2,3].map(t=><React.Fragment key={t}><th style={{background:TERMS[t].color,color:'#fff'}}>{TERMS[t].short}<br/><small>coef {TERMS[t].coef}</small></th><th style={{background:TERMS[t].color+'55'}}>Rang</th></React.Fragment>)}
+              <th style={{background:'#ffd54f',fontSize:14}}>MOYENNE<br/>ANNUELLE</th><th style={{background:'#ffd54f'}}>Rang<br/>annuel</th>
+            </tr></thead>
+            <tbody>{sorted.map(({s,i})=>{const a=livret.annual[s.id];return(<tr key={s.id}>
+              <td className="st-num">{i+1}</td>
+              <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {i+1}</span>}</td>
+              {[1,2,3].map(t=>{const m=livret.per[t][s.id];return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td>{rankLabel(livret.ranks[t][s.id])}</td></React.Fragment>;})}
+              <td className={col(a,10)} style={{fontSize:15}}>{fmt(a)}</td>
+              <td style={{fontWeight:700}}>{rankLabel(livret.rankA[s.id])}</td>
+            </tr>);})}</tbody>
+            <tfoot><tr>
+              <td className="st-num"></td><td className="st-name">Moyenne de la classe</td>
+              {[1,2,3].map(t=>{const m=mean(cls.students.map(s=>livret.per[t][s.id]));return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td></td></React.Fragment>;})}
+              {(()=>{const m=mean(cls.students.map(s=>livret.annual[s.id]));return <td className={col(m,10)} style={{fontSize:15}}>{fmt(m)}</td>;})()}
+              <td></td>
+            </tr></tfoot>
+          </table></div>
+        </div>}
+
+        {/* ---- Légende ---- */}
+        <div style={{marginTop:8,fontSize:12}}>
+          <b>Légende :</b> {Object.values(TYPES).map(t=><span key={t.short} className="chip" style={{background:t.color}}>{t.short} = {t.label}</span>)}
+          {Object.values(TERMS).map(t=><span key={t.short} className="chip" style={{background:t.color,color:'#fff'}}>{t.label}</span>)}
+          <span className="chip" style={{background:'#ffd54f'}}>Bonus</span>
+          <span className="chip g">≥ moitié du barème</span><span className="chip r">&lt; moitié du barème</span>
+        </div>
+      </div>
+    </div>
+
+    {/* ---- Fenêtre : création d'une classe ---- */}
+    {createOpen&&<div className="modal"><div className="box">
+      <h3 style={{margin:'0 0 4px',color:'var(--vert)'}}>➕ Créer une nouvelle classe</h3>
+      <label className="lbl">Nom de la classe</label>
+      <input type="text" style={{width:'100%'}} value={newName} onChange={e=>setNewName(e.target.value)} placeholder="ex. 4ème B"/>
+      <label className="lbl">Noms et prénoms des élèves <span style={{fontWeight:400,color:'#555'}}>(un élève par ligne, 100 maximum)</span></label>
+      <textarea rows="12" style={{width:'100%'}} value={newNames} onChange={e=>setNewNames(e.target.value)} placeholder={'KOUAME Jean\nDIALLO Fatou\nTRAORE Moussa\n…'}/>
+      <p className="hint">{splitNames(newNames).length} élève(s) saisi(s). Vous pourrez compléter ou corriger la liste plus tard dans l'onglet 👥 Élèves.</p>
+      <div className="row" style={{marginTop:8,justifyContent:'flex-end'}}>
+        <button className="btn grey" onClick={()=>setCreateOpen(false)}>Annuler</button>
+        <button className="btn or big" onClick={createClass}>✅ Créer la classe</button>
+      </div>
+    </div></div>}
+
+    {/* ---- Fenêtre : coller une liste de noms ---- */}
+    {pasteOpen&&<div className="modal" onClick={()=>setPasteOpen(false)}><div className="box" onClick={e=>e.stopPropagation()}>
+      <h3 style={{margin:'0 0 6px',color:'var(--vert)'}}>📋 Coller la liste des élèves</h3>
+      <p className="hint">Un nom par ligne. Les noms remplaceront ceux des premières lignes.</p>
+      <textarea rows="10" style={{width:'100%'}} value={pasteTxt} onChange={e=>setPasteTxt(e.target.value)} placeholder={'KOUAME Jean\nDIALLO Fatou\n…'}/>
+      <div className="row" style={{marginTop:8,justifyContent:'flex-end'}}>
+        <button className="btn grey" onClick={()=>setPasteOpen(false)}>Annuler</button>
+        <button className="btn or" onClick={applyPaste}>Importer les noms</button>
+      </div>
+    </div></div>}
+
+    {toast&&<div className="toast">{toast}</div>}
+  </div>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
