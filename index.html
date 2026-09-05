@@ -404,6 +404,7 @@ function App(){
             <div className="stat">Min<b>{curFilled.length?fmt(Math.min(...curFilled)):'-'}</b></div>
             {!isBonus&&<div className="stat">≥ {curEval.scale/2}<b>{curFilled.filter(v=>v>=curEval.scale/2).length} / {curFilled.length}</b></div>}
           </div>
+          {!isBonus && curFilled.length > 0 && <ApprBar list={curFilled.map(v => (v / curEval.scale) * 20)} />}
 
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar merit={false}/>
@@ -601,4 +602,4 @@ function App(){
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
-</html>
+  </html>
