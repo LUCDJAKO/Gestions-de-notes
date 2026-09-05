@@ -8,58 +8,77 @@
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
-:root{--vert:#1b5e20;--vert2:#2e7d32;--vert3:#e8f5e9;--or:#c9a227;--or2:#ffd54f;--or3:#fff8e1;}
+:root{--vert:#1b5e20;--vert2:#2e7d32;--or:#c9a227;--or2:#ffd54f;
+--bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff;--zebra:#f3faf3;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffd54f;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--z:1}
+body.dark{--bg:#0b160d;--card:#152a18;--text:#eef3ee;--muted:#aebdae;--accent:#ffd54f;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3b3214;--cell:#152a18;--zebra:#1b321e;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3b3214;--stat:#2a2510;--statb:#8a7a2a;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3b3214}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Roboto,Arial,sans-serif;background:var(--vert3);color:#1a1a1a;font-size:14px}
-header{background:linear-gradient(135deg,var(--vert),var(--vert2));color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:4px solid var(--or)}
+body{margin:0;font-family:system-ui,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;transition:background .3s,color .3s}
+header{background:linear-gradient(135deg,var(--vert),var(--vert2));color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:4px solid var(--or);flex-wrap:wrap}
 header h1{margin:0;font-size:20px;color:var(--or2)}
 header small{display:block;font-size:11px;opacity:.9}
+.toggle{background:transparent;border:2px solid var(--or2);color:var(--or2);border-radius:20px;padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer}
 .wrap{padding:8px}
-.card{background:#fff;border:1px solid #c8e6c9;border-radius:10px;padding:8px;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;margin-bottom:8px}
 .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .btn{border:none;border-radius:8px;padding:9px 11px;font-size:13px;font-weight:600;cursor:pointer;background:var(--vert2);color:#fff}
 .btn.or{background:var(--or);color:#1a1a1a}
-.btn.red{background:#c62828}
-.btn.grey{background:#78909c}
-.btn.light{background:#fff;color:var(--vert);border:2px solid var(--vert2)}
+.btn.red{background:#c62828;color:#fff}
+.btn.grey{background:#78909c;color:#fff}
+.btn.light{background:var(--card);color:var(--accent);border:2px solid var(--vert2)}
 .btn.active{outline:3px solid var(--or2)}
 .btn.big{font-size:15px;padding:12px 14px}
-select,input[type=text],input[type=date],textarea{padding:8px;border:1px solid #a5d6a7;border-radius:6px;font-size:15px;background:#fff}
-label.lbl{display:block;font-weight:700;color:var(--vert);margin:8px 0 3px;font-size:13px}
+select,input[type=text],input[type=date],textarea{padding:8px;border:1px solid var(--inputb);border-radius:6px;font-size:15px;background:var(--input);color:var(--text)}
+label.lbl{display:block;font-weight:700;color:var(--accent);margin:8px 0 3px;font-size:13px}
 .tab{padding:9px 12px;border-radius:8px 8px 0 0;font-weight:700;color:#fff;border:none;opacity:.55;cursor:pointer}
 .tab.on{opacity:1;box-shadow:0 -3px 0 var(--or) inset}
-.view{flex:1;padding:11px 2px;border-radius:8px;font-weight:700;font-size:12px;background:#fff;color:var(--vert);border:2px solid var(--vert2);cursor:pointer;min-width:60px}
+.view{flex:1;padding:11px 2px;border-radius:8px;font-weight:700;font-size:12px;background:var(--card);color:var(--accent);border:2px solid var(--vert2);cursor:pointer;min-width:60px}
 .view.on{background:var(--vert);color:var(--or2)}
-.tbl-wrap{overflow:auto;max-height:66vh;border:1px solid #c8e6c9;border-radius:8px;background:#fff}
+.tbl-wrap{overflow:auto;max-height:66vh;border:1px solid var(--border);border-radius:8px;background:var(--card)}
+.tbl-wrap.tall{max-height:88vh}
 table{border-collapse:separate;border-spacing:0;min-width:max-content;width:100%}
-th,td{border-bottom:1px solid #e0e0e0;border-right:1px solid #eee;padding:3px 4px;text-align:center;white-space:nowrap;font-size:13px}
-thead th{position:sticky;top:0;z-index:3;background:var(--vert3);vertical-align:top}
-tfoot td{position:sticky;bottom:0;z-index:3;background:var(--or3);font-weight:700}
-.st-num{position:sticky;left:0;z-index:2;background:#fff;min-width:34px;width:34px}
-.st-name{position:sticky;left:34px;z-index:2;background:#fff;text-align:left;min-width:230px;padding:6px}
-thead .st-num,thead .st-name{background:var(--vert3);z-index:5}
-tfoot .st-num,tfoot .st-name{background:var(--or3);z-index:5}
-input.name{width:100%;min-width:260px;padding:9px 6px;border:1px solid #cfd8dc;border-radius:4px;font-size:15px}
-input.big{width:84px;padding:9px 4px;border:2px solid #a5d6a7;border-radius:6px;text-align:center;font-size:18px;font-weight:700;background:#fff}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:3px 4px;text-align:center;white-space:nowrap;font-size:13px;color:var(--text)}
+thead th{position:sticky;top:0;z-index:3;background:var(--thead);vertical-align:top}
+tfoot td{position:sticky;bottom:0;z-index:3;background:var(--tfoot);font-weight:700}
+.st-num{position:sticky;left:0;z-index:2;background:var(--cell);min-width:34px;width:34px}
+.st-name{position:sticky;left:34px;z-index:2;background:var(--cell);text-align:left;min-width:230px;padding:6px}
+thead .st-num,thead .st-name{background:var(--thead);z-index:5}
+tfoot .st-num,tfoot .st-name{background:var(--tfoot);z-index:5}
+tbody tr:nth-child(even) td{background:var(--zebra)}
+input.name{width:100%;min-width:260px;padding:9px 6px;border:1px solid var(--line2);border-radius:4px;font-size:15px;background:var(--input);color:var(--text)}
+input.big{width:84px;padding:9px 4px;border:2px solid var(--inputb);border-radius:6px;text-align:center;font-size:18px;font-weight:700;background:var(--input);color:var(--text)}
 input.big:focus{outline:3px solid var(--or)}
-.g{background:#c8e6c9!important;color:#1b5e20!important;font-weight:700}
-.r{background:#ffcdd2!important;color:#b71c1c!important;font-weight:700}
+.g{background:var(--ok)!important;color:var(--okt)!important;font-weight:700}
+.r{background:var(--ko)!important;color:var(--kot)!important;font-weight:700}
+.tok{color:var(--okt)!important}.tko{color:var(--kot)!important}
+.bonuscell{background:var(--bonus)!important;font-weight:700}
+.hgold{background:var(--or2)!important;color:#1a1a1a!important}
+.ph{color:var(--ph)}
 .moy-big{font-size:18px;padding:8px 10px;min-width:90px}
-.colhead{display:flex;flex-direction:column;gap:2px;align-items:center;padding:4px 3px;border-radius:6px;cursor:pointer;min-width:56px}
+/* ---- vue d'ensemble : meilleure lisibilité ---- */
+.vue td,.vue th{border-right:1px solid var(--line2)}
+.vue td.nt{font-size:calc(17px*var(--z));font-weight:700;min-width:calc(56px*var(--z));padding:calc(9px*var(--z)) 6px}
+.vue .st-name{font-size:calc(15px*var(--z));font-weight:600;padding:8px 6px}
+.vue td.mo{font-size:calc(18px*var(--z));min-width:84px}
+.vue tr.sel td{box-shadow:inset 0 3px 0 var(--or),inset 0 -3px 0 var(--or)}
+.vue tr.sel .st-name{color:var(--accent)}
+.colhead{display:flex;flex-direction:column;gap:2px;align-items:center;padding:5px 4px;border-radius:6px;cursor:pointer;min-width:56px;color:#1a1a1a}
+.colhead b{font-size:15px}
 .colhead small{font-size:10px;font-weight:400}
 .chip{display:inline-block;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;margin:2px}
+.appr{display:inline-block;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap}
 .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--vert);color:var(--or2);padding:10px 18px;border-radius:20px;font-weight:700;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .stats{display:flex;flex-wrap:wrap;gap:6px}
-.stat{background:var(--or3);border:1px solid var(--or2);border-radius:8px;padding:6px 10px;font-size:12px}
-.stat b{display:block;font-size:16px;color:var(--vert)}
-.menu{position:absolute;background:#fff;border:2px solid var(--vert2);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.stat{background:var(--stat);border:1px solid var(--statb);border-radius:8px;padding:6px 10px;font-size:12px}
+.stat b{display:block;font-size:16px;color:var(--accent)}
+.menu{position:absolute;background:var(--card);border:2px solid var(--vert2);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .rel{position:relative}
-.panel{border:2px solid var(--or);background:var(--or3);border-radius:10px;padding:8px;margin-bottom:8px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
-.modal .box{background:#fff;border-radius:12px;padding:12px;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-top:6px solid var(--or)}
-.hint{font-size:12px;color:#555;margin:4px 0}
+.panel{border:2px solid var(--or);background:var(--panel);border-radius:10px;padding:8px;margin-bottom:8px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
+.modal .box{background:var(--card);border-radius:12px;padding:12px;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-top:6px solid var(--or)}
+.hint{font-size:12px;color:var(--muted);margin:4px 0}
 .coefbtn{background:var(--vert);color:var(--or2);font-size:16px;padding:12px 16px;border-radius:10px;border:3px solid var(--or)}
-@media print{.noprint{display:none!important}.tbl-wrap{max-height:none;overflow:visible}body{background:#fff}}
+h3{color:var(--accent)}
+@media print{.noprint{display:none!important}.tbl-wrap{max-height:none;overflow:visible}body{background:#fff;color:#000}}
 </style>
 </head>
 <body>
@@ -80,6 +99,20 @@ const TERMS={
   2:{label:'2e Trimestre',short:'T2',coef:2,color:'#8e24aa'},
   3:{label:'3e Trimestre',short:'T3',coef:2,color:'#f4511e'}
 };
+/* Appréciations automatiques (sur la moyenne /20) */
+const APPR=[
+  {min:17,label:'Très bien',bg:'#1b5e20',fg:'#fff'},
+  {min:14,label:'Bien',bg:'#43a047',fg:'#fff'},
+  {min:12,label:'Assez bien',bg:'#9ccc65',fg:'#1a1a1a'},
+  {min:10,label:'Passable',bg:'#ffd54f',fg:'#1a1a1a'},
+  {min:8,label:'Insuffisant',bg:'#ffa726',fg:'#1a1a1a'},
+  {min:5,label:'Très insuffisant',bg:'#ef5350',fg:'#fff'},
+  {min:0,label:'Faible',bg:'#b71c1c',fg:'#fff'}
+];
+const appr=m=>m==null?null:APPR.find(a=>m>=a.min);
+const Appr=({m})=>{const a=appr(m);return a?<span className="appr" style={{background:a.bg,color:a.fg}}>{a.label}</span>:<span className="ph">-</span>;};
+const ApprBar=({list})=>(<div className="row" style={{marginBottom:8}}><b>Répartition :</b>{APPR.map(a=>{const n=list.filter(m=>appr(m)===a).length;return <span key={a.label} className="appr" style={{background:a.bg,color:a.fg,opacity:n?1:.4}}>{a.label} : {n}</span>;})}</div>);
+
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const newEval=()=>({type:'IE',scale:20,coef:1,label:'',date:''});
 const newEvals=()=>Array.from({length:NB_NOTES},newEval);
@@ -92,9 +125,11 @@ const fmtDate=d=>{if(!d)return'';const p=d.split('-');return p.length===3?p[2]+'
 const rankLabel=r=>!r?'-':(r.rank===1?'1er':r.rank+'e')+(r.ex?' ex':'');
 const validNum=v=>/^\d{0,2}([.,]\d{0,2})?$/.test(v);
 const col=(n,half)=>n==null?'':(n>=half?'g':'r');
+const tcol=n=>n==null?'':(n>=10?'tok':'tko');
 const coefLabel=e=>e.scale===10?'Sur 10 — coef 0,5':'Sur 20 — coef '+e.coef;
 const nextCoef=e=>e.scale===10?{scale:20,coef:1}:e.coef===1?{scale:20,coef:2}:{scale:10,coef:0.5};
 const splitNames=t=>t.split(/\n/).map(x=>x.trim()).filter(Boolean).slice(0,NB_ELEVES);
+const ZOOMS=[1,1.2,1.4,1.6];
 
 /* ================= CALCULS ================= */
 function calcMoyenne(student,evals,term){
@@ -125,23 +160,24 @@ const ERow=memo(function ERow({s,pos,value,placeholder,half,moy,onVal}){
   const n=parseNum(value);
   return(<tr>
     <td className="st-num">{pos}</td>
-    <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {pos}</span>}</td>
+    <td className="st-name">{s.name||<span className="ph">Élève {pos}</span>}</td>
     <td><input className={'big '+(half?col(n,half):'')} inputMode="decimal" value={value} placeholder={placeholder} onChange={e=>onVal(s.id,e.target.value)}/></td>
     <td className={col(moy,10)} style={{fontSize:15,minWidth:64}}>{fmt(moy)}</td>
   </tr>);
 });
 
 /* ================= LIGNE DE VISUALISATION ================= */
-const VRow=memo(function VRow({s,pos,evals,term,r,rank,onClear}){
-  return(<tr>
+const VRow=memo(function VRow({s,pos,evals,term,r,rank,sel,onSel,onClear}){
+  return(<tr className={sel?'sel':''} onClick={()=>onSel(s.id)}>
     <td className="st-num">{pos}</td>
-    <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {pos}</span>}</td>
-    {evals.map((ev,i)=>{const v=s.notes[term][i];return <td key={i} className={col(parseNum(v),ev.scale/2)} style={{fontSize:14,minWidth:44}}>{v||''}</td>;})}
-    <td style={{background:'#fff8e1',fontWeight:700}}>{s.bonus[term]||''}</td>
+    <td className="st-name">{s.name||<span className="ph">Élève {pos}</span>}</td>
+    {evals.map((ev,i)=>{const v=s.notes[term][i];return <td key={i} className={'nt '+col(parseNum(v),ev.scale/2)}>{v||<span className="ph">·</span>}</td>;})}
+    <td className="bonuscell">{s.bonus[term]||''}</td>
     <td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td>
-    <td className={col(r.moyenne,10)} style={{fontSize:15}}>{fmt(r.moyenne)}</td>
-    <td style={{fontWeight:700}}>{rank}</td>
-    <td className="noprint"><button className="btn red" style={{padding:'3px 7px'}} onClick={()=>onClear(s.id)}>✕</button></td>
+    <td className={'mo '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
+    <td style={{fontWeight:700,fontSize:15}}>{rank}</td>
+    <td><Appr m={r.moyenne}/></td>
+    <td className="noprint"><button className="btn red" style={{padding:'3px 7px'}} onClick={e=>{e.stopPropagation();onClear(s.id);}}>✕</button></td>
   </tr>);
 });
 
@@ -150,7 +186,7 @@ function App(){
   const [data,setData]=useState(()=>{
     let d=null;try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)d=JSON.parse(raw);}catch(e){}
     if(!d||!Array.isArray(d.classes)||!d.classes.length){const c=newClass('6ème A');d={classes:[c],currentClassId:c.id,view:'eleves'};}
-    return{term:1,sort:'default',hideEmpty:false,view:'saisie',cur:0,...d};
+    return{term:1,sort:'default',hideEmpty:false,view:'saisie',cur:0,dark:false,zoom:1,...d};
   });
   const [lastSave,setLastSave]=useState(null);
   const [toast,setToast]=useState('');
@@ -161,12 +197,18 @@ function App(){
   const [newName,setNewName]=useState('');
   const [newNames,setNewNames]=useState('');
   const [detail,setDetail]=useState(false);
+  const [tall,setTall]=useState(false);
+  const [sel,setSel]=useState(null);
   const fileRef=useRef();
   const cls=data.classes.find(c=>c.id===data.currentClassId)||data.classes[0];
   const term=[1,2,3].includes(data.term)?data.term:1;
-  const {sort,hideEmpty,view,cur}=data;
+  const {sort,hideEmpty,view,cur,dark}=data;
+  const zoom=ZOOMS.includes(data.zoom)?data.zoom:1;
   const isBonus=cur==='bonus';
   const showToast=m=>{setToast(m);setTimeout(()=>setToast(''),2500);};
+
+  /* mode sombre */
+  useEffect(()=>{document.body.classList.toggle('dark',!!dark);},[dark]);
 
   /* sauvegarde automatique */
   useEffect(()=>{const t=setTimeout(()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));setLastSave(new Date());}catch(e){}},600);return()=>clearTimeout(t);},[data]);
@@ -179,6 +221,7 @@ function App(){
   const updateClass=useCallback(fn=>setData(d=>({...d,classes:d.classes.map(c=>c.id===d.currentClassId?fn(c):c)})),[]);
   const updateStudent=useCallback((sid,fn)=>updateClass(c=>({...c,students:c.students.map(s=>s.id===sid?fn(s):s)})),[updateClass]);
   const onName=useCallback((sid,v)=>updateStudent(sid,s=>({...s,name:v})),[updateStudent]);
+  const onSel=useCallback(id=>setSel(x=>x===id?null:id),[]);
   const evals=cls.evals[term];
   const curEval=isBonus?null:evals[cur];
   const onVal=useCallback((sid,v)=>{
@@ -193,6 +236,8 @@ function App(){
   const goEval=(i)=>set({cur:i,view:'saisie'});
   const prevEval=()=>goEval(isBonus?NB_NOTES-1:Math.max(0,cur-1));
   const nextEval=()=>goEval(isBonus?'bonus':(cur>=NB_NOTES-1?'bonus':cur+1));
+  const zoomIn=()=>set({zoom:ZOOMS[Math.min(ZOOMS.length-1,ZOOMS.indexOf(zoom)+1)]});
+  const zoomOut=()=>set({zoom:ZOOMS[Math.max(0,ZOOMS.indexOf(zoom)-1)]});
 
   /* classes */
   const openCreate=()=>{setNewName('');setNewNames('');setCreateOpen(true);};
@@ -250,24 +295,25 @@ function App(){
 
   const StatsBar=()=>(<div className="stats" style={{marginBottom:8}}>
     <div className="stat">Effectif<b>{named}</b></div>
-    <div className="stat">Moyenne classe<b style={{color:moyClasse==null?'':moyClasse>=10?'#1b5e20':'#b71c1c'}}>{fmt(moyClasse)}</b></div>
+    <div className="stat">Moyenne classe<b className={tcol(moyClasse)}>{fmt(moyClasse)}</b></div>
     <div className="stat">Plus forte<b>{moyList.length?fmt(Math.max(...moyList)):'-'}</b></div>
     <div className="stat">Plus faible<b>{moyList.length?fmt(Math.min(...moyList)):'-'}</b></div>
-    <div className="stat">Moy. ≥ 10<b style={{color:'#1b5e20'}}>{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
-    <div className="stat">Moy. &lt; 10<b style={{color:'#b71c1c'}}>{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
+    <div className="stat">Moy. ≥ 10<b className="tok">{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
+    <div className="stat">Moy. &lt; 10<b className="tko">{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
   </div>);
 
   return(<div>
     <header>
       <Logo/>
       <div style={{flex:1}}><h1>GestiNotes</h1><small>Notes • Moyennes • Rangs • Livret scolaire</small></div>
+      <button className="toggle noprint" onClick={()=>set({dark:!dark})}>{dark?'☀️ Clair':'🌙 Sombre'}</button>
       <div style={{textAlign:'right',fontSize:11}}>{lastSave?'✓ Auto-sauvegardé '+lastSave.toLocaleTimeString('fr-FR'):'…'}</div>
     </header>
 
     <div className="wrap">
       {/* ---- Classes ---- */}
       <div className="card row noprint">
-        <b style={{color:'var(--vert)'}}>Classe :</b>
+        <b style={{color:'var(--accent)'}}>Classe :</b>
         <select value={cls.id} onChange={e=>set({currentClassId:e.target.value})}>{data.classes.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select>
         <button className="btn or" onClick={openCreate}>+ Nouvelle classe</button>
         <button className="btn light" onClick={renameClass}>✏️ Renommer</button>
@@ -327,7 +373,7 @@ function App(){
             <button className={'btn or big'+(isBonus?' active':'')} onClick={()=>goEval('bonus')}>➕ Bonus</button>
           </div>
 
-          {!isBonus&&<div className="panel noprint" style={{background:TYPES[curEval.type].color+'66',borderColor:TYPES[curEval.type].color}}>
+          {!isBonus&&<div className="panel noprint" style={dark?{borderColor:TYPES[curEval.type].color}:{background:TYPES[curEval.type].color+'66',borderColor:TYPES[curEval.type].color}}>
             <div className="row" style={{marginBottom:6}}>
               <b style={{fontSize:16}}>N{cur+1}</b>
               <label style={{fontWeight:700}}>📅 Date :</label>
@@ -368,7 +414,7 @@ function App(){
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name">Nom et prénom(s)</th>
-              <th style={{background:isBonus?'#ffd54f':TYPES[curEval.type].color,fontSize:14}}>{isBonus?'BONUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&curEval.date&&<br/>}{!isBonus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
+              <th style={{background:isBonus?'#ffd54f':TYPES[curEval.type].color,color:'#1a1a1a',fontSize:14}}>{isBonus?'BONUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&curEval.date&&<br/>}{!isBonus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
               <th>Moyenne<br/>/20</th>
             </tr></thead>
             <tbody>{sorted.map(({s,i})=><ERow key={s.id} s={s} pos={i+1} value={isBonus?s.bonus[term]:s.notes[term][cur]} placeholder={isBonus?'0':'/'+curEval.scale} half={isBonus?null:curEval.scale/2} moy={results.map[s.id].moyenne} onVal={onVal}/>)}</tbody>
@@ -383,9 +429,13 @@ function App(){
 
         {/* ============ PAGE VUE D'ENSEMBLE ============ */}
         {view==='vue'&&<div>
-          <StatsBar/>
+          {!tall&&<StatsBar/>}
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar/>
+            <button className="btn light" onClick={zoomOut} disabled={zoom===ZOOMS[0]}>A−</button>
+            <b>{Math.round(zoom*100)} %</b>
+            <button className="btn light" onClick={zoomIn} disabled={zoom===ZOOMS[ZOOMS.length-1]}>A+</button>
+            <button className={'btn light'+(tall?' active':'')} onClick={()=>setTall(!tall)}>{tall?'⛶ Réduire le tableau':'⛶ Agrandir le tableau'}</button>
             <button className="btn or" onClick={()=>goEval('bonus')}>➕ Saisir les bonus</button>
             <span className="rel">
               <button className="btn red" onClick={()=>setDelMenu(!delMenu)}>🗑 Supprimer ▾</button>
@@ -403,8 +453,8 @@ function App(){
             <input type="file" accept=".json" ref={fileRef} style={{display:'none'}} onChange={importJSON}/>
             <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
           </div>
-          <p className="hint noprint">👆 Appuyez sur l'en-tête d'une colonne (N1, N2… ou Bonus) pour ouvrir sa page de saisie.</p>
-          <div className="tbl-wrap"><table>
+          {!tall&&<p className="hint noprint">👆 Appuyez sur une ligne pour la surligner, sur l'en-tête d'une colonne (N1, N2… ou Bonus) pour ouvrir sa page de saisie.</p>}
+          <div className={'tbl-wrap vue'+(tall?' tall':'')} style={{'--z':zoom}}><table>
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name">Nom et prénom(s)</th>
@@ -413,17 +463,17 @@ function App(){
               </div></th>)}
               <th onClick={()=>goEval('bonus')}><div className="colhead" style={{background:'#ffd54f'}}><b>BONUS</b><small>points</small><small>✏️</small></div></th>
               <th>Total<br/>points</th><th>Σ coef</th>
-              <th style={{background:'#ffd54f',fontSize:14}}>MOYENNE<br/>/20</th>
-              <th>Rang</th><th className="noprint"></th>
+              <th className="hgold" style={{fontSize:14}}>MOYENNE<br/>/20</th>
+              <th>Rang</th><th>Appréciation</th><th className="noprint"></th>
             </tr></thead>
-            <tbody>{sorted.map(({s,i})=><VRow key={s.id} s={s} pos={i+1} evals={evals} term={term} r={results.map[s.id]} rank={rankLabel(results.ranks[s.id])} onClear={onClear}/>)}</tbody>
+            <tbody>{sorted.map(({s,i})=><VRow key={s.id} s={s} pos={i+1} evals={evals} term={term} r={results.map[s.id]} rank={rankLabel(results.ranks[s.id])} sel={sel===s.id} onSel={onSel} onClear={onClear}/>)}</tbody>
             <tfoot><tr>
               <td className="st-num"></td>
               <td className="st-name">Moyenne de la classe par évaluation</td>
               {colStats.cols.map((m,i)=><td key={i} className={col(m,evals[i].scale/2)}>{fmt(m)}</td>)}
               <td>{fmt(colStats.bonus)}</td><td></td><td></td>
               <td className={col(colStats.moy,10)} style={{fontSize:15}}>{fmt(colStats.moy)}</td>
-              <td colSpan="2" style={{fontSize:11}}>Moy. des moyennes</td>
+              <td style={{fontSize:11}}>Moy.</td><td><Appr m={colStats.moy}/></td><td className="noprint"></td>
             </tr></tfoot>
           </table></div>
         </div>}
@@ -431,6 +481,7 @@ function App(){
         {/* ============ PAGE MOYENNES UNIQUEMENT ============ */}
         {view==='moyennes'&&<div>
           <StatsBar/>
+          <ApprBar list={moyList}/>
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar/>
             <button className={'btn light'+(detail?' active':'')} onClick={()=>setDetail(!detail)}>{detail?'Masquer le détail':'🔍 Afficher le détail (bonus, total, Σ coef)'}</button>
@@ -441,23 +492,25 @@ function App(){
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name">Nom et prénom(s)</th>
-              {detail&&<React.Fragment><th style={{background:'#ffd54f'}}>Bonus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
-              <th style={{background:'#ffd54f',fontSize:15}}>MOYENNE<br/>/20</th>
+              {detail&&<React.Fragment><th className="hgold">Bonus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
+              <th className="hgold" style={{fontSize:15}}>MOYENNE<br/>/20</th>
               <th style={{fontSize:14}}>Rang</th>
+              <th>Appréciation</th>
             </tr></thead>
             <tbody>{sorted.map(({s,i})=>{const r=results.map[s.id];return(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
-              <td className="st-name" style={{fontSize:15}}>{s.name||<span style={{color:'#bbb'}}>Élève {i+1}</span>}</td>
-              {detail&&<React.Fragment><td style={{background:'#fff8e1',fontWeight:700}}>{s.bonus[term]||''}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
+              <td className="st-name" style={{fontSize:15}}>{s.name||<span className="ph">Élève {i+1}</span>}</td>
+              {detail&&<React.Fragment><td className="bonuscell">{s.bonus[term]||''}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
               <td className={'moy-big '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
               <td style={{fontWeight:700,fontSize:15}}>{rankLabel(results.ranks[s.id])}</td>
+              <td><Appr m={r.moyenne}/></td>
             </tr>);})}</tbody>
             <tfoot><tr>
               <td className="st-num"></td>
               <td className="st-name">Moyenne de la classe</td>
               {detail&&<React.Fragment><td>{fmt(colStats.bonus)}</td><td></td><td></td></React.Fragment>}
               <td className={'moy-big '+col(colStats.moy,10)}>{fmt(colStats.moy)}</td>
-              <td></td>
+              <td></td><td><Appr m={colStats.moy}/></td>
             </tr></tfoot>
           </table></div>
           <div className="row noprint" style={{marginTop:8,justifyContent:'space-between'}}>
@@ -471,10 +524,11 @@ function App(){
         {isLivret&&<div>
           <div className="stats" style={{marginBottom:8}}>
             <div className="stat">Effectif<b>{named}</b></div>
-            <div className="stat">Moyenne annuelle classe<b style={{color:moyClasse==null?'':moyClasse>=10?'#1b5e20':'#b71c1c'}}>{fmt(moyClasse)}</b></div>
-            <div className="stat">Moy. ≥ 10<b style={{color:'#1b5e20'}}>{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
-            <div className="stat">Moy. &lt; 10<b style={{color:'#b71c1c'}}>{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
+            <div className="stat">Moyenne annuelle classe<b className={tcol(moyClasse)}>{fmt(moyClasse)}</b></div>
+            <div className="stat">Moy. ≥ 10<b className="tok">{moyList.filter(m=>m>=10).length} / {moyList.length}</b></div>
+            <div className="stat">Moy. &lt; 10<b className="tko">{moyList.filter(m=>m<10).length} / {moyList.length}</b></div>
           </div>
+          <ApprBar list={moyList}/>
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar/>
             <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
@@ -484,40 +538,41 @@ function App(){
             <thead><tr>
               <th className="st-num">N°</th><th className="st-name">Nom et prénom(s)</th>
               {[1,2,3].map(t=><React.Fragment key={t}><th style={{background:TERMS[t].color,color:'#fff'}}>{TERMS[t].short}<br/><small>coef {TERMS[t].coef}</small></th><th style={{background:TERMS[t].color+'55'}}>Rang</th></React.Fragment>)}
-              <th style={{background:'#ffd54f',fontSize:14}}>MOYENNE<br/>ANNUELLE</th><th style={{background:'#ffd54f'}}>Rang<br/>annuel</th>
+              <th className="hgold" style={{fontSize:14}}>MOYENNE<br/>ANNUELLE</th><th className="hgold">Rang<br/>annuel</th><th>Appréciation<br/>annuelle</th>
             </tr></thead>
             <tbody>{sorted.map(({s,i})=>{const a=livret.annual[s.id];return(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
-              <td className="st-name">{s.name||<span style={{color:'#bbb'}}>Élève {i+1}</span>}</td>
+              <td className="st-name">{s.name||<span className="ph">Élève {i+1}</span>}</td>
               {[1,2,3].map(t=>{const m=livret.per[t][s.id];return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td>{rankLabel(livret.ranks[t][s.id])}</td></React.Fragment>;})}
               <td className={col(a,10)} style={{fontSize:15}}>{fmt(a)}</td>
               <td style={{fontWeight:700}}>{rankLabel(livret.rankA[s.id])}</td>
+              <td><Appr m={a}/></td>
             </tr>);})}</tbody>
             <tfoot><tr>
               <td className="st-num"></td><td className="st-name">Moyenne de la classe</td>
               {[1,2,3].map(t=>{const m=mean(cls.students.map(s=>livret.per[t][s.id]));return <React.Fragment key={t}><td className={col(m,10)}>{fmt(m)}</td><td></td></React.Fragment>;})}
-              {(()=>{const m=mean(cls.students.map(s=>livret.annual[s.id]));return <td className={col(m,10)} style={{fontSize:15}}>{fmt(m)}</td>;})()}
-              <td></td>
+              {(()=>{const m=mean(cls.students.map(s=>livret.annual[s.id]));return <React.Fragment><td className={col(m,10)} style={{fontSize:15}}>{fmt(m)}</td><td></td><td><Appr m={m}/></td></React.Fragment>;})()}
             </tr></tfoot>
           </table></div>
         </div>}
 
         {/* ---- Légende ---- */}
         <div style={{marginTop:8,fontSize:12}}>
-          <b>Légende :</b> {Object.values(TYPES).map(t=><span key={t.short} className="chip" style={{background:t.color}}>{t.short} = {t.label}</span>)}
+          <b>Légende :</b> {Object.values(TYPES).map(t=><span key={t.short} className="chip" style={{background:t.color,color:'#1a1a1a'}}>{t.short} = {t.label}</span>)}
           {Object.values(TERMS).map(t=><span key={t.short} className="chip" style={{background:t.color,color:'#fff'}}>{t.label}</span>)}
-          <span className="chip" style={{background:'#ffd54f'}}>Bonus</span>
+          <span className="chip" style={{background:'#ffd54f',color:'#1a1a1a'}}>Bonus</span>
           <span className="chip g">≥ moitié du barème</span><span className="chip r">&lt; moitié du barème</span>
+          <div style={{marginTop:4}}><b>Appréciations :</b> {APPR.slice().reverse().map((a,i,arr)=>{const max=i<arr.length-1?arr[i+1].min:20;return <span key={a.label} className="appr" style={{background:a.bg,color:a.fg,margin:2}}>{a.label} : {a.min} à {i<arr.length-1?'moins de '+max:'20'}</span>;})}</div>
         </div>
       </div>
     </div>
 
     {/* ---- Fenêtre : création d'une classe ---- */}
     {createOpen&&<div className="modal"><div className="box">
-      <h3 style={{margin:'0 0 4px',color:'var(--vert)'}}>➕ Créer une nouvelle classe</h3>
+      <h3 style={{margin:'0 0 4px'}}>➕ Créer une nouvelle classe</h3>
       <label className="lbl">Nom de la classe</label>
       <input type="text" style={{width:'100%'}} value={newName} onChange={e=>setNewName(e.target.value)} placeholder="ex. 4ème B"/>
-      <label className="lbl">Noms et prénoms des élèves <span style={{fontWeight:400,color:'#555'}}>(un élève par ligne, 100 maximum)</span></label>
+      <label className="lbl">Noms et prénoms des élèves <span style={{fontWeight:400,color:'var(--muted)'}}>(un élève par ligne, 100 maximum)</span></label>
       <textarea rows="12" style={{width:'100%'}} value={newNames} onChange={e=>setNewNames(e.target.value)} placeholder={'KOUAME Jean\nDIALLO Fatou\nTRAORE Moussa\n…'}/>
       <p className="hint">{splitNames(newNames).length} élève(s) saisi(s). Vous pourrez compléter ou corriger la liste plus tard dans l'onglet 👥 Élèves.</p>
       <div className="row" style={{marginTop:8,justifyContent:'flex-end'}}>
@@ -528,7 +583,7 @@ function App(){
 
     {/* ---- Fenêtre : coller une liste de noms ---- */}
     {pasteOpen&&<div className="modal" onClick={()=>setPasteOpen(false)}><div className="box" onClick={e=>e.stopPropagation()}>
-      <h3 style={{margin:'0 0 6px',color:'var(--vert)'}}>📋 Coller la liste des élèves</h3>
+      <h3 style={{margin:'0 0 6px'}}>📋 Coller la liste des élèves</h3>
       <p className="hint">Un nom par ligne. Les noms remplaceront ceux des premières lignes.</p>
       <textarea rows="10" style={{width:'100%'}} value={pasteTxt} onChange={e=>setPasteTxt(e.target.value)} placeholder={'KOUAME Jean\nDIALLO Fatou\n…'}/>
       <div className="row" style={{marginTop:8,justifyContent:'flex-end'}}>
