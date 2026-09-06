@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GestiNotes – Gestion des notes</title>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 <style>
 :root{--vert:#1b5e20;--vert2:#2e7d32;--or:#c9a227;--or2:#ffd54f;
 --bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff;--zebra:#f3faf3;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffd54f;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--z:1}
@@ -51,6 +51,7 @@ input.big:focus{outline:3px solid var(--or)}
 .r{background:var(--ko)!important;color:var(--kot)!important;font-weight:700}
 .tok{color:var(--okt)!important}.tko{color:var(--kot)!important}
 .bonuscell{background:var(--bonus)!important;font-weight:700}
+.malluscell{background:#ffe0e0!important;font-weight:700}
 .hgold{background:var(--or2)!important;color:#1a1a1a!important}
 .ph{color:var(--ph)}
 .moy-big{font-size:18px;padding:8px 10px;min-width:90px}
@@ -119,7 +120,7 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const newEval=()=>({type:'IE',scale:20,coef:1,label:'',date:''});
 const newEvals=()=>Array.from({length:NB_NOTES},newEval);
 const emptyNotes=()=>({1:Array(NB_NOTES).fill(''),2:Array(NB_NOTES).fill(''),3:Array(NB_NOTES).fill('')});
-const newStudent=(i,name='')=>({id:uid()+i,name,notes:emptyNotes(),bonus:{1:'',2:'',3:''}});
+const newStudent=(i,name='')=>({id:uid()+i,name,notes:emptyNotes(),bonus:{1:'',2:'',3:''},malus:{1:'',2:'',3:''}});
 const newClass=(name,names=[])=>({id:uid(),name,students:Array.from({length:NB_ELEVES},(_,i)=>newStudent(i,names[i]||'')),evals:{1:newEvals(),2:newEvals(),3:newEvals()}});
 const parseNum=v=>{if(v===''||v==null)return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
 const fmt=n=>n==null?'-':n.toFixed(2).replace('.',',');
@@ -132,6 +133,8 @@ const coefLabel=e=>e.scale===10?'Sur 10 — coef 0,5':'Sur 20 — coef '+e.coef;
 const nextCoef=e=>e.scale===10?{scale:20,coef:1}:e.coef===1?{scale:20,coef:2}:{scale:10,coef:0.5};
 const splitNames=t=>t.split(/\n/).map(x=>x.trim()).filter(Boolean).slice(0,NB_ELEVES);
 const ZOOMS=[0.9,1,1.1,1.2,1.3];
+const getBonus=(s,term)=>s.bonus&&s.bonus[term]!=null?s.bonus[term]:'';
+const getMalus=(s,term)=>s.malus&&s.malus[term]!=null?s.malus[term]:'';
 
 /* ================= CALCULS ================= */
 function calcMoyenne(student,evals,term){
@@ -139,7 +142,8 @@ function calcMoyenne(student,evals,term){
   evals.forEach((ev,i)=>{const n=parseNum(notes[i]);if(n==null)return;count++;
     if(ev.scale===10){total+=n;sumCoef+=0.5;}else{total+=n*ev.coef;sumCoef+=ev.coef;}});
   if(count===0)return{total:null,sumCoef:0,moyenne:null,count:0};
-  total+=parseNum(student.bonus[term])||0;
+  total+=parseNum(getBonus(student,term))||0;
+  total-=parseNum(getMalus(student,term))||0;
   const m=Math.max(0,Math.min(20,total/sumCoef));
   return{total:Math.round(total*100)/100,sumCoef,moyenne:Math.round(m*100)/100,count};
 }
@@ -174,7 +178,8 @@ const VRow=memo(function VRow({s,pos,evals,term,r,rank,sel,onSel,onClear}){
     <td className="st-num">{pos}</td>
     <td className="st-name" title={s.name}>{s.name||<span className="ph">Élève {pos}</span>}</td>
     {evals.map((ev,i)=>{const v=s.notes[term][i];return <td key={i} className={'nt '+col(parseNum(v),ev.scale/2)}>{v||<span className="ph">·</span>}</td>;})}
-    <td className="bonuscell">{s.bonus[term]||''}</td>
+    <td className="bonuscell">{getBonus(s,term)}</td>
+    <td className="malluscell">{getMalus(s,term)}</td>
     <td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td>
     <td className={'mo '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
     <td style={{fontWeight:700,fontSize:15}}>{rank}</td>
@@ -207,6 +212,7 @@ function App(){
   const {sort,hideEmpty,view,cur,dark,wideNames}=data;
   const zoom=ZOOMS.includes(data.zoom)?data.zoom:1;
   const isBonus=cur==='bonus';
+  const isMalus=cur==='malus';
   const showToast=m=>{setToast(m);setTimeout(()=>setToast(''),2500);};
 
   /* mode sombre */
@@ -225,19 +231,20 @@ function App(){
   const onName=useCallback((sid,v)=>updateStudent(sid,s=>({...s,name:v})),[updateStudent]);
   const onSel=useCallback(id=>setSel(x=>x===id?null:id),[]);
   const evals=cls.evals[term];
-  const curEval=isBonus?null:evals[cur];
+  const curEval=(isBonus||isMalus)?null:evals[cur];
   const onVal=useCallback((sid,v)=>{
     if(!validNum(v))return;
     if(isBonus){updateStudent(sid,s=>({...s,bonus:{...s.bonus,[term]:v}}));return;}
+    if(isMalus){updateStudent(sid,s=>({...s,malus:{...s.malus,[term]:v}}));return;}
     const scale=curEval.scale;const n=parseNum(v);if(n!=null&&n>scale)v=String(scale);
     updateStudent(sid,s=>({...s,notes:{...s.notes,[term]:s.notes[term].map((x,k)=>k===cur?v:x)}}));
-  },[updateStudent,term,cur,isBonus,curEval&&curEval.scale]);
-  const onClear=useCallback(sid=>{if(!confirm('Effacer le nom et toutes les notes de cet élève ?'))return;updateStudent(sid,s=>({...s,name:'',notes:emptyNotes(),bonus:{1:'',2:'',3:''}}));},[updateStudent]);
+  },[updateStudent,term,cur,isBonus,isMalus,curEval&&curEval.scale]);
+  const onClear=useCallback(sid=>{if(!confirm('Effacer le nom et toutes les notes de cet élève ?'))return;updateStudent(sid,s=>({...s,name:'',notes:emptyNotes(),bonus:{1:'',2:'',3:''},malus:{1:'',2:'',3:''}}));},[updateStudent]);
   const setEval=(i,patch)=>updateClass(c=>({...c,evals:{...c.evals,[term]:c.evals[term].map((e,k)=>k===i?{...e,...patch}:e)}}));
   const setAllType=t=>{updateClass(c=>({...c,evals:{...c.evals,[term]:c.evals[term].map(e=>({...e,type:t}))}}));showToast('Type appliqué aux 20 évaluations');};
   const goEval=(i)=>set({cur:i,view:'saisie'});
-  const prevEval=()=>goEval(isBonus?NB_NOTES-1:Math.max(0,cur-1));
-  const nextEval=()=>goEval(isBonus?'bonus':(cur>=NB_NOTES-1?'bonus':cur+1));
+  const prevEval=()=>goEval(isMalus?'bonus':isBonus?NB_NOTES-1:Math.max(0,cur-1));
+  const nextEval=()=>goEval(isBonus?'malus':isMalus?'malus':(cur>=NB_NOTES-1?'bonus':cur+1));
   const zoomIn=()=>set({zoom:ZOOMS[Math.min(ZOOMS.length-1,ZOOMS.indexOf(zoom)+1)]});
   const zoomOut=()=>set({zoom:ZOOMS[Math.max(0,ZOOMS.indexOf(zoom)-1)]});
 
@@ -252,7 +259,8 @@ function App(){
   const clearNames=()=>{if(!confirm('Effacer tous les noms des élèves ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,name:''}))}));setDelMenu(false);};
   const clearNotes=()=>{if(!confirm('Effacer toutes les notes du '+TERMS[term].label+' ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,notes:{...s.notes,[term]:Array(NB_NOTES).fill('')}}))}));setDelMenu(false);};
   const clearBonus=()=>{if(!confirm('Effacer tous les bonus du '+TERMS[term].label+' ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,bonus:{...s.bonus,[term]:''}}))}));setDelMenu(false);};
-  const clearCurrent=()=>{if(isBonus){clearBonus();return;}if(!confirm('Effacer toutes les notes de N'+(cur+1)+' ?'))return;
+  const clearMalus=()=>{if(!confirm('Effacer tous les malus du '+TERMS[term].label+' ?'))return;updateClass(c=>({...c,students:c.students.map(s=>({...s,malus:{...s.malus,[term]:''}}))}));setDelMenu(false);};
+  const clearCurrent=()=>{if(isBonus){clearBonus();return;}if(isMalus){clearMalus();return;}if(!confirm('Effacer toutes les notes de N'+(cur+1)+' ?'))return;
     updateClass(c=>({...c,students:c.students.map(s=>({...s,notes:{...s.notes,[term]:s.notes[term].map((x,k)=>k===cur?'':x)}}))}));};
   const applyPaste=()=>{const lines=splitNames(pasteTxt);updateClass(c=>({...c,students:c.students.map((s,i)=>i<lines.length?{...s,name:lines[i]}:s)}));setPasteOpen(false);setPasteTxt('');showToast(lines.length+' noms importés');};
   const sortRoster=()=>{if(!confirm('Ranger définitivement la liste par ordre alphabétique (les notes suivent chaque élève) ?'))return;
@@ -263,7 +271,8 @@ function App(){
     const ranks=computeRanks(cls.students.map(s=>({id:s.id,moyenne:map[s.id].moyenne})));return{map,ranks};},[cls,term]);
   const colStats=useMemo(()=>({
     cols:evals.map((_,i)=>mean(cls.students.map(s=>parseNum(s.notes[term][i])))),
-    bonus:mean(cls.students.map(s=>parseNum(s.bonus[term]))),
+    bonus:mean(cls.students.map(s=>parseNum(getBonus(s,term)))),
+    malus:mean(cls.students.map(s=>parseNum(getMalus(s,term)))),
     moy:mean(cls.students.map(s=>results.map[s.id].moyenne))}),[cls,term,results]);
   const livret=useMemo(()=>{const per={1:{},2:{},3:{}},ranks={},annual={};
     [1,2,3].forEach(t=>{cls.students.forEach(s=>per[t][s.id]=calcMoyenne(s,cls.evals[t],t).moyenne);ranks[t]=computeRanks(cls.students.map(s=>({id:s.id,moyenne:per[t][s.id]})));});
@@ -284,7 +293,7 @@ function App(){
   const moyClasse=mean(moyList);
   const hasTerm=view==='saisie'||view==='vue'||view==='moyennes';
   const termColor=hasTerm?TERMS[term].color:'#c9a227';
-  const curVals=isBonus?cls.students.map(s=>parseNum(s.bonus[term])):cls.students.map(s=>parseNum(s.notes[term][cur]));
+  const curVals=isBonus?cls.students.map(s=>parseNum(getBonus(s,term))):isMalus?cls.students.map(s=>parseNum(getMalus(s,term))):cls.students.map(s=>parseNum(s.notes[term][cur]));
   const curFilled=curVals.filter(x=>x!=null);
   const titles={eleves:'Liste des élèves',saisie:TERMS[term].label,vue:TERMS[term].label+' — Vue d\'ensemble',moyennes:TERMS[term].label+' — Moyennes',livret:'Livret scolaire'};
 
@@ -367,15 +376,17 @@ function App(){
         {view==='saisie'&&<div>
           <div className="row noprint" style={{marginBottom:8}}>
             <button className="btn big" onClick={prevEval}>◀</button>
-            <select value={cur} onChange={e=>goEval(e.target.value==='bonus'?'bonus':+e.target.value)} style={{flex:1,fontSize:16,fontWeight:700,minWidth:160}}>
+            <select value={isBonus?'bonus':isMalus?'malus':cur} onChange={e=>goEval(e.target.value==='bonus'?'bonus':e.target.value==='malus'?'malus':+e.target.value)} style={{flex:1,fontSize:16,fontWeight:700,minWidth:160}}>
               {evals.map((ev,i)=><option key={i} value={i}>N{i+1} — {TYPES[ev.type].short} /{ev.scale} coef {ev.scale===10?'0,5':ev.coef}{ev.date?' — '+fmtDate(ev.date):''}{ev.label?' — '+ev.label:''}</option>)}
               <option value="bonus">➕ BONUS</option>
+              <option value="malus">➖ MALUS</option>
             </select>
             <button className="btn big" onClick={nextEval}>▶</button>
             <button className={'btn or big'+(isBonus?' active':'')} onClick={()=>goEval('bonus')}>➕ Bonus</button>
+            <button className={'btn red big'+(isMalus?' active':'')} onClick={()=>goEval('malus')}>➖ Malus</button>
           </div>
 
-          {!isBonus&&<div className="panel noprint" style={dark?{borderColor:TYPES[curEval.type].color}:{background:TYPES[curEval.type].color+'66',borderColor:TYPES[curEval.type].color}}>
+          {!isBonus&&!isMalus&&<div className="panel noprint" style={dark?{borderColor:TYPES[curEval.type].color}:{background:TYPES[curEval.type].color+'66',borderColor:TYPES[curEval.type].color}}>
             <div className="row" style={{marginBottom:6}}>
               <b style={{fontSize:16}}>N{cur+1}</b>
               <label style={{fontWeight:700}}>📅 Date :</label>
@@ -396,20 +407,24 @@ function App(){
             <b style={{fontSize:16}}>➕ Bonus du {TERMS[term].label}</b>
             <p className="hint">Les points de bonus sont <b>ajoutés au total des points</b> de l'élève avant la division par la somme des coefficients. Exemple : total 120 points, Σ coef 8, bonus 4 → (120 + 4) ÷ 8 = 15,50. La moyenne reste plafonnée à 20.</p>
           </div>}
+          {isMalus&&<div className="panel noprint" style={{borderColor:'#c62828',background:'#ffe0e0'}}>
+            <b style={{fontSize:16}}>➖ Malus du {TERMS[term].label}</b>
+            <p className="hint">Les points de malus sont <b>retranchés du total des points</b> de l'élève avant la division par la somme des coefficients. Exemple : total 120 points, Σ coef 8, malus 4 → (120 − 4) ÷ 8 = 14,50. La moyenne reste plancher à 0.</p>
+          </div>}
 
           <div className="stats" style={{marginBottom:8}}>
             <div className="stat">Saisies<b>{curFilled.length} / {named||'…'}</b></div>
-            <div className="stat">Moyenne {isBonus?'bonus':'N'+(cur+1)}<b>{fmt(mean(curVals))}</b></div>
+            <div className="stat">Moyenne {isBonus?'bonus':isMalus?'malus':'N'+(cur+1)}<b>{fmt(mean(curVals))}</b></div>
             <div className="stat">Max<b>{curFilled.length?fmt(Math.max(...curFilled)):'-'}</b></div>
             <div className="stat">Min<b>{curFilled.length?fmt(Math.min(...curFilled)):'-'}</b></div>
-            {!isBonus&&<div className="stat">≥ {curEval.scale/2}<b>{curFilled.filter(v=>v>=curEval.scale/2).length} / {curFilled.length}</b></div>}
+            {!isBonus&&!isMalus&&<div className="stat">≥ {curEval.scale/2}<b>{curFilled.filter(v=>v>=curEval.scale/2).length} / {curFilled.length}</b></div>}
           </div>
-          {!isBonus && curFilled.length > 0 && <ApprBar list={curFilled.map(v => (v / curEval.scale) * 20)} />}
+          {!isBonus && !isMalus && curFilled.length > 0 && <ApprBar list={curFilled.map(v => (v / curEval.scale) * 20)} />}
 
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar merit={false}/>
             <button className="btn light" onClick={()=>set({view:'eleves'})}>👥 Modifier les noms</button>
-            <button className="btn red" onClick={clearCurrent}>🗑 Effacer {isBonus?'les bonus':'les notes de N'+(cur+1)}</button>
+            <button className="btn red" onClick={clearCurrent}>🗑 Effacer {isBonus?'les bonus':isMalus?'les malus':'les notes de N'+(cur+1)}</button>
             <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
           </div>
 
@@ -417,11 +432,11 @@ function App(){
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name" style={{maxWidth:180}}>Nom et prénom(s)</th>
-              <th style={{background:isBonus?'#ffd54f':TYPES[curEval.type].color,color:'#1a1a1a',fontSize:14}}>{isBonus?'BONUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&curEval.date&&<br/>}{!isBonus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
+              <th style={{background:isBonus?'#ffd54f':isMalus?'#ef9a9a':TYPES[curEval.type].color,color:'#1a1a1a',fontSize:14}}>{isBonus?'BONUS':isMalus?'MALUS':'N'+(cur+1)+' /'+curEval.scale}{!isBonus&&!isMalus&&curEval.date&&<br/>}{!isBonus&&!isMalus&&curEval.date&&<small>{fmtDate(curEval.date)}</small>}</th>
               <th>Moyenne<br/>/20</th>
             </tr></thead>
-            <tbody>{sorted.map(({s,i})=><ERow key={s.id} s={s} pos={i+1} value={isBonus?s.bonus[term]:s.notes[term][cur]} placeholder={isBonus?'0':'/'+curEval.scale} half={isBonus?null:curEval.scale/2} moy={results.map[s.id].moyenne} onVal={onVal}/>)}</tbody>
-            <tfoot><tr><td className="st-num"></td><td className="st-name" style={{maxWidth:180}}>Moyenne de la classe</td><td className={isBonus?'':col(mean(curVals),curEval.scale/2)}>{fmt(mean(curVals))}</td><td className={col(colStats.moy,10)}>{fmt(colStats.moy)}</td></tr></tfoot>
+            <tbody>{sorted.map(({s,i})=><ERow key={s.id} s={s} pos={i+1} value={isBonus?getBonus(s,term):isMalus?getMalus(s,term):s.notes[term][cur]} placeholder={(isBonus||isMalus)?'0':'/'+curEval.scale} half={(isBonus||isMalus)?null:curEval.scale/2} moy={results.map[s.id].moyenne} onVal={onVal}/>)}</tbody>
+            <tfoot><tr><td className="st-num"></td><td className="st-name" style={{maxWidth:180}}>Moyenne de la classe</td><td className={(isBonus||isMalus)?'':col(mean(curVals),curEval.scale/2)}>{fmt(mean(curVals))}</td><td className={col(colStats.moy,10)}>{fmt(colStats.moy)}</td></tr></tfoot>
           </table></div>
           <div className="row noprint" style={{marginTop:8,justifyContent:'space-between'}}>
             <button className="btn big" onClick={prevEval}>◀ Précédente</button>
@@ -441,12 +456,14 @@ function App(){
             <button className="btn light" onClick={zoomIn} disabled={zoom===ZOOMS[ZOOMS.length-1]}>A+</button>
             <button className={'btn light'+(tall?' active':'')} onClick={()=>setTall(!tall)}>{tall?'⛶ Réduire le tableau':'⛶ Agrandir le tableau'}</button>
             <button className="btn or" onClick={()=>goEval('bonus')}>➕ Saisir les bonus</button>
+            <button className="btn red" onClick={()=>goEval('malus')}>➖ Saisir les malus</button>
             <span className="rel">
               <button className="btn red" onClick={()=>setDelMenu(!delMenu)}>🗑 Supprimer ▾</button>
               {delMenu&&<div className="menu">
                 <button className="btn light" onClick={clearNames}>Effacer tous les noms</button>
                 <button className="btn light" onClick={clearNotes}>Effacer les notes du trimestre</button>
                 <button className="btn light" onClick={clearBonus}>Effacer les bonus du trimestre</button>
+                <button className="btn light" onClick={clearMalus}>Effacer les malus du trimestre</button>
                 <button className="btn grey" onClick={()=>setDelMenu(false)}>Annuler</button>
               </div>}
             </span>
@@ -457,7 +474,7 @@ function App(){
             <input type="file" accept=".json" ref={fileRef} style={{display:'none'}} onChange={importJSON}/>
             <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
           </div>
-          {!tall&&<p className="hint noprint">👆 Appuyez sur une ligne pour la surligner, sur l'en-tête d'une colonne (N1, N2… ou Bonus) pour ouvrir sa page de saisie.</p>}
+          {!tall&&<p className="hint noprint">👆 Appuyez sur une ligne pour la surligner, sur l'en-tête d'une colonne (N1, N2… ou Bonus/Malus) pour ouvrir sa page de saisie.</p>}
           <div className={'tbl-wrap vue'+(tall?' tall':'')+(wideNames?' wide-names':'')} style={{'--z':zoom}}><table>
             <thead><tr>
               <th className="st-num">N°</th>
@@ -466,6 +483,7 @@ function App(){
                 <b>N{i+1}</b><small>{TYPES[ev.type].short} /{ev.scale}</small><small>coef {ev.scale===10?'0,5':ev.coef}</small><small>📅 {fmtDate(ev.date)||'—'}</small>{ev.label&&<small style={{maxWidth:60,overflow:'hidden',textOverflow:'ellipsis'}}>{ev.label}</small>}
               </div></th>)}
               <th onClick={()=>goEval('bonus')}><div className="colhead" style={{background:'#ffd54f'}}><b>BONUS</b><small>points</small><small>✏️</small></div></th>
+              <th onClick={()=>goEval('malus')}><div className="colhead" style={{background:'#ef9a9a'}}><b>MALUS</b><small>points</small><small>✏️</small></div></th>
               <th>Total<br/>points</th><th>Σ coef</th>
               <th className="hgold" style={{fontSize:14}}>MOYENNE<br/>/20</th>
               <th>Rang</th><th>Appréciation</th><th className="noprint"></th>
@@ -475,7 +493,7 @@ function App(){
               <td className="st-num"></td>
               <td className="st-name">Moyenne de la classe par évaluation</td>
               {colStats.cols.map((m,i)=><td key={i} className={col(m,evals[i].scale/2)}>{fmt(m)}</td>)}
-              <td>{fmt(colStats.bonus)}</td><td></td><td></td>
+              <td>{fmt(colStats.bonus)}</td><td>{fmt(colStats.malus)}</td><td></td><td></td>
               <td className={col(colStats.moy,10)} style={{fontSize:15}}>{fmt(colStats.moy)}</td>
               <td style={{fontSize:11}}>Moy.</td><td><Appr m={colStats.moy}/></td><td className="noprint"></td>
             </tr></tfoot>
@@ -488,7 +506,7 @@ function App(){
           <ApprBar list={moyList}/>
           <div className="row noprint" style={{marginBottom:8}}>
             <SortBar/>
-            <button className={'btn light'+(detail?' active':'')} onClick={()=>setDetail(!detail)}>{detail?'Masquer le détail':'🔍 Afficher le détail (bonus, total, Σ coef)'}</button>
+            <button className={'btn light'+(detail?' active':'')} onClick={()=>setDetail(!detail)}>{detail?'Masquer le détail':'🔍 Afficher le détail (bonus, malus, total, Σ coef)'}</button>
             <button className="btn" onClick={saveNow}>💾 Sauvegarder</button>
             <button className="btn grey" onClick={()=>window.print()}>🖨 Imprimer</button>
           </div>
@@ -496,7 +514,7 @@ function App(){
             <thead><tr>
               <th className="st-num">N°</th>
               <th className="st-name" style={{maxWidth:200}}>Nom et prénom(s)</th>
-              {detail&&<React.Fragment><th className="hgold">Bonus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
+              {detail&&<React.Fragment><th className="hgold">Bonus</th><th style={{background:'#ef9a9a'}}>Malus</th><th>Total<br/>points</th><th>Σ coef</th></React.Fragment>}
               <th className="hgold" style={{fontSize:15}}>MOYENNE<br/>/20</th>
               <th style={{fontSize:14}}>Rang</th>
               <th>Appréciation</th>
@@ -504,7 +522,7 @@ function App(){
             <tbody>{sorted.map(({s,i})=>{const r=results.map[s.id];return(<tr key={s.id}>
               <td className="st-num">{i+1}</td>
               <td className="st-name" style={{fontSize:15,maxWidth:200}} title={s.name}>{s.name||<span className="ph">Élève {i+1}</span>}</td>
-              {detail&&<React.Fragment><td className="bonuscell">{s.bonus[term]||''}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
+              {detail&&<React.Fragment><td className="bonuscell">{getBonus(s,term)}</td><td className="malluscell">{getMalus(s,term)}</td><td>{fmt(r.total)}</td><td>{r.sumCoef||'-'}</td></React.Fragment>}
               <td className={'moy-big '+col(r.moyenne,10)}>{fmt(r.moyenne)}</td>
               <td style={{fontWeight:700,fontSize:15}}>{rankLabel(results.ranks[s.id])}</td>
               <td><Appr m={r.moyenne}/></td>
@@ -512,7 +530,7 @@ function App(){
             <tfoot><tr>
               <td className="st-num"></td>
               <td className="st-name" style={{maxWidth:200}}>Moyenne de la classe</td>
-              {detail&&<React.Fragment><td>{fmt(colStats.bonus)}</td><td></td><td></td></React.Fragment>}
+              {detail&&<React.Fragment><td>{fmt(colStats.bonus)}</td><td>{fmt(colStats.malus)}</td><td></td><td></td></React.Fragment>}
               <td className={'moy-big '+col(colStats.moy,10)}>{fmt(colStats.moy)}</td>
               <td></td><td><Appr m={colStats.moy}/></td>
             </tr></tfoot>
@@ -565,6 +583,7 @@ function App(){
           <b>Légende :</b> {Object.values(TYPES).map(t=><span key={t.short} className="chip" style={{background:t.color,color:'#1a1a1a'}}>{t.short} = {t.label}</span>)}
           {Object.values(TERMS).map(t=><span key={t.short} className="chip" style={{background:t.color,color:'#fff'}}>{t.label}</span>)}
           <span className="chip" style={{background:'#ffd54f',color:'#1a1a1a'}}>Bonus</span>
+          <span className="chip" style={{background:'#ef9a9a',color:'#1a1a1a'}}>Malus</span>
           <span className="chip g">≥ moitié du barème</span><span className="chip r">&lt; moitié du barème</span>
           <div style={{marginTop:4}}><b>Appréciations :</b> {APPR.slice().reverse().map((a,i,arr)=>{const max=i<arr.length-1?arr[i+1].min:20;return <span key={a.label} className="appr" style={{background:a.bg,color:a.fg,margin:2}}>{a.label} : {a.min} à {i<arr.length-1?'moins de '+max:'20'}</span>;})}</div>
         </div>
