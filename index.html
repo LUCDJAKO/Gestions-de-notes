@@ -7,23 +7,23 @@
 <meta name="description" content="Application de gestion des notes, moyennes, bonus/malus et livrets scolaires.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
 <style>
-:root{--or:#ff6f00;--or2:#ffb74d;--vert:#2e7d32;--vert2:#4caf50;
---bg:#ffffff;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:var(--vert);--border:#ffe0b2;--line:#f5f5f5;--line2:#eeeeee;--thead:#fff8e1;--tfoot:#fff8e1;--cell:#fff;--zebra:#fffaf0;--input:#fff;--inputb:#ffe0b2;--ph:#999;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffb74d;--ok:#e8f5e9;--okt:var(--vert);--ko:#ffcdd2;--kot:#b71c1c;--bonus:#e8f5e9;--malus:#fff3e0;--z:1;--bonusColor:var(--vert);--malusColor:#c62828}
-body.dark{--bg:#1b1a17;--card:#2b2a28;--text:#fff;--muted:#cfcac4;--accent:var(--or);--border:#3a2c22;--line:#2e2a28;--line2:#3a3a37;--thead:#3b2a1f;--tfoot:#312414;--cell:#2b2a28;--zebra:#272422;--input:#1f1d1b;--inputb:#624022;--ph:#9f9a95;--panel:#312414;--stat:#3b2a1f;--statb:#ffb74d;--ok:#2e7d32;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#2b2a28;--malus:#3b1420}
+:root{--vert:#1b5e20;--vert2:#2e7d32;--or:#c9a227;--or2:#ffd54f;
+--bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff;--zebra:#f3faf3;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffd54f;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--malus:#fce4ec;--z:1}
+body.dark{--bg:#0b160d;--card:#152a18;--text:#eef3ee;--muted:#aebdae;--accent:#ffd54f;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3b3214;--cell:#152a18;--zebra:#1b321e;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3b3214;--stat:#2a2510;--statb:#8a7a2a;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3b3214;--malus:#3b1420}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{margin:0;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;transition:background .3s,color .3s}
-header{position:sticky;top:0;z-index:40;background:linear-gradient(135deg,var(--or),var(--vert));color:#fff;padding:10px 14px;display:flex;align-items:center;gap:12px;border-bottom:4px solid var(--or2);flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header{position:sticky;top:0;z-index:40;background:linear-gradient(135deg,var(--vert),var(--vert2));color:#fff;padding:10px 14px;display:flex;align-items:center;gap:12px;border-bottom:4px solid var(--or);flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.18)}
 header h1{margin:0;font-size:21px;color:var(--or2);letter-spacing:.5px}
 header small{display:block;font-size:11px;opacity:.9}
 .toggle{background:transparent;border:2px solid var(--or2);color:var(--or2);border-radius:20px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
 .wrap{padding:10px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px}
 .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.btn{border:none;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;background:var(--or);color:#fff;transition:opacity .15s}
+.btn{border:none;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;background:var(--vert2);color:#fff;transition:opacity .15s}
 .btn:hover{opacity:.9}
-.btn.or{background:var(--or);color:#fff}
-.btn.red{background:var(--malusColor);color:#fff}
+.btn.or{background:var(--or);color:#1a1a1a}
+.btn.red{background:#c62828;color:#fff}
 .btn.grey{background:#78909c;color:#fff}
 .btn.light{background:var(--card);color:var(--accent);border:2px solid var(--vert2)}
 .btn.active{outline:3px solid var(--or2)}
@@ -37,22 +37,22 @@ label.lbl{display:block;font-weight:700;color:var(--accent);margin:8px 0 3px;fon
 .term-tabs-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin-bottom:0}
 .tab{padding:12px 18px;border-radius:10px 10px 0 0;font-weight:700;color:#fff;border:3px solid transparent;opacity:.5;filter:grayscale(.35) brightness(.92);cursor:pointer;font-size:14px;transform:scale(.96);transition:all .18s ease;position:relative}
 .tab:hover{opacity:.85;filter:grayscale(.1)}
-.tab.on{opacity:1;filter:none;transform:scale(1.08);border-color:#fff;box-shadow:0 -3px 0 var(--or) inset,0 0 0 3px var(--or2),0 8px 16px rgba(0,0,0,.12);font-size:15px;animation:tabPulse 2s ease-in-out infinite}
+.tab.on{opacity:1;filter:none;transform:scale(1.08);border-color:#fff;box-shadow:0 -3px 0 var(--or) inset,0 0 0 3px var(--or2),0 8px 16px rgba(0,0,0,.3);font-size:15px;animation:tabPulse 2s ease-in-out infinite}
 @keyframes tabPulse{
-  0%,100%{box-shadow:0 -3px 0 var(--or) inset,0 0 0 3px var(--or2),0 8px 16px rgba(0,0,0,.12)}
-  50%{box-shadow:0 -3px 0 var(--or) inset,0 0 0 6px var(--or2),0 10px 20px rgba(0,0,0,.14)}
+  0%,100%{box-shadow:0 -3px 0 var(--or) inset,0 0 0 3px var(--or2),0 8px 16px rgba(0,0,0,.3)}
+  50%{box-shadow:0 -3px 0 var(--or) inset,0 0 0 6px var(--or2),0 10px 20px rgba(0,0,0,.35)}
 }
 .view{flex:1;padding:11px 2px;border-radius:8px;font-weight:700;font-size:12px;background:var(--card);color:var(--accent);border:2px solid var(--vert2);cursor:pointer;min-width:60px}
 .view.on{background:var(--vert);color:var(--or2)}
 
 /* Badge "trimestre actif" affiché en permanence dans l'en-tête */
-.term-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(0,0,0,.06);border:2px solid var(--or2);color:#fff;padding:6px 14px;border-radius:20px;font-weight:800;font-size:12.5px;letter-spacing:.2px;white-space:nowrap}
-.term-badge .dot{width:11px;height:11px;border-radius:50%;display:inline-block;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.term-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(0,0,0,.18);border:2px solid var(--or2);color:#fff;padding:6px 14px;border-radius:20px;font-weight:800;font-size:12.5px;letter-spacing:.2px;white-space:nowrap}
+.term-badge .dot{width:11px;height:11px;border-radius:50%;display:inline-block;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
 
 /* Bandeau rappel du trimestre actif, affiché au-dessus de chaque écran de saisie */
-.active-term-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-weight:800;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.08);border:2px solid rgba(255,255,255,.3)}
+.active-term-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-weight:800;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.2);border:2px solid rgba(255,255,255,.5)}
 .active-term-banner .big{font-size:16px}
-.active-term-banner .warn{font-size:11.5px;font-weight:700;opacity:.95;background:rgba(0,0,0,.06);padding:4px 10px;border-radius:12px;color:#fff}
+.active-term-banner .warn{font-size:11.5px;font-weight:700;opacity:.95;background:rgba(0,0,0,.2);padding:4px 10px;border-radius:12px}
 
 .tbl-wrap{overflow:auto;max-height:66vh;border:1px solid var(--border);border-radius:8px;background:var(--card)}
 .tbl-wrap.tall{max-height:88vh}
@@ -72,11 +72,11 @@ tbody tr.picked td{background:#fff3cd!important}
 body.dark tbody tr.picked td{background:#3d3516!important}
 
 input.name{width:100%;min-width:240px;padding:9px 6px;border:1px solid var(--line2);border-radius:4px;font-size:15px;background:var(--input);color:var(--text)}
-input[type=checkbox].pick{width:22px;height:22px;accent-color:var(--vert2);cursor:pointer}
-input.big{width:90px;padding:12px 6px;border:2px solid var(--inputb);border-radius:6px;text-align:center;font-size:20px;font-weight:700;background:var(--input);color:var(--text);box-shadow:0 2px 4px rgba(0,0,0,.06);transition:all .2s}
-input.big:focus{outline:3px solid var(--or);transform:scale(1.05);box-shadow:0 4px 8px rgba(0,0,0,.08)}
-input.big.malus-input{border-color:var(--malusColor);color:var(--malusColor)}
-input.big.bonus-input{border-color:var(--bonusColor);color:var(--bonusColor)}
+input[type=checkbox].pick{width:22px;height:22px;accent-color:#2e7d32;cursor:pointer}
+input.big{width:90px;padding:12px 6px;border:2px solid var(--inputb);border-radius:6px;text-align:center;font-size:20px;font-weight:700;background:var(--input);color:var(--text);box-shadow:0 2px 4px rgba(0,0,0,.1);transition:all .2s}
+input.big:focus{outline:3px solid var(--or);transform:scale(1.05);box-shadow:0 4px 8px rgba(0,0,0,.15)}
+input.big.malus-input{border-color:#e53935;color:#c62828}
+input.big.bonus-input{border-color:#43a047;color:#1b5e20}
 body.dark input.big.malus-input{color:#ff8a80}
 body.dark input.big.bonus-input{color:#b9f6ca}
 tbody tr{min-height:52px;height:auto}
@@ -86,7 +86,7 @@ tbody td{padding:8px 4px;vertical-align:top}
 .r{background:var(--ko)!important;color:var(--kot)!important;font-weight:700}
 .tok{color:var(--okt)!important}.tko{color:var(--kot)!important}
 .bonuscell{background:var(--bonus)!important;font-weight:700}
-.bonuscell.negative{background:var(--malus)!important;color:var(--malusColor)!important}
+.bonuscell.negative{background:var(--malus)!important;color:#c62828!important}
 body.dark .bonuscell.negative{color:#ff8a80!important}
 .hgold{background:var(--or2)!important;color:#1a1a1a!important}
 .ph{color:var(--ph)}
@@ -103,51 +103,51 @@ body.dark .bonuscell.negative{color:#ff8a80!important}
 .colhead small{font-size:10px;font-weight:400}
 .chip{display:inline-block;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;margin:2px}
 .appr{display:inline-block;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700;white-space:nowrap}
-.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--or);color:#fff;padding:10px 18px;border-radius:20px;font-weight:700;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--vert);color:var(--or2);padding:10px 18px;border-radius:20px;font-weight:700;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .stats{display:flex;flex-wrap:wrap;gap:6px}
 .stat{background:var(--stat);border:1px solid var(--statb);border-radius:8px;padding:6px 10px;font-size:12px}
 .stat b{display:block;font-size:16px;color:var(--accent)}
-.menu{position:absolute;background:var(--card);border:2px solid var(--vert2);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.menu{position:absolute;background:var(--card);border:2px solid var(--vert2);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .rel{position:relative}
 .panel{border:2px solid var(--or);background:var(--panel);border-radius:10px;padding:8px;margin-bottom:8px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:100;padding:12px}
 .modal .box{background:var(--card);border-radius:12px;padding:14px;width:100%;max-width:760px;max-height:92vh;overflow:auto;border-top:6px solid var(--or)}
 .hint{font-size:12px;color:var(--muted);margin:4px 0}
-.coefbtn{background:var(--vert);color:#fff;font-size:16px;padding:12px 16px;border-radius:10px;border:3px solid var(--or)}
+.coefbtn{background:var(--vert);color:var(--or2);font-size:16px;padding:12px 16px;border-radius:10px;border:3px solid var(--or)}
 h3{color:var(--accent)}
 .bm-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:700}
-.bm-badge.pos{background:var(--bonus);color:var(--vert)}
-.bm-badge.neg{background:var(--malus);color:var(--kot)}
+.bm-badge.pos{background:#c8e6c9;color:#1b5e20}
+.bm-badge.neg{background:#ffcdd2;color:#b71c1c}
 body.dark .bm-badge.pos{background:#1f5e28;color:#c8f5cf}
 body.dark .bm-badge.neg{background:#6e1f1f;color:#ffd0d0}
 .bm-toggle{display:flex;border-radius:8px;overflow:hidden;border:2px solid var(--vert2)}
 .bm-toggle button{flex:1;padding:8px 14px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
-.bm-toggle button.bm-bonus{background:var(--bonus);color:var(--vert)}
-.bm-toggle button.bm-malus{background:var(--malus);color:var(--kot)}
-.bm-toggle button.bm-bonus.on{background:var(--vert2);color:var(--or2)}
-.bm-toggle button.bm-malus.on{background:var(--malusColor);color:#fff}
-.bm-toggle button.bm-scope{background:var(--or2);color:#fff}
-.bm-toggle button.bm-scope.on{background:var(--or);color:#fff}
-body.dark .bm-toggle button.bm-bonus{background:#2b2a28;color:#c8f5cf}
+.bm-toggle button.bm-bonus{background:#e8f5e9;color:#1b5e20}
+.bm-toggle button.bm-malus{background:#fff5f5;color:#c62828}
+.bm-toggle button.bm-bonus.on{background:#2e7d32;color:#ffd54f}
+.bm-toggle button.bm-malus.on{background:#c62828;color:#fff}
+.bm-toggle button.bm-scope{background:#e3f2fd;color:#0d47a1}
+.bm-toggle button.bm-scope.on{background:#1565c0;color:#fff}
+body.dark .bm-toggle button.bm-bonus{background:#1d3a21;color:#c8f5cf}
 body.dark .bm-toggle button.bm-malus{background:#3b1420;color:#ff8a80}
-body.dark .bm-toggle button.bm-bonus.on{background:var(--vert2);color:var(--or2)}
-body.dark .bm-toggle button.bm-malus.on{background:var(--malusColor);color:#fff}
+body.dark .bm-toggle button.bm-bonus.on{background:#2e7d32;color:#ffd54f}
+body.dark .bm-toggle button.bm-malus.on{background:#c62828;color:#fff}
 body.dark .bm-toggle button.bm-scope{background:#13293d;color:#90caf9}
 
 /* Saisie groupée (Bulk) */
 .bulk-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;border:2px dashed var(--vert2);background:var(--panel);border-radius:10px;padding:8px 10px;margin-bottom:8px}
-.bulk-bar.malus-bulk{border-color:var(--malusColor);background:var(--malus)}
+.bulk-bar.malus-bulk{border-color:#e53935;background:var(--malus)}
 .bulk-bar input.bulkval{width:90px;padding:9px;border:2px solid var(--inputb);border-radius:8px;text-align:center;font-size:18px;font-weight:700;background:var(--input);color:var(--text)}
 .bulk-count{font-weight:700;color:var(--accent)}
 
 /* Barre de session B/M */
 .bm-date-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:var(--panel);border:2px solid var(--or);border-radius:10px;padding:10px 12px;margin-bottom:8px}
-.bm-date-bar.malus-bar{border-color:var(--malusColor);background:var(--malus)}
+.bm-date-bar.malus-bar{border-color:#e53935;background:var(--malus)}
 .bm-session-label{font-size:13px;font-weight:700;color:var(--accent)}
 .bm-date-input{padding:7px 10px;border:2px solid var(--inputb);border-radius:8px;font-size:14px;font-weight:600;background:var(--input);color:var(--text);cursor:pointer}
-.bm-date-input.malus-date{border-color:var(--malusColor)}
-.bm-save-btn{background:var(--vert2);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
-.bm-save-btn.malus-save{background:var(--malusColor)}
+.bm-date-input.malus-date{border-color:#e53935}
+.bm-save-btn{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.bm-save-btn.malus-save{background:#c62828}
 .bm-save-btn:disabled{opacity:.45;cursor:not-allowed}
 .bm-reason-input{padding:7px 10px;border:1.5px solid var(--inputb);border-radius:8px;font-size:13px;background:var(--input);color:var(--text);flex:1;min-width:140px}
 
@@ -156,32 +156,32 @@ body.dark .bm-toggle button.bm-scope{background:#13293d;color:#90caf9}
 .hist-toggle-btn{display:flex;align-items:center;gap:6px;background:none;border:2px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;margin-bottom:6px}
 .hist-group{border:1.5px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden}
 .hist-group-header{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--thead);border-bottom:1.5px solid var(--border);flex-wrap:wrap}
-.hist-group-header.bonus-header{border-left:5px solid var(--vert2)}
-.hist-group-header.malus-header{border-left:5px solid var(--malusColor)}
+.hist-group-header.bonus-header{border-left:5px solid #43a047}
+.hist-group-header.malus-header{border-left:5px solid #e53935}
 .hist-date{font-weight:700;font-size:14px;color:var(--accent)}
 .hist-reason{font-size:12px;color:var(--muted);font-style:italic;flex:1}
-.hist-del-btn{background:var(--malusColor);color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
-.hist-edit-btn{background:var(--or);color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;margin-left:auto}
+.hist-del-btn{background:#c62828;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
+.hist-edit-btn{background:#1565c0;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;margin-left:auto}
 .hist-entries-table{width:100%;border-collapse:collapse}
 .hist-entries-table th{background:var(--thead);padding:5px 8px;font-size:12px;font-weight:700;text-align:left;border-bottom:1px solid var(--line)}
 .hist-entries-table td{padding:5px 8px;font-size:13px;border-bottom:1px solid var(--line)}
 .hist-entries-table tr:nth-child(even) td{background:var(--zebra)}
-.hist-val-pos{color:var(--vert);font-weight:700}
-.hist-val-neg{color:var(--malusColor);font-weight:700}
-body.dark .hist-val-pos{color:#c8f5cf}
+.hist-val-pos{color:#1b5e20;font-weight:700}
+.hist-val-neg{color:#c62828;font-weight:700}
+body.dark .hist-val-pos{color:#b9f6ca}
 body.dark .hist-val-neg{color:#ff8a80}
 .hist-empty{text-align:center;color:var(--muted);padding:16px;font-size:13px}
 .hist-total-row td{font-weight:700;background:var(--tfoot)!important;border-top:2px solid var(--line2)}
 .session-count-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--vert2);color:#fff;border-radius:12px;font-size:11px;font-weight:700;padding:2px 7px;min-width:22px}
-.session-count-badge.malus-badge{background:var(--malusColor)}
+.session-count-badge.malus-badge{background:#c62828}
 .bm-cumul{display:flex;flex-direction:column;gap:2px;min-width:56px;text-align:center}
 .bm-cumul .bm-badge{margin:1px 0;justify-content:center}
 .student-bm-entry{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:1px 5px;border-radius:8px;white-space:nowrap;margin:1px 0}
-.student-bm-entry.pos{background:var(--bonus);color:var(--vert)}
-.student-bm-entry.neg{background:var(--malus);color:var(--malusColor)}
-body.dark .student-bm-entry.pos{background:#2b2a28;color:#c8f5cf}
+.student-bm-entry.pos{background:#e8f5e9;color:#1b5e20}
+.student-bm-entry.neg{background:#fff0f0;color:#c62828}
+body.dark .student-bm-entry.pos{background:#1d3a21;color:#b9f6ca}
 body.dark .student-bm-entry.neg{background:#3b1420;color:#ff8a80}
-.scope-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:var(--or2);color:#fff}
+.scope-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#e3f2fd;color:#0d47a1}
 body.dark .scope-pill{background:#13293d;color:#90caf9}
 
 /* Grille d'édition de séance */
@@ -191,8 +191,8 @@ body.dark .scope-pill{background:#13293d;color:#90caf9}
 
 /* Confirmation */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
-.confirm-box{background:var(--card);border-radius:12px;padding:20px;max-width:430px;width:100%;border-top:5px solid var(--malusColor);box-shadow:0 8px 32px rgba(0,0,0,.12)}
-.confirm-box h4{margin:0 0 10px;color:var(--malusColor);font-size:16px}
+.confirm-box{background:var(--card);border-radius:12px;padding:20px;max-width:430px;width:100%;border-top:5px solid #c62828;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.confirm-box h4{margin:0 0 10px;color:#c62828;font-size:16px}
 .confirm-box p{margin:0 0 16px;font-size:14px;color:var(--text)}
 .confirm-actions{display:flex;gap:8px;justify-content:flex-end}
 
@@ -209,7 +209,7 @@ body.dark .scope-pill{background:#13293d;color:#90caf9}
 </head>
 <body>
 <div id="root">
-  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#ffffff;color:var(--vert);font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;font-weight:700;font-size:15px">Chargement de GestiNotes…</div>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#e8f5e9;color:#1b5e20;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;font-weight:700;font-size:15px">Chargement de GestiNotes…</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
@@ -218,6 +218,21 @@ body.dark .scope-pill{background:#13293d;color:#90caf9}
 
 /*
  * GestiNotes — application de gestion des notes.
+ *
+ * Portage fidèle de l'application originale (React 18 via CDN + createElement)
+ * dans un composant client Next.js. Toutes les données restent stockées dans
+ * le localStorage du navigateur, exactement comme dans la version autonome.
+ *
+ * Amélioration demandée : mettre le trimestre actif beaucoup plus en évidence
+ * pour éviter de saisir des notes dans le mauvais trimestre :
+ *   - en-tête toujours visible (sticky) avec un badge "trimestre actif" ;
+ *   - onglets de trimestre agrandis, colorés, animés et nettement plus
+ *     contrastés entre actif / inactif (grisés quand inactifs) ;
+ *   - icônes numérotées (1️⃣ 2️⃣ 3️⃣) en plus de la couleur pour une
+ *     identification qui ne dépend pas que de la couleur ;
+ *   - bandeau de rappel "Trimestre actif" affiché juste au-dessus de chaque
+ *     écran où l'on saisit des notes / bonus-malus ;
+ *   - confirmation (toast) à chaque changement de trimestre.
  */
 
 const { useState, useEffect, useMemo, useCallback, useRef } = React;
@@ -228,24 +243,24 @@ const STORAGE_KEY = "gestinotes_v4";
 const OLD_STORAGE_KEY = "gestinotes_v3";
 
 const TYPES = {
-  IE: { label: "Interrogation écrite", short: "IE", color: "#ffe0b2" },
-  IO: { label: "Interrogation orale", short: "IO", color: "#fff3e0" },
-  DC: { label: "Devoir de classe", short: "DC", color: "#e8f5e9" },
-  DN: { label: "Devoir de niveau", short: "DN", color: "#fbe9e7" },
+  IE: { label: "Interrogation écrite", short: "IE", color: "#bbdefb" },
+  IO: { label: "Interrogation orale", short: "IO", color: "#f8bbd0" },
+  DC: { label: "Devoir de classe", short: "DC", color: "#ffe0b2" },
+  DN: { label: "Devoir de niveau", short: "DN", color: "#e1bee7" },
 };
 
 const TERMS = {
-  1: { label: "1er Trimestre", short: "T1", coef: 1, color: "#2e7d32", icon: "1️⃣" },
-  2: { label: "2e Trimestre", short: "T2", coef: 2, color: "#ff6f00", icon: "2️⃣" },
-  3: { label: "3e Trimestre", short: "T3", coef: 2, color: "#4caf50", icon: "3️⃣" },
+  1: { label: "1er Trimestre", short: "T1", coef: 1, color: "#1e88e5", icon: "1️⃣" },
+  2: { label: "2e Trimestre", short: "T2", coef: 2, color: "#8e24aa", icon: "2️⃣" },
+  3: { label: "3e Trimestre", short: "T3", coef: 2, color: "#f4511e", icon: "3️⃣" },
 };
 
 const APPR = [
-  { min: 17, label: "Très bien", bg: "#2e7d32", fg: "#fff" },
-  { min: 14, label: "Bien", bg: "#66bb6a", fg: "#fff" },
-  { min: 12, label: "Assez bien", bg: "#ffb74d", fg: "#1a1a1a" },
-  { min: 10, label: "Passable", bg: "#ff8f00", fg: "#1a1a1a" },
-  { min: 8, label: "Insuffisant", bg: "#ff7043", fg: "#1a1a1a" },
+  { min: 17, label: "Très bien", bg: "#1b5e20", fg: "#fff" },
+  { min: 14, label: "Bien", bg: "#43a047", fg: "#fff" },
+  { min: 12, label: "Assez bien", bg: "#9ccc65", fg: "#1a1a1a" },
+  { min: 10, label: "Passable", bg: "#ffd54f", fg: "#1a1a1a" },
+  { min: 8, label: "Insuffisant", bg: "#ffa726", fg: "#1a1a1a" },
   { min: 5, label: "Très insuffisant", bg: "#ef5350", fg: "#fff" },
   { min: 0, label: "Faible", bg: "#b71c1c", fg: "#fff" },
 ];
@@ -384,12 +399,12 @@ function computeRanks(list) {
 
 const Logo = () =>
   React.createElement("svg", { width: "44", height: "44", viewBox: "0 0 64 64" },
-    React.createElement("circle", { cx: "32", cy: "32", r: "30", fill: "#ff6f00" }),
-    React.createElement("circle", { cx: "32", cy: "32", r: "26", fill: "#2e7d32" }),
-    React.createElement("path", { d: "M32 16 L52 25 L32 34 L12 25 Z", fill: "#ffb74d" }),
-    React.createElement("path", { d: "M20 29 V39 Q32 47 44 39 V29 L32 34 Z", fill: "#ffffff" }),
-    React.createElement("path", { d: "M52 25 V38", stroke: "#ffb74d", strokeWidth: "2.5" }),
-    React.createElement("circle", { cx: "52", cy: "40", r: "2.5", fill: "#ffb74d" })
+    React.createElement("circle", { cx: "32", cy: "32", r: "30", fill: "#c9a227" }),
+    React.createElement("circle", { cx: "32", cy: "32", r: "26", fill: "#1b5e20" }),
+    React.createElement("path", { d: "M32 16 L52 25 L32 34 L12 25 Z", fill: "#ffd54f" }),
+    React.createElement("path", { d: "M20 29 V39 Q32 47 44 39 V29 L32 34 Z", fill: "#fff8e1" }),
+    React.createElement("path", { d: "M52 25 V38", stroke: "#ffd54f", strokeWidth: "2.5" }),
+    React.createElement("circle", { cx: "52", cy: "40", r: "2.5", fill: "#ffd54f" })
   );
 
 const Appr = ({ m }) => {
@@ -412,8 +427,6 @@ const ApprBar = ({ list }) =>
     })
   );
 
-// rest of the JS remains unchanged
-
 const ConfirmDialog = ({ msg, onOk, onCancel }) =>
   React.createElement("div", { className: "confirm-overlay", onClick: onCancel },
     React.createElement("div", { className: "confirm-box", onClick: (e) => e.stopPropagation() },
@@ -426,9 +439,1134 @@ const ConfirmDialog = ({ msg, onOk, onCancel }) =>
     )
   );
 
-// ... the rest of the original script is unchanged and continues below (trimmed in this commit for brevity)
+const ActiveTermBanner = ({ term }) =>
+  React.createElement("div", {
+    className: "active-term-banner noprint",
+    style: { background: "linear-gradient(135deg," + TERMS[term].color + "," + TERMS[term].color + "cc)" },
+  },
+    React.createElement("span", { style: { fontSize: 20 } }, TERMS[term].icon),
+    React.createElement("span", { className: "big" }, "Trimestre actif : ", TERMS[term].label, " (coef ", TERMS[term].coef, ")"),
+    React.createElement("span", { className: "warn" }, "⚠️ Vérifiez le trimestre avant de saisir une note ou un bonus/malus")
+  );
 
-// For clarity: only colors and theme variables were adapted to an orange/white/green palette.
+const BmSessionsCell = ({ sessions, studentId, term }) => {
+  const t = totalBmFromSessions(sessions, studentId, term);
+  const any = t.bonusPts || t.malusPts || t.bonusMoy || t.malusMoy;
+  if (!any) return React.createElement("span", { className: "ph" }, "—");
+  return React.createElement("span", null,
+    t.bonusPts > 0 && React.createElement("span", { className: "bm-badge pos" }, "+", fmt(t.bonusPts), " pt"),
+    t.malusPts > 0 && React.createElement("span", { className: "bm-badge neg" }, "−", fmt(t.malusPts), " pt"),
+    t.bonusMoy > 0 && React.createElement("span", { className: "bm-badge pos" }, "+", fmt(t.bonusMoy), " moy"),
+    t.malusMoy > 0 && React.createElement("span", { className: "bm-badge neg" }, "−", fmt(t.malusMoy), " moy")
+  );
+};
+
+function SessionEditor({ session, students, onSave, onClose }) {
+  const [type, setType] = useState(session.type);
+  const [scope, setScope] = useState(session.scope || "points");
+  const [date, setDate] = useState(session.date);
+  const [reason, setReason] = useState(session.reason || "");
+  const [term, setTerm] = useState(Number(session.term) || 1);
+  const [vals, setVals] = useState(() => {
+    const o = {};
+    session.entries.forEach((e) => {
+      if (parseNum(e.value) != null) o[e.studentId] = e.value;
+    });
+    return o;
+  });
+  const [onlyConcerned, setOnlyConcerned] = useState(true);
+  const [picked, setPicked] = useState({});
+  const [bulk, setBulk] = useState("");
+
+  const named = useMemo(() => students.map((s, i) => ({ s, i })).filter((x) => x.s.name.trim()), [students]);
+  const visible = onlyConcerned ? named.filter((x) => parseNum(vals[x.s.id]) != null) : named;
+  const filled = Object.values(vals).map(parseNum).filter((x) => x != null && x > 0);
+  const pickedIds = Object.keys(picked).filter((k) => picked[k]);
+
+  const applyBulk = () => {
+    const n = parseNum(bulk);
+    if (n == null || !pickedIds.length) return;
+    setVals((v) => {
+      const o = { ...v };
+      pickedIds.forEach((id) => (o[id] = bulk));
+      return o;
+    });
+  };
+
+  const clearPicked = () => {
+    setVals((v) => {
+      const o = { ...v };
+      pickedIds.forEach((id) => delete o[id]);
+      return o;
+    });
+  };
+
+  const save = () => {
+    const entries = students
+      .filter((s) => parseNum(vals[s.id]) != null && parseNum(vals[s.id]) !== 0)
+      .map((s) => ({ studentId: s.id, value: vals[s.id] }));
+    onSave({ ...session, type, scope, date, reason: reason.trim(), term, entries });
+  };
+
+  return React.createElement("div", { className: "modal", onClick: onClose },
+    React.createElement("div", { className: "box", onClick: (e) => e.stopPropagation() },
+      React.createElement("h3", { style: { margin: "0 0 6px" } }, "✏️ Modifier la séance ", type === "bonus" ? "➕ bonus" : "➖ malus"),
+      React.createElement("p", { className: "hint" }, "Corrigez ici la date, le motif, la nature, la portée et les valeurs attribuées à chaque élève. Les moyennes sont recalculées immédiatement."),
+      React.createElement("div", { className: "row", style: { marginBottom: 6 } },
+        React.createElement("div", { className: "bm-toggle" },
+          React.createElement("button", { className: "bm-bonus" + (type === "bonus" ? " on" : ""), onClick: () => setType("bonus") }, "➕ Bonus"),
+          React.createElement("button", { className: "bm-malus" + (type === "malus" ? " on" : ""), onClick: () => setType("malus") }, "➖ Malus")
+        ),
+        React.createElement("div", { className: "bm-toggle" },
+          React.createElement("button", { className: "bm-scope" + (scope === "points" ? " on" : ""), onClick: () => setScope("points") }, "Sur le total des points"),
+          React.createElement("button", { className: "bm-scope" + (scope === "moyenne" ? " on" : ""), onClick: () => setScope("moyenne") }, "Sur la moyenne /20")
+        )
+      ),
+      React.createElement("div", { className: "row", style: { marginBottom: 6 } },
+        React.createElement("label", { style: { fontWeight: 700 } }, "📅 Date :"),
+        React.createElement("input", { type: "date", value: date, onChange: (e) => setDate(e.target.value) }),
+        React.createElement("select", { value: term, onChange: (e) => setTerm(+e.target.value) },
+          [1, 2, 3].map((t) => React.createElement("option", { key: t, value: t }, TERMS[t].label))
+        ),
+        React.createElement("input", {
+          type: "text",
+          style: { flex: 1, minWidth: 180 },
+          placeholder: "Motif",
+          value: reason,
+          onChange: (e) => setReason(e.target.value),
+        })
+      ),
+      React.createElement("div", { className: "bulk-bar" + (type === "malus" ? " malus-bulk" : "") },
+        React.createElement("span", { className: "bulk-count" }, "☑️ ", pickedIds.length, " sélectionné(s)"),
+        React.createElement("input", {
+          className: "bulkval",
+          inputMode: "decimal",
+          placeholder: "val.",
+          value: bulk,
+          onChange: (e) => validNoteNum(e.target.value) && setBulk(e.target.value),
+        }),
+        React.createElement("button", { className: "btn", onClick: applyBulk, disabled: !pickedIds.length || parseNum(bulk) == null }, "✅ Appliquer"),
+        React.createElement("button", { className: "btn red", onClick: clearPicked, disabled: !pickedIds.length }, "🗑 Effacer"),
+        React.createElement("button", { className: "btn grey", onClick: () => setPicked({}) }, "Désélectionner"),
+        React.createElement("label", { className: "row", style: { gap: 4 } },
+          React.createElement("input", { type: "checkbox", checked: onlyConcerned, onChange: (e) => setOnlyConcerned(e.target.checked) }),
+          "Afficher uniquement les élèves concernés"
+        )
+      ),
+      React.createElement("div", { className: "edit-grid" },
+        visible.length === 0 && React.createElement("div", { style: { gridColumn: "1 / -1" }, className: "hist-empty" }, "Aucun élève à afficher. Décochez la case ci-dessus pour ajouter des élèves."),
+        visible.map(({ s, i }) =>
+          React.createElement(React.Fragment, { key: s.id },
+            React.createElement("input", {
+              type: "checkbox",
+              className: "pick",
+              checked: !!picked[s.id],
+              onChange: (e) => setPicked((p) => ({ ...p, [s.id]: e.target.checked })),
+            }),
+            React.createElement("span", { className: "en", title: s.name }, (i + 1) + ". " + s.name),
+            React.createElement("input", {
+              inputMode: "decimal",
+              value: vals[s.id] || "",
+              placeholder: "—",
+              onChange: (e) => validNoteNum(e.target.value) && setVals((v) => ({ ...v, [s.id]: e.target.value })),
+            })
+          )
+        )
+      ),
+      React.createElement("div", { className: "row", style: { marginTop: 8 } },
+        React.createElement("span", { className: "bm-badge pos" }, filled.length, " élève(s) concerné(s)"),
+        filled.length > 0 && React.createElement("span", { className: "bm-badge " + (type === "bonus" ? "pos" : "neg") }, "moyenne ", type === "bonus" ? "+" : "−", fmt(mean(filled))),
+        React.createElement("span", { className: "scope-pill" }, scope === "points" ? "appliqué au total des points" : "appliqué directement sur la moyenne /20")
+      ),
+      React.createElement("div", { className: "row", style: { marginTop: 10, justifyContent: "flex-end" } },
+        React.createElement("button", { className: "btn grey", onClick: onClose }, "Annuler"),
+        React.createElement("button", { className: "btn or big", onClick: save }, "💾 Enregistrer les modifications")
+      )
+    )
+  );
+}
+
+function BmHistoryPanel({ sessions, term, students, onDelete, onEdit, defaultOpen = false, collapsible = true }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const [confirmId, setConfirmId] = useState(null);
+
+  const termSessions = (sessions || [])
+    .filter((s) => Number(s.term) === Number(term))
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const bonusCount = termSessions.filter((s) => s.type === "bonus").length;
+  const malusCount = termSessions.filter((s) => s.type === "malus").length;
+  const shown = collapsible ? open : true;
+
+  return React.createElement("div", { className: "hist-panel noprint" },
+    confirmId && React.createElement(ConfirmDialog, {
+      msg: "Supprimer définitivement cette séance de bonus/malus ? Les valeurs seront retirées du calcul des moyennes.",
+      onOk: () => {
+        onDelete(confirmId);
+        setConfirmId(null);
+      },
+      onCancel: () => setConfirmId(null),
+    }),
+    collapsible && React.createElement("button", { className: "hist-toggle-btn", onClick: () => setOpen((o) => !o) },
+      open ? "▲" : "▼", " Consulter / modifier les séances",
+      bonusCount > 0 && React.createElement("span", { className: "session-count-badge" }, "➕ ", bonusCount, " bonus"),
+      malusCount > 0 && React.createElement("span", { className: "session-count-badge malus-badge" }, "➖ ", malusCount, " malus"),
+      termSessions.length === 0 && React.createElement("span", { style: { color: "var(--muted)", fontWeight: 400, fontSize: 12 } }, "— aucune séance enregistrée")
+    ),
+    shown && React.createElement("div", null,
+      termSessions.length === 0 && React.createElement("div", { className: "hist-empty" }, "Aucune séance enregistrée pour ce trimestre."),
+      termSessions.map((sess) => {
+        const filled = sess.entries.filter((e) => parseNum(e.value) != null && parseNum(e.value) !== 0);
+        const total = filled.reduce((a, e) => a + (parseNum(e.value) || 0), 0);
+        const avg = filled.length ? total / filled.length : null;
+        const sign = sess.type === "bonus" ? "+" : "−";
+        return React.createElement("div", { className: "hist-group", key: sess.id },
+          React.createElement("div", { className: "hist-group-header " + (sess.type === "bonus" ? "bonus-header" : "malus-header") },
+            React.createElement("span", { style: { fontSize: 18 } }, sess.type === "bonus" ? "➕" : "➖"),
+            React.createElement("span", { className: "hist-date" }, fmtDateFull(sess.date)),
+            React.createElement("span", { className: "scope-pill" }, sess.scope === "moyenne" ? "sur la moyenne /20" : "sur le total des points"),
+            sess.reason && React.createElement("span", { className: "hist-reason" }, "« ", sess.reason, " »"),
+            React.createElement("span", { className: "bm-badge " + (sess.type === "bonus" ? "pos" : "neg") }, filled.length, " élève", filled.length > 1 ? "s" : ""),
+            avg != null && React.createElement("span", { className: "bm-badge " + (sess.type === "bonus" ? "pos" : "neg") }, "moy. ", sign, fmt(avg)),
+            React.createElement("button", { className: "hist-edit-btn", onClick: () => onEdit(sess) }, "✏️ Modifier"),
+            React.createElement("button", { className: "hist-del-btn", onClick: () => setConfirmId(sess.id) }, "🗑 Supprimer")
+          ),
+          React.createElement("table", { className: "hist-entries-table" },
+            React.createElement("thead", null,
+              React.createElement("tr", null,
+                React.createElement("th", { style: { width: 50 } }, "N°"),
+                React.createElement("th", null, "Élève"),
+                React.createElement("th", null, sess.type === "bonus" ? "➕ Bonus accordé" : "➖ Malus appliqué", sess.scope === "moyenne" ? " (points de moyenne)" : " (points)")
+              )
+            ),
+            React.createElement("tbody", null,
+              filled.map((entry) => {
+                const idx = students.findIndex((s) => s.id === entry.studentId);
+                const stu = students[idx];
+                return React.createElement("tr", { key: entry.studentId },
+                  React.createElement("td", { style: { textAlign: "center" } }, idx + 1),
+                  React.createElement("td", { style: { textAlign: "left" } }, (stu && stu.name) || React.createElement("span", { className: "ph" }, "Élève ", idx + 1)),
+                  React.createElement("td", null, React.createElement("span", { className: sess.type === "bonus" ? "hist-val-pos" : "hist-val-neg" }, sign, fmt(parseNum(entry.value))))
+                );
+              }),
+              filled.length === 0 && React.createElement("tr", null,
+                React.createElement("td", { colSpan: 3, className: "hist-empty" }, "Séance vide — cliquez sur ✏️ Modifier pour y ajouter des élèves.")
+              )
+            ),
+            React.createElement("tfoot", null,
+              React.createElement("tr", { className: "hist-total-row" },
+                React.createElement("td", null),
+                React.createElement("td", { style: { textAlign: "left" } }, "Total / moyenne de la séance"),
+                React.createElement("td", null, React.createElement("span", { className: sess.type === "bonus" ? "hist-val-pos" : "hist-val-neg" }, sign, fmt(total), " (moy. ", sign, fmt(mean(filled.map((e) => parseNum(e.value)))), ")"))
+              )
+            )
+          )
+        );
+      })
+    )
+  );
+}
+
+function App() {
+  const [data, setData] = useState(() => {
+    let d = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY);
+      if (raw) d = JSON.parse(raw);
+    } catch (e) {}
+    if (!d || !Array.isArray(d.classes) || !d.classes.length) {
+      const c = newClass("6ème A");
+      d = { classes: [c], currentClassId: c.id };
+    }
+    if (d.classes) {
+      d.classes = d.classes.map((cls2) => ({
+        ...cls2,
+        bmSessions: (cls2.bmSessions || []).map((s) => ({ scope: "points", ...s })),
+        students: (cls2.students || []).map((s, i) => ({
+          id: s.id || uid() + i,
+          name: s.name || "",
+          notes: s.notes || emptyNotes(),
+        })),
+      }));
+    }
+    return {
+      term: 1,
+      sort: "default",
+      hideEmpty: false,
+      view: "saisie",
+      cur: 0,
+      dark: false,
+      zoom: 1,
+      wideNames: false,
+      bmMode: "bonus",
+      bmScope: "points",
+      ...d,
+    };
+  });
+
+  const [sessionDate, setSessionDate] = useState(todayStr);
+  const [sessionReason, setSessionReason] = useState("");
+  const [sessionDraft, setSessionDraft] = useState({});
+  const [picked, setPicked] = useState({});
+  const [bulkVal, setBulkVal] = useState("");
+  const [editSession, setEditSession] = useState(null);
+  const [confirm, setConfirm] = useState(null);
+  const [lastSave, setLastSave] = useState(null);
+  const [toast, setToast] = useState("");
+  const [delMenu, setDelMenu] = useState(false);
+  const [pasteOpen, setPasteOpen] = useState(false);
+  const [pasteTxt, setPasteTxt] = useState("");
+  const [createOpen, setCreateOpen] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newNames, setNewNames] = useState("");
+  const [detail, setDetail] = useState(false);
+  const [tall, setTall] = useState(false);
+  const [sel, setSel] = useState(null);
+  const fileRef = useRef(null);
+
+  const cls = data.classes.find((c) => c.id === data.currentClassId) || data.classes[0];
+  const term = [1, 2, 3].includes(data.term) ? data.term : 1;
+  const { sort, hideEmpty, view, cur, dark, wideNames, bmMode, bmScope } = data;
+  const zoom = [0.9, 1, 1.1, 1.2, 1.3].includes(data.zoom) ? data.zoom : 1;
+  const isBM = cur === "bm";
+  const sessions = cls.bmSessions || [];
+  const evals = cls.evals[term];
+  const curIdx = typeof cur === "number" ? cur : 0;
+  const curEval = evals[curIdx] || evals[0];
+
+  const showToast = (m) => {
+    setToast(m);
+    setTimeout(() => setToast(""), 2600);
+  };
+
+  const ask = (msg, fn) => setConfirm({ msg, fn });
+
+  useEffect(() => {
+    document.body.classList.toggle("dark", !!dark);
+  }, [dark]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        setLastSave(new Date());
+      } catch (e) {}
+    }, 600);
+    return () => clearTimeout(t);
+  }, [data]);
+
+  useEffect(() => {
+    setSessionDraft({});
+    setPicked({});
+    setBulkVal("");
+  }, [term, bmMode, bmScope, cur, cls.id]);
+
+  const set = (patch) => setData((d) => ({ ...d, ...patch }));
+
+  const changeTerm = (t) => {
+    if (t === term) return;
+    set({ term: t });
+    showToast(TERMS[t].icon + " Trimestre actif → " + TERMS[t].label);
+  };
+
+  const updateClass = useCallback(
+    (fn) =>
+      setData((d) => ({
+        ...d,
+        classes: d.classes.map((c) => (c.id === d.currentClassId ? fn(c) : c)),
+      })),
+    []
+  );
+
+  const updateStudent = useCallback(
+    (sid, fn) => updateClass((c) => ({ ...c, students: c.students.map((s) => (s.id === sid ? fn(s) : s)) })),
+    [updateClass]
+  );
+
+  const saveNow = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      setLastSave(new Date());
+      showToast("💾 Sauvegarde effectuée");
+    } catch (e) {
+      showToast("⚠️ Échec de la sauvegarde");
+    }
+  };
+
+  const exportJSON = () => {
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "gestinotes-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click();
+    showToast("📤 Fichier exporté");
+  };
+
+  const importJSON = (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const d = JSON.parse(r.result);
+        if (!d.classes) throw new Error();
+        d.classes = d.classes.map((cls2) => ({
+          ...cls2,
+          bmSessions: (cls2.bmSessions || []).map((s) => ({ scope: "points", ...s })),
+          students: cls2.students.map((s, i) => ({
+            id: s.id || uid() + i,
+            name: s.name || "",
+            notes: s.notes || emptyNotes(),
+          })),
+        }));
+        setData((x) => ({ ...x, ...d }));
+        showToast("📥 Données importées");
+      } catch (err) {
+        showToast("⚠️ Fichier invalide");
+      }
+    };
+    r.readAsText(f);
+    e.target.value = "";
+  };
+
+  const setNoteFor = useCallback(
+    (ids, v) => {
+      const scale = curEval.scale;
+      const n = parseNum(v);
+      const val = n != null && n > scale ? String(scale) : v;
+      updateClass((c) => ({
+        ...c,
+        students: c.students.map((s) =>
+          ids.includes(s.id)
+            ? {
+                ...s,
+                notes: {
+                  ...s.notes,
+                  [term]: s.notes[term].map((x, k) => (k === curIdx ? val : x)),
+                },
+              }
+            : s
+        ),
+      }));
+    },
+    [curEval, curIdx, term, updateClass]
+  );
+
+  const onVal = useCallback((sid, v) => {
+    if (!validNoteNum(v)) return;
+    setNoteFor([sid], v);
+  }, [setNoteFor]);
+
+  const onSessionVal = useCallback((sid, v) => {
+    if (!validNoteNum(v)) return;
+    setSessionDraft((d) => ({ ...d, [sid]: v }));
+  }, []);
+
+  const pickedIds = useMemo(() => Object.keys(picked).filter((k) => picked[k]), [picked]);
+
+  const applyBulkNote = () => {
+    if (!pickedIds.length || !validNoteNum(bulkVal) || parseNum(bulkVal) == null) return;
+    setNoteFor(pickedIds, bulkVal);
+    showToast("✅ Note " + bulkVal + " appliquée à " + pickedIds.length + " élève(s)");
+    setPicked({});
+    setBulkVal("");
+  };
+
+  const clearBulkNote = () => {
+    if (!pickedIds.length) return;
+    setNoteFor(pickedIds, "");
+    showToast("🗑 Note effacée pour " + pickedIds.length + " élève(s)");
+    setPicked({});
+  };
+
+  const applyBulkBm = () => {
+    if (!pickedIds.length || parseNum(bulkVal) == null) return;
+    setSessionDraft((d) => {
+      const o = { ...d };
+      pickedIds.forEach((id) => (o[id] = bulkVal));
+      return o;
+    });
+    showToast("✅ Valeur appliquée à " + pickedIds.length + " élève(s)");
+    setPicked({});
+    setBulkVal("");
+  };
+
+  const saveSession = useCallback(() => {
+    const entries = cls.students
+      .filter((s) => parseNum(sessionDraft[s.id]) != null && parseNum(sessionDraft[s.id]) > 0)
+      .map((s) => ({ studentId: s.id, value: sessionDraft[s.id] }));
+    if (!entries.length) {
+      showToast("⚠️ Aucune valeur saisie dans cette séance");
+      return;
+    }
+    if (!sessionDate) {
+      showToast("⚠️ Veuillez choisir une date");
+      return;
+    }
+    const sess = {
+      id: uid(),
+      type: bmMode,
+      scope: bmScope || "points",
+      date: sessionDate,
+      reason: sessionReason.trim(),
+      term,
+      entries,
+    };
+    updateClass((c) => ({ ...c, bmSessions: [...(c.bmSessions || []), sess] }));
+    setSessionDraft({});
+    setSessionReason("");
+    setPicked({});
+    showToast("✅ Séance " + bmMode + " (" + (sess.scope === "moyenne" ? "sur moyenne" : "sur points") + ") du " + fmtDate(sessionDate) + " enregistrée pour " + TERMS[term].label);
+  }, [cls.students, sessionDraft, bmMode, bmScope, sessionDate, sessionReason, term, updateClass]);
+
+  const deleteSession = useCallback(
+    (sessionId) => {
+      updateClass((c) => ({ ...c, bmSessions: (c.bmSessions || []).filter((s) => s.id !== sessionId) }));
+      showToast("🗑 Séance supprimée");
+    },
+    [updateClass]
+  );
+
+  const saveEditedSession = useCallback(
+    (edited) => {
+      updateClass((c) => ({
+        ...c,
+        bmSessions: (c.bmSessions || []).map((s) => (s.id === edited.id ? edited : s)),
+      }));
+      setEditSession(null);
+      showToast("✏️ Séance modifiée — moyennes recalculées");
+    },
+    [updateClass]
+  );
+
+  const onClear = useCallback(
+    (sid) => {
+      ask("Effacer le nom et toutes les notes de cet élève ?", () => {
+        updateStudent(sid, (s) => ({ ...s, name: "", notes: emptyNotes() }));
+      });
+    },
+    [updateStudent]
+  );
+
+  const setEval = (i, patch) =>
+    updateClass((c) => ({ ...c, evals: { ...c.evals, [term]: c.evals[term].map((e, k) => (k === i ? { ...e, ...patch } : e)) } }));
+
+  const setAllType = (t) => {
+    updateClass((c) => ({ ...c, evals: { ...c.evals, [term]: c.evals[term].map((e) => ({ ...e, type: t })) } }));
+    showToast("Type appliqué aux 20 évaluations");
+  };
+
+  const goEval = (i) => set({ cur: i, view: "saisie" });
+  const prevEval = () => goEval(isBM ? NB_NOTES - 1 : Math.max(0, curIdx - 1));
+  const nextEval = () => goEval(isBM ? "bm" : curIdx >= NB_NOTES - 1 ? "bm" : curIdx + 1);
+
+  const createClass = () => {
+    const n = newName.trim();
+    if (!n) {
+      showToast("⚠️ Indiquez le nom de la classe");
+      return;
+    }
+    const names = splitNames(newNames);
+    const c = newClass(n, names);
+    setData((d) => ({ ...d, classes: [...d.classes, c], currentClassId: c.id, view: "saisie", cur: 0, term: 1 }));
+    setCreateOpen(false);
+    showToast("Classe « " + n + " » créée avec " + names.length + " élèves");
+  };
+
+  const renameClass = () => {
+    const n = prompt("Nouveau nom de la classe :", cls.name);
+    if (n && n.trim()) updateClass((c) => ({ ...c, name: n.trim() }));
+  };
+
+  const deleteClass = () => {
+    ask("Supprimer définitivement la classe « " + cls.name + " » ?", () => {
+      setData((d) => {
+        let rest = d.classes.filter((c) => c.id !== cls.id);
+        if (!rest.length) rest = [newClass("Nouvelle classe")];
+        return { ...d, classes: rest, currentClassId: rest[0].id };
+      });
+      showToast("🗑 Classe supprimée");
+    });
+  };
+
+  const resetClass = () => {
+    ask("RÉINITIALISER la classe « " + cls.name + " » ? Noms, notes et réglages seront effacés.", () => {
+      updateClass((c) => ({ ...newClass(c.name), id: c.id }));
+      showToast("♻️ Classe réinitialisée");
+    });
+  };
+
+  const clearNames = () => {
+    setDelMenu(false);
+    ask("Effacer tous les noms des élèves ?", () => {
+      updateClass((c) => ({ ...c, students: c.students.map((s) => ({ ...s, name: "" })) }));
+    });
+  };
+
+  const clearNotes = () => {
+    setDelMenu(false);
+    ask("Effacer toutes les notes du " + TERMS[term].label + " ?", () => {
+      updateClass((c) => ({ ...c, students: c.students.map((s) => ({ ...s, notes: { ...s.notes, [term]: Array(NB_NOTES).fill("") } })) }));
+    });
+  };
+
+  const clearAllSessions = (type) => {
+    setDelMenu(false);
+    const label = type ? (type === "bonus" ? "bonus" : "malus") : "bonus et malus";
+    ask("Effacer toutes les séances de " + label + " du " + TERMS[term].label + " ?", () => {
+      updateClass((c) => ({
+        ...c,
+        bmSessions: (c.bmSessions || []).filter((s) => Number(s.term) !== term || (type && s.type !== type)),
+      }));
+      showToast("🗑 Séances supprimées");
+    });
+  };
+
+  const clearCurrent = () => {
+    if (isBM) return clearAllSessions();
+    ask("Effacer toutes les notes de N" + (curIdx + 1) + " ?", () => {
+      updateClass((c) => ({ ...c, students: c.students.map((s) => ({ ...s, notes: { ...s.notes, [term]: s.notes[term].map((x, k) => (k === curIdx ? "" : x)) } })) }));
+    });
+  };
+
+  const applyPaste = () => {
+    const lines = splitNames(pasteTxt);
+    updateClass((c) => ({ ...c, students: c.students.map((s, i) => (i < lines.length ? { ...s, name: lines[i] } : s)) }));
+    setPasteOpen(false);
+    setPasteTxt("");
+    showToast(lines.length + " noms importés");
+  };
+
+  const sortRoster = () => {
+    ask("Ranger définitivement la liste par ordre alphabétique ?", () => {
+      updateClass((c) => ({
+        ...c,
+        students: [...c.students].sort((a, b) => {
+          const na = a.name.trim(), nb = b.name.trim();
+          if (!na && !nb) return 0;
+          if (!na) return 1;
+          if (!nb) return -1;
+          return na.localeCompare(nb, "fr", { sensitivity: "base" });
+        }),
+      }));
+      showToast("Liste rangée par ordre alphabétique");
+    });
+  };
+
+  const results = useMemo(() => {
+    const map = {};
+    cls.students.forEach((s) => (map[s.id] = calcMoyenne(s, evals, term, sessions)));
+    const ranks = computeRanks(cls.students.map((s) => ({ id: s.id, moyenne: map[s.id].moyenne })));
+    return { map, ranks };
+  }, [cls, term, evals, sessions]);
+
+  const colStats = useMemo(
+    () => ({
+      cols: evals.map((_, i) => mean(cls.students.map((s) => parseNum(s.notes[term][i])))),
+      bonusMean: mean(
+        cls.students.map((s) => {
+          const t = totalBmFromSessions(sessions, s.id, term);
+          return t.totalBonus > 0 ? t.totalBonus : null;
+        })
+      ),
+      malusMean: mean(
+        cls.students.map((s) => {
+          const t = totalBmFromSessions(sessions, s.id, term);
+          return t.totalMalus > 0 ? t.totalMalus : null;
+        })
+      ),
+      moy: mean(cls.students.map((s) => results.map[s.id].moyenne)),
+    }),
+    [cls, term, evals, results, sessions]
+  );
+
+  const livret = useMemo(() => {
+    const per = { 1: {}, 2: {}, 3: {} };
+    const ranks = {};
+    const annual = {};
+    [1, 2, 3].forEach((t) => {
+      cls.students.forEach((s) => (per[t][s.id] = calcMoyenne(s, cls.evals[t], t, sessions).moyenne));
+      ranks[t] = computeRanks(cls.students.map((s) => ({ id: s.id, moyenne: per[t][s.id] })));
+    });
+    cls.students.forEach((s) => {
+      let num = 0, den = 0;
+      [1, 2, 3].forEach((t) => {
+        const m = per[t][s.id];
+        if (m != null) {
+          num += m * TERMS[t].coef;
+          den += TERMS[t].coef;
+        }
+      });
+      annual[s.id] = den ? Math.round((num / den) * 100) / 100 : null;
+    });
+    const rankA = computeRanks(cls.students.map((s) => ({ id: s.id, moyenne: annual[s.id] })));
+    return { per, ranks, annual, rankA };
+  }, [cls, sessions]);
+
+  const isLivret = view === "livret";
+  const getMoy = (s) => (isLivret ? livret.annual[s.id] : results.map[s.id].moyenne);
+
+  const sorted = useMemo(() => {
+    let arr = cls.students.map((s, i) => ({ s, i }));
+    if (hideEmpty) arr = arr.filter((x) => x.s.name.trim());
+    if (sort === "merit") {
+      arr.sort((a, b) => {
+        const ma = getMoy(a.s), mb = getMoy(b.s);
+        if (ma == null && mb == null) return a.i - b.i;
+        if (ma == null) return 1;
+        if (mb == null) return -1;
+        return mb - ma || a.i - b.i;
+      });
+    } else if (sort === "alpha") {
+      arr.sort((a, b) => {
+        const na = a.s.name.trim(), nb = b.s.name.trim();
+        if (!na && !nb) return a.i - b.i;
+        if (!na) return 1;
+        if (!nb) return -1;
+        return na.localeCompare(nb, "fr", { sensitivity: "base" }) || a.i - b.i;
+      });
+    }
+    return arr;
+  }, [cls, sort, hideEmpty, results, livret, isLivret]);
+
+  const named = cls.students.filter((s) => s.name.trim()).length;
+  const moyList = (isLivret ? cls.students.map((s) => livret.annual[s.id]) : cls.students.map((s) => results.map[s.id].moyenne)).filter((x) => x != null);
+  const moyClasse = mean(moyList);
+  const hasTerm = view === "saisie" || view === "vue" || view === "moyennes" || view === "seances";
+  const termColor = hasTerm ? TERMS[term].color : "#c9a227";
+
+  const draftVals = cls.students.map((s) => parseNum(sessionDraft[s.id])).filter((x) => x != null && x > 0);
+  const draftFilled = draftVals.length;
+  const curNoteVals = isBM ? [] : cls.students.map((s) => parseNum(s.notes[term][curIdx]));
+  const curFilled = curNoteVals.filter((x) => x != null);
+
+  const visibleIds = sorted.map((x) => x.s.id);
+  const allPicked = visibleIds.length > 0 && visibleIds.every((id) => picked[id]);
+  const toggleAll = () => setPicked(() => {
+    if (allPicked) return {};
+    const o = {};
+    visibleIds.forEach((id) => (o[id] = true));
+    return o;
+  });
+  const togglePick = (id) => setPicked((p) => ({ ...p, [id]: !p[id] }));
+
+  const titles = {
+    eleves: "Liste des élèves",
+    saisie: TERMS[term].label,
+    vue: TERMS[term].label + " — Vue d'ensemble",
+    moyennes: TERMS[term].label + " — Moyennes",
+    livret: "Livret scolaire",
+    seances: TERMS[term].label + " — Séances bonus / malus",
+  };
+
+  const SortBar = ({ merit = true }) =>
+    React.createElement(React.Fragment, null,
+      merit && React.createElement("button", { className: "btn or" + (sort === "merit" ? " active" : ""), onClick: () => set({ sort: "merit" }) }, "🏆 Ordre de mérite"),
+      React.createElement("button", { className: "btn or" + (sort === "alpha" ? " active" : ""), onClick: () => set({ sort: "alpha" }) }, "🔤 Alphabétique"),
+      React.createElement("button", { className: "btn grey" + (sort === "default" ? " active" : ""), onClick: () => set({ sort: "default" }) }, "Ordre de saisie"),
+      React.createElement("button", { className: "btn grey" + (hideEmpty ? " active" : ""), onClick: () => set({ hideEmpty: !hideEmpty }) }, hideEmpty ? "👁 Afficher les 100 lignes" : "👁 Masquer les lignes vides")
+    );
+
+  const StatsBar = () =>
+    React.createElement("div", { className: "stats", style: { marginBottom: 8 } },
+      React.createElement("div", { className: "stat" }, "Effectif", React.createElement("b", null, named)),
+      React.createElement("div", { className: "stat" }, "Moyenne classe", React.createElement("b", { className: tcol(moyClasse) }, fmt(moyClasse))),
+      React.createElement("div", { className: "stat" }, "Plus forte", React.createElement("b", null, moyList.length ? fmt(Math.max(...moyList)) : "-")),
+      React.createElement("div", { className: "stat" }, "Plus faible", React.createElement("b", null, moyList.length ? fmt(Math.min(...moyList)) : "-")),
+      React.createElement("div", { className: "stat" }, "Moy. ≥ 10", React.createElement("b", { className: "tok" }, moyList.filter((m) => m >= 10).length, " / ", moyList.length)),
+      React.createElement("div", { className: "stat" }, "Moy. < 10", React.createElement("b", { className: "tko" }, moyList.filter((m) => m < 10).length, " / ", moyList.length))
+    );
+
+  const BulkBar = ({ mode }) =>
+    React.createElement("div", { className: "bulk-bar noprint" + (mode === "bm" && bmMode === "malus" ? " malus-bulk" : "") },
+      React.createElement("span", { className: "bulk-count" }, "☑️ ", pickedIds.length, " élève(s) sélectionné(s)"),
+      React.createElement("input", {
+        className: "bulkval",
+        inputMode: "decimal",
+        placeholder: mode === "note" ? "/" + curEval.scale : "val.",
+        value: bulkVal,
+        onChange: (e) => validNoteNum(e.target.value) && setBulkVal(e.target.value),
+      }),
+      React.createElement("button", {
+        className: "btn big",
+        disabled: !pickedIds.length || parseNum(bulkVal) == null,
+        onClick: mode === "note" ? applyBulkNote : applyBulkBm,
+      }, "✅ ", mode === "note" ? "Valider cette note" : "Valider cette valeur", " pour les sélectionnés"),
+      React.createElement("button", { className: "btn light", onClick: toggleAll }, allPicked ? "☐ Tout décocher" : "☑ Tout cocher"),
+      mode === "note" && React.createElement("button", { className: "btn red", disabled: !pickedIds.length, onClick: clearBulkNote }, "🗑 Effacer la note"),
+      React.createElement("span", { className: "hint" }, "Cochez les élèves ayant la même note et validez en un clic.")
+    );
+
+  const ChkHead = () =>
+    React.createElement("th", { className: "st-chk noprint" },
+      React.createElement("input", { type: "checkbox", className: "pick", checked: allPicked, onChange: toggleAll })
+    );
+
+  return React.createElement("div", null,
+    React.createElement("header", null,
+      React.createElement(Logo, null),
+      React.createElement("div", { style: { flex: 1 } },
+        React.createElement("h1", null, "GestiNotes"),
+        React.createElement("small", null, "Notes • Moyennes • Bonus/Malus • Rangs • Livret scolaire")
+      ),
+      hasTerm && React.createElement("div", { className: "term-badge noprint", title: "Trimestre actuellement sélectionné" },
+        React.createElement("span", { className: "dot", style: { background: TERMS[term].color } }),
+        TERMS[term].icon, " ", TERMS[term].label
+      ),
+      React.createElement("button", { className: "toggle noprint", onClick: () => set({ dark: !dark }) }, dark ? "☀️ Clair" : "🌙 Sombre"),
+      React.createElement("div", { style: { textAlign: "right", fontSize: 11 } },
+        lastSave ? "✓ Auto-sauvegardé " + lastSave.toLocaleTimeString("fr-FR") : "…"
+      )
+    ),
+
+    React.createElement("div", { className: "wrap" },
+      React.createElement("div", { className: "card row noprint" },
+        React.createElement("b", { style: { color: "var(--accent)" } }, "Classe :"),
+        React.createElement("select", { value: cls.id, onChange: (e) => set({ currentClassId: e.target.value }) },
+          data.classes.map((c) => React.createElement("option", { key: c.id, value: c.id }, c.name))
+        ),
+        React.createElement("button", { className: "btn or", onClick: () => { setNewName(""); setNewNames(""); setCreateOpen(true); } }, "+ Nouvelle classe"),
+        React.createElement("button", { className: "btn light", onClick: renameClass }, "✏️ Renommer"),
+        React.createElement("button", { className: "btn red", onClick: deleteClass }, "🗑 Supprimer la classe")
+      ),
+
+      React.createElement("div", { className: "row noprint", style: { marginBottom: 8, gap: 4 } },
+        [["eleves", "👥 Élèves"], ["saisie", "✏️ Saisie"], ["vue", "📊 Ensemble"], ["moyennes", "📈 Moyennes"], ["seances", "📅 Séances B/M"], ["livret", "📘 Livret"]].map(([k, lbl]) =>
+          React.createElement("button", { key: k, className: "view" + (view === k ? " on" : ""), onClick: () => set({ view: k }) }, lbl)
+        )
+      ),
+
+      hasTerm && React.createElement("div", { className: "term-tabs-row noprint", style: { marginBottom: 0 } },
+        [1, 2, 3].map((t) =>
+          React.createElement("button", {
+            key: t,
+            className: "tab" + (term === t ? " on" : ""),
+            style: { background: TERMS[t].color },
+            title: term === t ? "Trimestre actuellement actif" : "Basculer sur " + TERMS[t].label,
+            onClick: () => changeTerm(t),
+          }, TERMS[t].icon, " ", term === t ? "✓ " : "", TERMS[t].label, " (coef ", TERMS[t].coef, ")")
+        )
+      ),
+
+      React.createElement("div", { className: "card", style: { borderTop: "5px solid " + termColor, borderRadius: hasTerm ? "0 10px 10px 10px" : 10 } },
+        React.createElement("h2", { style: { margin: "0 0 8px", color: termColor, fontSize: 18 } }, cls.name, " — ", titles[view]),
+        hasTerm && React.createElement(ActiveTermBanner, { term }),
+
+        view === "eleves" && React.createElement("div", null,
+          React.createElement("div", { className: "stats", style: { marginBottom: 8 } },
+            React.createElement("div", { className: "stat" }, "Élèves inscrits", React.createElement("b", null, named, " / ", NB_ELEVES))
+          ),
+          React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+            React.createElement("button", { className: "btn or", onClick: () => setPasteOpen(true) }, "📋 Coller une liste de noms"),
+            React.createElement("button", { className: "btn light", onClick: sortRoster }, "🔤 Ranger par ordre alphabétique"),
+            React.createElement("button", { className: "btn grey" + (hideEmpty ? " active" : ""), onClick: () => set({ hideEmpty: !hideEmpty }) }, hideEmpty ? "👁 Afficher les 100 lignes" : "👁 Masquer les lignes vides"),
+            React.createElement("button", { className: "btn red", onClick: clearNames }, "🗑 Effacer tous les noms"),
+            React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder")
+          ),
+          React.createElement("div", { className: "tbl-wrap" },
+            React.createElement("table", null,
+              React.createElement("thead", null,
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "st-num" }, "N°"),
+                  React.createElement("th", { className: "st-name", style: { maxWidth: 300 } }, "Nom et prénom(s)"),
+                  React.createElement("th", { className: "noprint" })
+                )
+              ),
+              React.createElement("tbody", null,
+                cls.students.map((s, i) =>
+                  hideEmpty && !s.name.trim() ? null :
+                  React.createElement("tr", { key: s.id },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", style: { maxWidth: 300 } },
+                      React.createElement("input", { className: "name", value: s.name, placeholder: "Élève " + (i + 1), onChange: (e) => updateStudent(s.id, (st) => ({ ...st, name: e.target.value })) })
+                    ),
+                    React.createElement("td", { className: "noprint" }, React.createElement("button", { className: "btn red", style: { padding: "3px 7px" }, onClick: () => onClear(s.id) }, "✕"))
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        view === "saisie" && React.createElement("div", null,
+          React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+            React.createElement("button", { className: "btn big", onClick: prevEval }, "◀"),
+            React.createElement("select", { value: isBM ? "bm" : curIdx, onChange: (e) => goEval(e.target.value === "bm" ? "bm" : +e.target.value), style: { flex: 1, fontSize: 16, fontWeight: 700, minWidth: 160 } },
+              evals.map((ev, i) => React.createElement("option", { key: i, value: i }, "N", i + 1, " — ", TYPES[ev.type].short, " /", ev.scale, " coef ", ev.scale === 10 ? "0,5" : ev.coef, ev.date ? " — " + fmtDate(ev.date) : "", ev.label ? " — " + ev.label : "")),
+              React.createElement("option", { value: "bm" }, "➕/➖ BONUS / MALUS")
+            ),
+            React.createElement("button", { className: "btn big", onClick: nextEval }, "▶"),
+            React.createElement("button", { className: "btn or big" + (isBM ? " active" : ""), onClick: () => goEval("bm") }, "➕/➖ Bonus/Malus")
+          ),
+
+          !isBM && React.createElement(React.Fragment, null,
+            React.createElement("div", { className: "panel noprint", style: { background: TYPES[curEval.type].color + "66", borderColor: TYPES[curEval.type].color } },
+              React.createElement("div", { className: "row", style: { marginBottom: 6 } },
+                React.createElement("b", { style: { fontSize: 16 } }, "N", curIdx + 1),
+                React.createElement("label", { style: { fontWeight: 700 } }, "📅 Date :"),
+                React.createElement("input", { type: "date", value: curEval.date || "", onChange: (e) => setEval(curIdx, { date: e.target.value }) }),
+                React.createElement("input", { type: "text", placeholder: "Intitulé (facultatif) : ex. Chapitre 3", value: curEval.label || "", onChange: (e) => setEval(curIdx, { label: e.target.value }), style: { flex: 1, minWidth: 160 } })
+              ),
+              React.createElement("div", { className: "row", style: { marginBottom: 6 } },
+                React.createElement("b", null, "Type :"),
+                Object.entries(TYPES).map(([k, t]) => React.createElement("button", { key: k, className: "btn" + (curEval.type === k ? " active" : ""), style: { background: t.color, color: "#1a1a1a" }, onClick: () => setEval(curIdx, { type: k }) }, t.label))
+              ),
+              React.createElement("div", { className: "row", style: { marginBottom: 6 } },
+                React.createElement("b", null, "Barème / coefficient :"),
+                React.createElement("button", { className: "btn coefbtn", onClick: () => setEval(curIdx, nextCoef(curEval)) }, "⚖️ ", coefLabel(curEval)),
+                React.createElement("span", { className: "hint" }, "(/10 coef 0,5 → /20 coef 1 → /20 coef 2)")
+              ),
+              React.createElement("button", { className: "btn grey", onClick: () => setAllType(curEval.type) }, "Appliquer « ", TYPES[curEval.type].label, " » aux 20 évaluations")
+            ),
+
+            React.createElement("div", { className: "stats", style: { marginBottom: 8 } },
+              React.createElement("div", { className: "stat" }, "Saisies", React.createElement("b", null, curFilled.length, " / ", named || "…")),
+              React.createElement("div", { className: "stat" }, "Moyenne N", curIdx + 1, React.createElement("b", null, fmt(mean(curNoteVals)))),
+              React.createElement("div", { className: "stat" }, "Max", React.createElement("b", null, curFilled.length ? fmt(Math.max(...curFilled)) : "-")),
+              React.createElement("div", { className: "stat" }, "Min", React.createElement("b", null, curFilled.length ? fmt(Math.min(...curFilled)) : "-")),
+              React.createElement("div", { className: "stat" }, "≥ ", curEval.scale / 2, React.createElement("b", null, curFilled.filter((v) => v >= curEval.scale / 2).length, " / ", curFilled.length))
+            ),
+            curFilled.length > 0 && React.createElement(ApprBar, { list: curFilled.map((v) => (v / curEval.scale) * 20) }),
+            React.createElement(BulkBar, { mode: "note" }),
+            React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+              React.createElement(SortBar, { merit: false }),
+              React.createElement("button", { className: "btn light", onClick: () => set({ view: "eleves" }) }, "👥 Modifier les noms"),
+              React.createElement("button", { className: "btn red", onClick: clearCurrent }, "🗑 Effacer les notes de N", curIdx + 1),
+              React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder")
+            ),
+            React.createElement("div", { className: "tbl-wrap" },
+              React.createElement("table", null,
+                React.createElement("thead", null,
+                  React.createElement("tr", null,
+                    React.createElement("th", { className: "st-num" }, "N°"),
+                    React.createElement("th", { className: "st-name", style: { maxWidth: 200 } }, "Nom et prénom(s)"),
+                    React.createElement(ChkHead, null),
+                    React.createElement("th", { style: { background: TYPES[curEval.type].color, color: "#1a1a1a", fontSize: 14 } }, "N", curIdx + 1, " /", curEval.scale, curEval.date && React.createElement(React.Fragment, null, React.createElement("br", null), React.createElement("small", null, fmtDate(curEval.date))))
+                  )
+                ),
+                React.createElement("tbody", null,
+                  sorted.map(({ s, i }) => {
+                    const v = s.notes[term][curIdx];
+                    const n = parseNum(v);
+                    return React.createElement("tr", { key: s.id, className: picked[s.id] ? "picked" : "" },
+                      React.createElement("td", { className: "st-num" }, i + 1),
+                      React.createElement("td", { className: "st-name" }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                      React.createElement("td", { className: "st-chk noprint" }, React.createElement("input", { type: "checkbox", className: "pick", checked: !!picked[s.id], onChange: () => togglePick(s.id) })),
+                      React.createElement("td", null, React.createElement("input", { className: "big " + col(n, curEval.scale / 2), inputMode: "decimal", value: v, placeholder: "/" + curEval.scale, onChange: (e) => onVal(s.id, e.target.value) }))
+                    );
+                  })
+                )
+              )
+            )
+          ),
+
+          isBM && React.createElement(React.Fragment, null,
+            React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+              React.createElement("b", { style: { fontSize: 15, color: "var(--accent)" } }, "➕/➖ Bonus et Malus — ", TERMS[term].label),
+              React.createElement("div", { className: "bm-toggle" },
+                React.createElement("button", { className: "bm-bonus" + (bmMode === "bonus" ? " on" : ""), onClick: () => set({ bmMode: "bonus" }) }, "➕ Bonus"),
+                React.createElement("button", { className: "bm-malus" + (bmMode === "malus" ? " on" : ""), onClick: () => set({ bmMode: "malus" }) }, "➖ Malus")
+              ),
+              React.createElement("div", { className: "bm-toggle" },
+                React.createElement("button", { className: "bm-scope" + (bmScope === "points" ? " on" : ""), onClick: () => set({ bmScope: "points" }) }, "⚖️ Sur le total des points"),
+                React.createElement("button", { className: "bm-scope" + (bmScope === "moyenne" ? " on" : ""), onClick: () => set({ bmScope: "moyenne" }) }, "📈 Sur la moyenne /20")
+              )
+            ),
+            React.createElement("div", { className: "bm-date-bar noprint" + (bmMode === "malus" ? " malus-bar" : "") },
+              React.createElement("span", { className: "bm-session-label" }, bmMode === "bonus" ? "➕ Nouvelle séance bonus" : "➖ Nouvelle séance malus", " (", bmScope === "moyenne" ? "sur la moyenne" : "sur les points", ")"),
+              React.createElement("span", { style: { fontSize: 13, fontWeight: 600 } }, "📅 Date :"),
+              React.createElement("input", { type: "date", className: "bm-date-input" + (bmMode === "malus" ? " malus-date" : ""), value: sessionDate, onChange: (e) => setSessionDate(e.target.value) }),
+              React.createElement("input", { type: "text", className: "bm-reason-input", placeholder: bmMode === "bonus" ? "Motif (ex. : participation active…)" : "Motif (ex. : retard, oubli de matériel…)", value: sessionReason, onChange: (e) => setSessionReason(e.target.value) }),
+              React.createElement("button", { className: "bm-save-btn" + (bmMode === "malus" ? " malus-save" : ""), onClick: saveSession, disabled: draftFilled === 0 || !sessionDate }, "💾 Enregistrer la séance", draftFilled > 0 && React.createElement("span", { className: "session-count-badge" + (bmMode === "malus" ? " malus-badge" : "") }, draftFilled))
+            ),
+            React.createElement(BulkBar, { mode: "bm" }),
+            React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+              React.createElement(SortBar, { merit: false }),
+              React.createElement("button", { className: "btn red", onClick: () => clearAllSessions(bmMode) }, "🗑 Effacer séances ", bmMode === "bonus" ? "bonus" : "malus"),
+              React.createElement("button", { className: "btn grey", onClick: () => clearAllSessions() }, "🗑 Tout effacer"),
+              React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder")
+            ),
+            React.createElement("div", { className: "tbl-wrap" },
+              React.createElement("table", null,
+                React.createElement("thead", null,
+                  React.createElement("tr", null,
+                    React.createElement("th", { className: "st-num" }, "N°"),
+                    React.createElement("th", { className: "st-name", style: { maxWidth: 200 } }, "Nom et prénom(s)"),
+                    React.createElement(ChkHead, null),
+                    React.createElement("th", { style: { background: bmMode === "bonus" ? "#c8e6c9" : "#ffcdd2", color: bmMode === "bonus" ? "#1b5e20" : "#c62828", fontSize: 14, minWidth: 100 } }, bmMode === "bonus" ? "➕ BONUS" : "➖ MALUS", React.createElement("br", null), React.createElement("small", null, "séance du ", fmtDate(sessionDate)))
+                  )
+                ),
+                React.createElement("tbody", null,
+                  sorted.map(({ s, i }) => React.createElement("tr", { key: s.id, className: picked[s.id] ? "picked" : "" },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name" }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    React.createElement("td", { className: "st-chk noprint" }, React.createElement("input", { type: "checkbox", className: "pick", checked: !!picked[s.id], onChange: () => togglePick(s.id) })),
+                    React.createElement("td", null, React.createElement("input", { className: "big " + (bmMode === "bonus" ? "bonus-input" : "malus-input"), inputMode: "decimal", value: sessionDraft[s.id] || "", placeholder: "0", onChange: (e) => onSessionVal(s.id, e.target.value) }))
+                  ))
+                )
+              )
+            ),
+            React.createElement(BmHistoryPanel, { sessions, term, students: cls.students, onDelete: deleteSession, onEdit: setEditSession })
+          )
+        ),
+
+        view === "vue" && React.createElement("div", null,
+          React.createElement(StatsBar, null),
+          React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+            React.createElement(SortBar, null),
+            React.createElement("button", { className: "btn light", onClick: () => set({ wideNames: !wideNames }) }, wideNames ? "Noms : Compact" : "Noms : Large"),
+            React.createElement("button", { className: "btn light", onClick: () => set({ zoom: [0.9, 1, 1.1, 1.2, 1.3][Math.max(0, [0.9, 1, 1.1, 1.2, 1.3].indexOf(zoom) - 1)] }), disabled: zoom === 0.9 }, "A−"),
+            React.createElement("button", { className: "btn light", onClick: () => set({ zoom: [0.9, 1, 1.1, 1.2, 1.3][Math.min(4, [0.9, 1, 1.1, 1.2, 1.3].indexOf(zoom) + 1)] }), disabled: zoom === 1.3 }, "A+"),
+            React.createElement("button", { className: "btn light" + (tall ? " active" : ""), onClick: () => setTall(!tall) }, tall ? "⛶ Réduire" : "⛶ Agrandir"),
+            React.createElement("button", { className: "btn or", onClick: () => goEval("bm") }, "➕/➖ Saisir Bonus/Malus"),
+            React.createElement("button", { className: "btn red", onClick: resetClass }, "♻️ Réinitialiser"),
+            React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder")
+          ),
+          React.createElement("div", { className: "tbl-wrap vue" + (tall ? " tall" : "") + (wideNames ? " wide-names" : ""), style: { "--z": zoom } },
+            React.createElement("table", null,
+              React.createElement("thead", null,
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "st-num" }, "N°"),
+                  React.createElement("th", { className: "st-name" }, "Nom et prénom(s)"),
+                  evals.map((ev, i) => React.createElement("th", { key: i, onClick: () => goEval(i) }, React.createElement("div", { className: "colhead", style: { background: TYPES[ev.type].color } }, React.createElement("b", null, "N", i + 1), React.createElement("small", null, TYPES[ev.type].short, " /", ev.scale), React.createElement("small", null, "coef ", ev.scale === 10 ? "0,5" : ev.coef), React.createElement("small", null, "📅 ", fmtDate(ev.date) || "—")))) ,
+                  React.createElement("th", { onClick: () => goEval("bm") }, React.createElement("div", { className: "colhead", style: { background: "linear-gradient(135deg,#c8e6c9 50%,#ffcdd2 50%)", minWidth: 80 } }, React.createElement("b", { style: { fontSize: 11 } }, "BONUS", React.createElement("br", null), "MALUS"), React.createElement("small", null, sessions.filter((s) => Number(s.term) === term).length, " séance(s)"))),
+                  React.createElement("th", null, "Moyenne", React.createElement("br", null), "/20"),
+                  React.createElement("th", null, "Rang"),
+                  React.createElement("th", null, "Appréciation")
+                )
+              ),
+              React.createElement("tbody", null,
+                sorted.map(({ s, i }) => {
+                  const r = results.map[s.id];
+                  return React.createElement("tr", { key: s.id, className: sel === s.id ? "sel" : "" },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", title: s.name }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    evals.map((ev, k) => { const v = s.notes[term][k]; return React.createElement("td", { key: k, className: "nt " + col(parseNum(v), ev.scale / 2) }, v || React.createElement("span", { className: "ph" }, "·")); }),
+                    React.createElement("td", { className: "bonuscell" + (r.netPts + r.netMoy < 0 ? " negative" : "") }, React.createElement(BmSessionsCell, { sessions, studentId: s.id, term })),
+                    React.createElement("td", { className: "mo " + col(r.moyenne, 10) }, fmt(r.moyenne)),
+                    React.createElement("td", { style: { fontWeight: 700, fontSize: 15 } }, rankLabel(results.ranks[s.id])),
+                    React.createElement("td", null, React.createElement(Appr, { m: r.moyenne }))
+                  );
+                })
+              )
+            )
+          )
+        ),
+
+        view === "moyennes" && React.createElement("div", null,
+          React.createElement(StatsBar, null),
+          React.createElement(ApprBar, { list: moyList }),
+          React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+            React.createElement(SortBar, null),
+            React.createElement("button", { className: "btn light" + (detail ? " active" : ""), onClick: () => setDetail(!detail) }, detail ? "Masquer le détail" : "🔍 Afficher le détail"),
+            React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder")
+          ),
+          React.createElement("div", { className: "tbl-wrap" },
+            React.createElement("table", null,
+              React.createElement("thead", null,
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "st-num" }, "N°"),
+                  React.createElement("th", { className: "st-name", style: { maxWidth: 200 } }, "Nom et prénom(s)"),
+                  detail && React.createElement(React.Fragment, null,
+                    React.createElement("th", { style: { background: "#c8e6c9", color: "#1b5e20" } }, "Bonus"),
+                    React.createElement("th", { style: { background: "#ffcdd2", color: "#c62828" } }, "Malus")
+                  ),
+                  React.createElement("th", { className: "hgold", style: { fontSize: 15 } }, "MOYENNE", React.createElement("br", null), "/20"),
+                  React.createElement("th", { style: { fontSize: 14 } }, "Rang"),
+                  React.createElement("th", null, "Appréciation")
+                )
+              ),
+              React.createElement("tbody", null,
+                sorted.map(({ s, i }) => {
+                  const r = results.map[s.id];
+                  return React.createElement("tr", { key: s.id },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", style: { fontSize: 15, maxWidth: 200 }, title: s.name }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    detail && React.createElement(React.Fragment, null,
+                      React.createElement("td", { className: "bonuscell", style: { color: "#1b5e20" } }, r.totalBonus > 0 ? "+" + fmt(r.totalBonus) : "—"),
+                      React.createElement("td", { className: "bonuscell negative" }, r.totalMalus > 0 ? "−" + fmt(r.totalMalus) : "—")
+                    ),
+                    React.createElement("td", { className: "moy-big " + col(r.moyenne, 10) }, fmt(r.moyenne)),
+                    React.createElement("td", { style: { fontWeight: 700, fontSize: 15 } }, rankLabel(results.ranks[s.id])),
+                    React.createElement("td", null, React.createElement(Appr, { m: r.moyenne }))
+                  );
+                })
+              )
+            )
+          )
+        ),
+
+        view === "seances" && React.createElement("div", null,
+          React.createElement("p", { className: "hint" }, "Consultez ici toutes les séances de bonus et de malus du ", TERMS[term].label, ". Cliquez sur ", React.createElement("b", null, "✏️ Modifier"), " pour corriger une séance."),
+          React.createElement(BmHistoryPanel, { sessions, term, students: cls.students, onDelete: deleteSession, onEdit: setEditSession, collapsible: false, defaultOpen: true })
+        ),
+
+        view === "livret" && React.createElement("div", null,
+          React.createElement("div", { className: "stats", style: { marginBottom: 8 } },
+            React.createElement("div", { className: "stat" }, "Effectif", React.createElement("b", null, named)),
+            React.createElement("div", { className: "stat" }, "Moyenne annuelle classe", React.createElement("b", { className: tcol(moyClasse) }, fmt(moyClasse)))
+          ),
+          React.createElement(ApprBar, { list: moyList }),
+          React.createElement("div", { className: "tbl-wrap" },
+            React.createElement("table", null,
+              React.createElement("thead", null,
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "st-num" }, "N°"),
+                  React.createElement("th", { className: "st-name", style: { maxWidth: 180 } }, "Nom et prénom(s)"),
+                  [1, 2, 3].map((t) => React.createElement(React.Fragment, { key: t }, React.createElement("th", { style: { background: TERMS[t].color, color: "#fff" } }, TERMS[t].short, React.createElement("br", null), React.createElement("small", null, "coef ", TERMS[t].coef)), React.createElement("th", { style: { background: TERMS[t].color + "55" } }, "Rang"))),
+                  React.createElement("th", { className: "hgold", style: { fontSize: 14 } }, "MOYENNE", React.createElement("br", null), "ANNUELLE"),
+                  React.createElement("th", { className: "hgold" }, "Rang", React.createElement("br", null), "annuel"),
+                  React.createElement("th", null, "Appréciation")
+                )
+              ),
+              React.createElement("tbody", null,
+                sorted.map(({ s, i }) => {
+                  const a = livret.annual[s.id];
+                  return React.createElement("tr", { key: s.id },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", style: { maxWidth: 180 }, title: s.name }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    [1, 2, 3].map((t) => React.createElement(React.Fragment, { key: t }, React.createElement("td", { className: col(livret.per[t][s.id], 10) }, fmt(livret.per[t][s.id])), React.createElement("td", null, rankLabel(livret.ranks[t][s.id])))),
+                    React.createElement("td", { className: col(a, 10), style: { fontSize: 15 } }, fmt(a)),
+                    React.createElement("td", { style: { fontWeight: 700 } }, rankLabel(livret.rankA[s.id])),
+                    React.createElement("td", null, React.createElement(Appr, { m: a }))
+                  );
+                })
+              )
+            )
+          )
+        )
+      )
+    ),
+
+    editSession && React.createElement(SessionEditor, { session: editSession, students: cls.students, onSave: saveEditedSession, onClose: () => setEditSession(null) }),
+    confirm && React.createElement(ConfirmDialog, { msg: confirm.msg, onOk: () => { confirm.fn(); setConfirm(null); }, onCancel: () => setConfirm(null) }),
+    createOpen && React.createElement("div", { className: "modal", onClick: () => setCreateOpen(false) },
+      React.createElement("div", { className: "box", onClick: (e) => e.stopPropagation() },
+        React.createElement("h3", { style: { margin: "0 0 4px" } }, "➕ Créer une nouvelle classe"),
+        React.createElement("label", { className: "lbl" }, "Nom de la classe"),
+        React.createElement("input", { type: "text", style: { width: "100%" }, value: newName, onChange: (e) => setNewName(e.target.value), placeholder: "ex. 4ème B" }),
+        React.createElement("label", { className: "lbl" }, "Noms et prénoms des élèves (un par ligne, 100 max)"),
+        React.createElement("textarea", { rows: 10, style: { width: "100%" }, value: newNames, onChange: (e) => setNewNames(e.target.value), placeholder: "KOUAME Jean\nDIALLO Fatou\nTRAORE Moussa" }),
+        React.createElement("p", { className: "hint" }, splitNames(newNames).length, " élève(s) saisi(s)."),
+        React.createElement("div", { className: "row", style: { marginTop: 8, justifyContent: "flex-end" } },
+          React.createElement("button", { className: "btn grey", onClick: () => setCreateOpen(false) }, "Annuler"),
+          React.createElement("button", { className: "btn or big", onClick: createClass }, "✅ Créer la classe")
+        )
+      )
+    ),
+    pasteOpen && React.createElement("div", { className: "modal", onClick: () => setPasteOpen(false) },
+      React.createElement("div", { className: "box", onClick: (e) => e.stopPropagation() },
+        React.createElement("h3", { style: { margin: "0 0 6px" } }, "📋 Coller la liste des élèves"),
+        React.createElement("p", { className: "hint" }, "Un nom par ligne."),
+        React.createElement("textarea", { rows: 10, style: { width: "100%" }, value: pasteTxt, onChange: (e) => setPasteTxt(e.target.value), placeholder: "KOUAME Jean\nDIALLO Fatou" }),
+        React.createElement("div", { className: "row", style: { marginTop: 8, justifyContent: "flex-end" } },
+          React.createElement("button", { className: "btn grey", onClick: () => setPasteOpen(false) }, "Annuler"),
+          React.createElement("button", { className: "btn or", onClick: applyPaste }, "Importer les noms")
+        )
+      )
+    ),
+    toast && React.createElement("div", { className: "toast" }, toast)
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 </script>
