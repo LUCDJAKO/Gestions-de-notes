@@ -1812,4 +1812,217 @@ function App() {
                 sorted.map(({ s, i }) => {
                   const r = results.map[s.id];
                   const stuSessions = sessions.filter(
-                    (sess) => Numbe
+                    (sess) => Number(sess.term) === term && sess.entries.some((e) => e.studentId === s.id && parseNum(e.value) > 0)
+                  );
+                  return React.createElement("tr", { key: s.id },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", style: { fontSize: 15, maxWidth: 200 }, title: s.name }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    detail && React.createElement(React.Fragment, null,
+                      React.createElement("td", { className: "bonuscell", style: { color: "#1b5e20" } },
+                        r.bonusPts > 0 && React.createElement("div", null, "+", fmt(r.bonusPts), " pt"),
+                        r.bonusMoy > 0 && React.createElement("div", null, "+", fmt(r.bonusMoy), " moy"),
+                        !r.bonusPts && !r.bonusMoy && "—"
+                      ),
+                      React.createElement("td", { className: "bonuscell negative" },
+                        r.malusPts > 0 && React.createElement("div", null, "−", fmt(r.malusPts), " pt"),
+                        r.malusMoy > 0 && React.createElement("div", null, "−", fmt(r.malusMoy), " moy"),
+                        !r.malusPts && !r.malusMoy && "—"
+                      ),
+                      React.createElement("td", { className: col(r.brut, 10) }, fmt(r.brut)),
+                      React.createElement("td", { style: { fontSize: 11, textAlign: "left" } },
+                        stuSessions.map((sess) =>
+                          React.createElement("div", {
+                            key: sess.id,
+                            className: "student-bm-entry " + (sess.type === "bonus" ? "pos" : "neg"),
+                          },
+                            sess.type === "bonus" ? "➕" : "➖", " ", fmtDate(sess.date), " ",
+                            sess.scope === "moyenne" ? "(moy)" : "(pts)",
+                            sess.reason ? " — " + sess.reason.slice(0, 18) : ""
+                          )
+                        ),
+                        stuSessions.length === 0 && React.createElement("span", { className: "ph" }, "—")
+                      ),
+                      React.createElement("td", null, fmt(r.total)),
+                      React.createElement("td", null, r.sumCoef || "-")
+                    ),
+                    React.createElement("td", { className: "moy-big " + col(r.moyenne, 10) }, fmt(r.moyenne)),
+                    React.createElement("td", { style: { fontWeight: 700, fontSize: 15 } }, rankLabel(results.ranks[s.id])),
+                    React.createElement("td", null, React.createElement(Appr, { m: r.moyenne }))
+                  );
+                })
+              ),
+              React.createElement("tfoot", null,
+                React.createElement("tr", null,
+                  React.createElement("td", { className: "st-num" }),
+                  React.createElement("td", { className: "st-name", style: { maxWidth: 200 } }, "Moyenne de la classe"),
+                  detail && React.createElement(React.Fragment, null,
+                    React.createElement("td", { style: { color: "#1b5e20", fontWeight: 700 } }, "+", fmt(colStats.bonusMean)),
+                    React.createElement("td", { style: { color: "#c62828", fontWeight: 700 } }, "−", fmt(colStats.malusMean)),
+                    React.createElement("td", null),
+                    React.createElement("td", null),
+                    React.createElement("td", null),
+                    React.createElement("td", null)
+                  ),
+                  React.createElement("td", { className: "moy-big " + col(colStats.moy, 10) }, fmt(colStats.moy)),
+                  React.createElement("td", null),
+                  React.createElement("td", null, React.createElement(Appr, { m: colStats.moy }))
+                )
+              )
+            )
+          ),
+          React.createElement("div", { className: "row noprint", style: { marginTop: 8, justifyContent: "space-between" } },
+            React.createElement("button", { className: "btn big", onClick: () => set({ view: "saisie" }) }, "✏️ Saisie"),
+            React.createElement("button", { className: "btn or big", onClick: () => set({ view: "vue" }) }, "📊 Vue d'ensemble"),
+            React.createElement("button", { className: "btn big", onClick: () => set({ view: "livret" }) }, "📘 Livret")
+          )
+        ),
+
+        /* ==================== VUE LIVRET ==================== */
+        view === "livret" && React.createElement("div", null,
+          React.createElement("div", { className: "stats", style: { marginBottom: 8 } },
+            React.createElement("div", { className: "stat" }, "Effectif", React.createElement("b", null, named)),
+            React.createElement("div", { className: "stat" }, "Moyenne annuelle classe", React.createElement("b", { className: tcol(moyClasse) }, fmt(moyClasse))),
+            React.createElement("div", { className: "stat" }, "Moy. ≥ 10", React.createElement("b", { className: "tok" }, moyList.filter((m) => m >= 10).length, " / ", moyList.length)),
+            React.createElement("div", { className: "stat" }, "Moy. < 10", React.createElement("b", { className: "tko" }, moyList.filter((m) => m < 10).length, " / ", moyList.length))
+          ),
+          React.createElement(ApprBar, { list: moyList }),
+          React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
+            React.createElement(SortBar, null),
+            React.createElement("button", { className: "btn grey", onClick: () => window.print() }, "🖨 Imprimer")
+          ),
+          React.createElement("p", { className: "hint" }, "Moyenne annuelle = (T1 × 1 + T2 × 2 + T3 × 2) ÷ 5, bonus et malus inclus."),
+          React.createElement("div", { className: "tbl-wrap" },
+            React.createElement("table", null,
+              React.createElement("thead", null,
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "st-num" }, "N°"),
+                  React.createElement("th", { className: "st-name", style: { maxWidth: 180 } }, "Nom et prénom(s)"),
+                  [1, 2, 3].map((t) =>
+                    React.createElement(React.Fragment, { key: t },
+                      React.createElement("th", { style: { background: TERMS[t].color, color: "#fff" } }, TERMS[t].short, React.createElement("br", null), React.createElement("small", null, "coef ", TERMS[t].coef)),
+                      React.createElement("th", { style: { background: TERMS[t].color + "55" } }, "Rang")
+                    )
+                  ),
+                  React.createElement("th", { className: "hgold", style: { fontSize: 14 } }, "MOYENNE", React.createElement("br", null), "ANNUELLE"),
+                  React.createElement("th", { className: "hgold" }, "Rang", React.createElement("br", null), "annuel"),
+                  React.createElement("th", null, "Appréciation", React.createElement("br", null), "annuelle")
+                )
+              ),
+              React.createElement("tbody", null,
+                sorted.map(({ s, i }) => {
+                  const a = livret.annual[s.id];
+                  return React.createElement("tr", { key: s.id },
+                    React.createElement("td", { className: "st-num" }, i + 1),
+                    React.createElement("td", { className: "st-name", style: { maxWidth: 180 }, title: s.name }, s.name || React.createElement("span", { className: "ph" }, "Élève ", i + 1)),
+                    [1, 2, 3].map((t) =>
+                      React.createElement(React.Fragment, { key: t },
+                        React.createElement("td", { className: col(livret.per[t][s.id], 10) }, fmt(livret.per[t][s.id])),
+                        React.createElement("td", null, rankLabel(livret.ranks[t][s.id]))
+                      )
+                    ),
+                    React.createElement("td", { className: col(a, 10), style: { fontSize: 15 } }, fmt(a)),
+                    React.createElement("td", { style: { fontWeight: 700 } }, rankLabel(livret.rankA[s.id])),
+                    React.createElement("td", null, React.createElement(Appr, { m: a }))
+                  );
+                })
+              ),
+              React.createElement("tfoot", null,
+                React.createElement("tr", null,
+                  React.createElement("td", { className: "st-num" }),
+                  React.createElement("td", { className: "st-name", style: { maxWidth: 180 } }, "Moyenne de la classe"),
+                  [1, 2, 3].map((t) => {
+                    const m = mean(cls.students.map((s) => livret.per[t][s.id]));
+                    return React.createElement(React.Fragment, { key: t },
+                      React.createElement("td", { className: col(m, 10) }, fmt(m)),
+                      React.createElement("td", null)
+                    );
+                  }),
+                  (() => {
+                    const m = mean(cls.students.map((s) => livret.annual[s.id]));
+                    return React.createElement(React.Fragment, null,
+                      React.createElement("td", { className: col(m, 10), style: { fontSize: 15 } }, fmt(m)),
+                      React.createElement("td", null),
+                      React.createElement("td", null, React.createElement(Appr, { m }))
+                    );
+                  })()
+                )
+              )
+            )
+          )
+        ),
+
+        /* Légende */
+        React.createElement("div", { style: { marginTop: 8, fontSize: 12 } },
+          React.createElement("b", null, "Légende :"),
+          Object.values(TYPES).map((t) =>
+            React.createElement("span", { key: t.short, className: "chip", style: { background: t.color, color: "#1a1a1a" } }, t.short, " = ", t.label)
+          ),
+          React.createElement("span", { className: "chip", style: { background: "#c8e6c9", color: "#1b5e20" } }, "➕ Bonus"),
+          React.createElement("span", { className: "chip", style: { background: "#ffcdd2", color: "#c62828" } }, "➖ Malus"),
+          React.createElement("span", { className: "scope-pill" }, "pts = total points"),
+          React.createElement("span", { className: "scope-pill" }, "moy = sur la moyenne /20"),
+          React.createElement("div", { style: { marginTop: 4 } },
+            React.createElement("b", null, "Appréciations :"),
+            APPR.slice().reverse().map((a, i, arr) =>
+              React.createElement("span", { key: a.label, className: "appr", style: { background: a.bg, color: a.fg, margin: 2 } },
+                a.label, " : ", a.min, " à ", i < arr.length - 1 ? "moins de " + arr[i + 1].min : "20"
+              )
+            )
+          )
+        )
+      )
+    ),
+
+    /* Modal d'édition de séance */
+    editSession && React.createElement(SessionEditor, {
+      session: editSession,
+      students: cls.students,
+      onSave: saveEditedSession,
+      onClose: () => setEditSession(null),
+    }),
+
+    /* Modal de confirmation */
+    confirm && React.createElement(ConfirmDialog, {
+      msg: confirm.msg,
+      onOk: () => { confirm.fn(); setConfirm(null); },
+      onCancel: () => setConfirm(null),
+    }),
+
+    /* Modal création de classe */
+    createOpen && React.createElement("div", { className: "modal", onClick: () => setCreateOpen(false) },
+      React.createElement("div", { className: "box", onClick: (e) => e.stopPropagation() },
+        React.createElement("h3", { style: { margin: "0 0 4px" } }, "➕ Créer une nouvelle classe"),
+        React.createElement("label", { className: "lbl" }, "Nom de la classe"),
+        React.createElement("input", { type: "text", style: { width: "100%" }, value: newName, onChange: (e) => setNewName(e.target.value), placeholder: "ex. 4ème B" }),
+        React.createElement("label", { className: "lbl" }, "Noms et prénoms des élèves (un par ligne, 100 max)"),
+        React.createElement("textarea", { rows: 10, style: { width: "100%" }, value: newNames, onChange: (e) => setNewNames(e.target.value), placeholder: "KOUAME Jean\nDIALLO Fatou\nTRAORE Moussa" }),
+        React.createElement("p", { className: "hint" }, splitNames(newNames).length, " élève(s) saisi(s)."),
+        React.createElement("div", { className: "row", style: { marginTop: 8, justifyContent: "flex-end" } },
+          React.createElement("button", { className: "btn grey", onClick: () => setCreateOpen(false) }, "Annuler"),
+          React.createElement("button", { className: "btn or big", onClick: createClass }, "✅ Créer la classe")
+        )
+      )
+    ),
+
+    /* Modal coller élèves */
+    pasteOpen && React.createElement("div", { className: "modal", onClick: () => setPasteOpen(false) },
+      React.createElement("div", { className: "box", onClick: (e) => e.stopPropagation() },
+        React.createElement("h3", { style: { margin: "0 0 6px" } }, "📋 Coller la liste des élèves"),
+        React.createElement("p", { className: "hint" }, "Un nom par ligne."),
+        React.createElement("textarea", { rows: 10, style: { width: "100%" }, value: pasteTxt, onChange: (e) => setPasteTxt(e.target.value), placeholder: "KOUAME Jean\nDIALLO Fatou" }),
+        React.createElement("div", { className: "row", style: { marginTop: 8, justifyContent: "flex-end" } },
+          React.createElement("button", { className: "btn grey", onClick: () => setPasteOpen(false) }, "Annuler"),
+          React.createElement("button", { className: "btn or", onClick: applyPaste }, "Importer les noms")
+        )
+      )
+    ),
+
+    /* Toast notification */
+    toast && React.createElement("div", { className: "toast" }, toast)
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+</body>
+</html>
