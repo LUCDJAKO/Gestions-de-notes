@@ -7,9 +7,9 @@
 <meta name="description" content="Application de gestion des notes, moyennes, bonus/malus et livrets scolaires.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
 <style>
-:root{--vert:#1b5e20;--vert2:#2e7d32;--or:#c9a227;--or2:#ffd54f;
---bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff;--zebra:#f3faf3;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffd54f;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--malus:#fce4ec;--z:1}
-body.dark{--bg:#0b160d;--card:#152a18;--text:#eef3ee;--muted:#aebdae;--accent:#ffd54f;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3b3214;--cell:#152a18;--zebra:#1b321e;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3b3214;--stat:#2a2510;--statb:#8a7a2a;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3b3214;--malus:#3b1420}
+:root{--vert:#0a6b3a;--vert2:#0b8a4f;--or:#f77f00;--or2:#ffc27a;
+--bg:#fffaf4;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#0a6b3a;--border:#ffd9b0;--line:#f0e6da;--line2:#e5d5c3;--thead:#e6f5ec;--tfoot:#fff1e0;--cell:#fff;--zebra:#f6fbf8;--input:#fff;--inputb:#7cc9a0;--ph:#bbb;--panel:#fff1e0;--stat:#fff1e0;--statb:#f77f00;--ok:#d4f0e0;--okt:#0a6b3a;--ko:#ffd9d6;--kot:#b71c1c;--bonus:#e6f5ec;--malus:#fce4ec;--z:1}
+body.dark{--bg:#0b160d;--card:#152a18;--text:#f4f1ec;--muted:#b9c4b9;--accent:#ffa94d;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3d2a12;--cell:#152a18;--zebra:#1b321e;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3d2a12;--stat:#2e2010;--statb:#a85a00;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3d2a12;--malus:#3b1420}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{margin:0;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;transition:background .3s,color .3s}
@@ -68,11 +68,11 @@ tfoot td{position:sticky;bottom:0;z-index:4;background:var(--tfoot);font-weight:
 thead .st-num,thead .st-name,thead .st-chk{background:var(--thead);z-index:6}
 tfoot .st-num,tfoot .st-name,tfoot .st-chk{background:var(--tfoot);z-index:6}
 tbody tr:nth-child(even) td{background:var(--zebra)}
-tbody tr.picked td{background:#fff3cd!important}
-body.dark tbody tr.picked td{background:#3d3516!important}
+tbody tr.picked td{background:#ffe8cc!important}
+body.dark tbody tr.picked td{background:#4a3314!important}
 
 input.name{width:100%;min-width:240px;padding:9px 6px;border:1px solid var(--line2);border-radius:4px;font-size:15px;background:var(--input);color:var(--text)}
-input[type=checkbox].pick{width:22px;height:22px;accent-color:#2e7d32;cursor:pointer}
+input[type=checkbox].pick{width:22px;height:22px;accent-color:#0b8a4f;cursor:pointer}
 input.big{width:90px;padding:12px 6px;border:2px solid var(--inputb);border-radius:6px;text-align:center;font-size:20px;font-weight:700;background:var(--input);color:var(--text);box-shadow:0 2px 4px rgba(0,0,0,.1);transition:all .2s}
 input.big:focus{outline:3px solid var(--or);transform:scale(1.05);box-shadow:0 4px 8px rgba(0,0,0,.15)}
 input.big.malus-input{border-color:#e53935;color:#c62828}
@@ -122,17 +122,17 @@ body.dark .bm-badge.pos{background:#1f5e28;color:#c8f5cf}
 body.dark .bm-badge.neg{background:#6e1f1f;color:#ffd0d0}
 .bm-toggle{display:flex;border-radius:8px;overflow:hidden;border:2px solid var(--vert2)}
 .bm-toggle button{flex:1;padding:8px 14px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
-.bm-toggle button.bm-bonus{background:#e8f5e9;color:#1b5e20}
+.bm-toggle button.bm-bonus{background:#e6f5ec;color:#1b5e20}
 .bm-toggle button.bm-malus{background:#fff5f5;color:#c62828}
-.bm-toggle button.bm-bonus.on{background:#2e7d32;color:#ffd54f}
+.bm-toggle button.bm-bonus.on{background:#0b8a4f;color:#fff}
 .bm-toggle button.bm-malus.on{background:#c62828;color:#fff}
-.bm-toggle button.bm-scope{background:#e3f2fd;color:#0d47a1}
-.bm-toggle button.bm-scope.on{background:#1565c0;color:#fff}
+.bm-toggle button.bm-scope{background:#fff1e0;color:#a54300}
+.bm-toggle button.bm-scope.on{background:#e65100;color:#fff}
 body.dark .bm-toggle button.bm-bonus{background:#1d3a21;color:#c8f5cf}
 body.dark .bm-toggle button.bm-malus{background:#3b1420;color:#ff8a80}
-body.dark .bm-toggle button.bm-bonus.on{background:#2e7d32;color:#ffd54f}
+body.dark .bm-toggle button.bm-bonus.on{background:#0b8a4f;color:#fff}
 body.dark .bm-toggle button.bm-malus.on{background:#c62828;color:#fff}
-body.dark .bm-toggle button.bm-scope{background:#13293d;color:#90caf9}
+body.dark .bm-toggle button.bm-scope{background:#3d2a12;color:#ffb870}
 
 /* Saisie groupée (Bulk) */
 .bulk-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;border:2px dashed var(--vert2);background:var(--panel);border-radius:10px;padding:8px 10px;margin-bottom:8px}
@@ -146,7 +146,7 @@ body.dark .bm-toggle button.bm-scope{background:#13293d;color:#90caf9}
 .bm-session-label{font-size:13px;font-weight:700;color:var(--accent)}
 .bm-date-input{padding:7px 10px;border:2px solid var(--inputb);border-radius:8px;font-size:14px;font-weight:600;background:var(--input);color:var(--text);cursor:pointer}
 .bm-date-input.malus-date{border-color:#e53935}
-.bm-save-btn{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.bm-save-btn{background:#0b8a4f;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
 .bm-save-btn.malus-save{background:#c62828}
 .bm-save-btn:disabled{opacity:.45;cursor:not-allowed}
 .bm-reason-input{padding:7px 10px;border:1.5px solid var(--inputb);border-radius:8px;font-size:13px;background:var(--input);color:var(--text);flex:1;min-width:140px}
@@ -161,7 +161,7 @@ body.dark .bm-toggle button.bm-scope{background:#13293d;color:#90caf9}
 .hist-date{font-weight:700;font-size:14px;color:var(--accent)}
 .hist-reason{font-size:12px;color:var(--muted);font-style:italic;flex:1}
 .hist-del-btn{background:#c62828;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
-.hist-edit-btn{background:#1565c0;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;margin-left:auto}
+.hist-edit-btn{background:#e65100;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;margin-left:auto}
 .hist-entries-table{width:100%;border-collapse:collapse}
 .hist-entries-table th{background:var(--thead);padding:5px 8px;font-size:12px;font-weight:700;text-align:left;border-bottom:1px solid var(--line)}
 .hist-entries-table td{padding:5px 8px;font-size:13px;border-bottom:1px solid var(--line)}
@@ -177,12 +177,12 @@ body.dark .hist-val-neg{color:#ff8a80}
 .bm-cumul{display:flex;flex-direction:column;gap:2px;min-width:56px;text-align:center}
 .bm-cumul .bm-badge{margin:1px 0;justify-content:center}
 .student-bm-entry{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:1px 5px;border-radius:8px;white-space:nowrap;margin:1px 0}
-.student-bm-entry.pos{background:#e8f5e9;color:#1b5e20}
+.student-bm-entry.pos{background:#e6f5ec;color:#1b5e20}
 .student-bm-entry.neg{background:#fff0f0;color:#c62828}
 body.dark .student-bm-entry.pos{background:#1d3a21;color:#b9f6ca}
 body.dark .student-bm-entry.neg{background:#3b1420;color:#ff8a80}
-.scope-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#e3f2fd;color:#0d47a1}
-body.dark .scope-pill{background:#13293d;color:#90caf9}
+.scope-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#fff1e0;color:#a54300}
+body.dark .scope-pill{background:#3d2a12;color:#ffb870}
 
 /* Grille d'édition de séance */
 .edit-grid{display:grid;grid-template-columns:36px 1fr 110px;gap:4px 8px;align-items:center;max-height:46vh;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px}
@@ -209,7 +209,7 @@ body.dark .scope-pill{background:#13293d;color:#90caf9}
 </head>
 <body>
 <div id="root">
-  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#e8f5e9;color:#1b5e20;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;font-weight:700;font-size:15px">Chargement de GestiNotes…</div>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fffaf4;color:#0a6b3a;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;font-weight:700;font-size:15px">Chargement de GestiNotes…</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
@@ -243,24 +243,24 @@ const STORAGE_KEY = "gestinotes_v4";
 const OLD_STORAGE_KEY = "gestinotes_v3";
 
 const TYPES = {
-  IE: { label: "Interrogation écrite", short: "IE", color: "#bbdefb" },
-  IO: { label: "Interrogation orale", short: "IO", color: "#f8bbd0" },
-  DC: { label: "Devoir de classe", short: "DC", color: "#ffe0b2" },
-  DN: { label: "Devoir de niveau", short: "DN", color: "#e1bee7" },
+  IE: { label: "Interrogation écrite", short: "IE", color: "#b9e4cb" },
+  IO: { label: "Interrogation orale", short: "IO", color: "#ffd8a8" },
+  DC: { label: "Devoir de classe", short: "DC", color: "#8fd1ab" },
+  DN: { label: "Devoir de niveau", short: "DN", color: "#ffb870" },
 };
 
 const TERMS = {
-  1: { label: "1er Trimestre", short: "T1", coef: 1, color: "#1e88e5", icon: "1️⃣" },
-  2: { label: "2e Trimestre", short: "T2", coef: 2, color: "#8e24aa", icon: "2️⃣" },
-  3: { label: "3e Trimestre", short: "T3", coef: 2, color: "#f4511e", icon: "3️⃣" },
+  1: { label: "1er Trimestre", short: "T1", coef: 1, color: "#0b8a4f", icon: "1️⃣" },
+  2: { label: "2e Trimestre", short: "T2", coef: 2, color: "#e65100", icon: "2️⃣" },
+  3: { label: "3e Trimestre", short: "T3", coef: 2, color: "#37474f", icon: "3️⃣" },
 };
 
 const APPR = [
   { min: 17, label: "Très bien", bg: "#1b5e20", fg: "#fff" },
   { min: 14, label: "Bien", bg: "#43a047", fg: "#fff" },
   { min: 12, label: "Assez bien", bg: "#9ccc65", fg: "#1a1a1a" },
-  { min: 10, label: "Passable", bg: "#ffd54f", fg: "#1a1a1a" },
-  { min: 8, label: "Insuffisant", bg: "#ffa726", fg: "#1a1a1a" },
+  { min: 10, label: "Passable", bg: "#ffb066", fg: "#1a1a1a" },
+  { min: 8, label: "Insuffisant", bg: "#f77f00", fg: "#1a1a1a" },
   { min: 5, label: "Très insuffisant", bg: "#ef5350", fg: "#fff" },
   { min: 0, label: "Faible", bg: "#b71c1c", fg: "#fff" },
 ];
@@ -399,12 +399,12 @@ function computeRanks(list) {
 
 const Logo = () =>
   React.createElement("svg", { width: "44", height: "44", viewBox: "0 0 64 64" },
-    React.createElement("circle", { cx: "32", cy: "32", r: "30", fill: "#c9a227" }),
+    React.createElement("circle", { cx: "32", cy: "32", r: "30", fill: "#f77f00" }),
     React.createElement("circle", { cx: "32", cy: "32", r: "26", fill: "#1b5e20" }),
-    React.createElement("path", { d: "M32 16 L52 25 L32 34 L12 25 Z", fill: "#ffd54f" }),
-    React.createElement("path", { d: "M20 29 V39 Q32 47 44 39 V29 L32 34 Z", fill: "#fff8e1" }),
-    React.createElement("path", { d: "M52 25 V38", stroke: "#ffd54f", strokeWidth: "2.5" }),
-    React.createElement("circle", { cx: "52", cy: "40", r: "2.5", fill: "#ffd54f" })
+    React.createElement("path", { d: "M32 16 L52 25 L32 34 L12 25 Z", fill: "#ffb066" }),
+    React.createElement("path", { d: "M20 29 V39 Q32 47 44 39 V29 L32 34 Z", fill: "#fff1e0" }),
+    React.createElement("path", { d: "M52 25 V38", stroke: "#ffb066", strokeWidth: "2.5" }),
+    React.createElement("circle", { cx: "52", cy: "40", r: "2.5", fill: "#ffb066" })
   );
 
 const Appr = ({ m }) => {
@@ -798,7 +798,7 @@ function App() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       setLastSave(new Date());
-      showToast("���� Sauvegarde effectuée");
+      showToast("💾 Sauvegarde effectuée");
     } catch (e) {
       showToast("⚠️ Échec de la sauvegarde");
     }
@@ -1149,7 +1149,7 @@ function App() {
   );
   const moyClasse = mean(moyList);
   const hasTerm = view === "saisie" || view === "vue" || view === "moyennes" || view === "seances";
-  const termColor = hasTerm ? TERMS[term].color : "#c9a227";
+  const termColor = hasTerm ? TERMS[term].color : "#f77f00";
 
   const draftVals = cls.students.map((s) => parseNum(sessionDraft[s.id])).filter((x) => x != null && x > 0);
   const draftFilled = draftVals.length;
@@ -1196,7 +1196,7 @@ function App() {
 
   const BulkBar = ({ mode }) =>
     React.createElement("div", { className: "bulk-bar noprint" + (mode === "bm" && bmMode === "malus" ? " malus-bulk" : "") },
-      React.createElement("span", { className: "bulk-count" }, "☑️ ", pickedIds.length, " élève(s) sélectionn��(s)"),
+      React.createElement("span", { className: "bulk-count" }, "☑️ ", pickedIds.length, " élève(s) sélectionné(s)"),
       React.createElement("input", {
         className: "bulkval",
         inputMode: "decimal",
@@ -1783,7 +1783,7 @@ function App() {
           React.createElement(ApprBar, { list: moyList }),
           React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
             React.createElement(SortBar, null),
-            React.createElement("button", { className: "btn light" + (detail ? " active" : "") , onClick: () => setDetail(!detail) },
+            React.createElement("button", { className: "btn light" + (detail ? " active" : ""), onClick: () => setDetail(!detail) },
               detail ? "Masquer le détail" : "🔍 Afficher le détail (bonus, malus…)"
             ),
             React.createElement("button", { className: "btn", onClick: saveNow }, "💾 Sauvegarder"),
@@ -2021,8 +2021,6 @@ function App() {
     toast && React.createElement("div", { className: "toast" }, toast)
   );
 }
-
-
 
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 </script>
