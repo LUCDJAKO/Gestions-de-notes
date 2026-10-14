@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GestiNotes — Version utile</title>
+  <title>GestiNotes — Synthèse & Bulletin</title>
   <style>
     :root {
       --green: #1b5e20;
@@ -18,12 +18,21 @@
       --shadow: rgba(28, 76, 38, 0.12);
       --danger: #c62828;
       --warning: #f2a900;
+      --blue: #1565c0;
+      --blue-soft: #e3f2fd;
+      --success-bg: #e8f5e9;
+      --success-fg: #1b5e20;
+      --warn-bg: #fff8e1;
+      --warn-fg: #8a6d00;
+      --danger-bg: #ffebee;
+      --danger-fg: #b71c1c;
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: linear-gradient(180deg, #edf7ee 0%, #eef2ee 100%);
       color: var(--text);
     }
@@ -54,56 +63,58 @@
       display: grid;
       place-items: center;
       color: var(--green);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 22px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.3rem, 2vw, 1.9rem);
+      font-size: clamp(1.35rem, 2vw, 1.9rem);
       color: #ffeaa7;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+      margin-top: 2px;
     }
 
     .toolbar {
       display: flex;
+      align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
     }
 
-    button {
+    button, .file-label {
       border: none;
       border-radius: 10px;
       padding: 10px 14px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform .12s ease, opacity .12s ease;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    button:hover { transform: translateY(-1px); }
-    button:active { transform: translateY(0); }
+    button:hover, .file-label:hover { transform: translateY(-1px); }
+    button:active, .file-label:active { transform: translateY(0); }
 
-    .primary {
-      background: var(--gold);
-      color: #1d1d1d;
-    }
-
-    .secondary {
-      background: rgba(255,255,255,.15);
-      color: white;
-      border: 1px solid rgba(255,255,255,.25);
-    }
-
-    .danger {
-      background: var(--danger);
-      color: white;
-    }
+    .primary { background: var(--gold); color: #1d1d1d; }
+    .secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); }
+    .blue { background: var(--blue); color: white; }
+    .neutral { background: #f2f7f3; color: var(--green); border: 1px solid var(--line); }
+    .danger { background: var(--danger); color: white; }
 
     .wrap {
-      max-width: 1200px;
+      max-width: 1220px;
       margin: 20px auto;
-      padding: 0 16px 30px;
+      padding: 0 16px 40px;
     }
 
     .cards {
@@ -116,7 +127,7 @@
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 4px 12px var(--shadow);
       overflow: hidden;
     }
@@ -135,63 +146,156 @@
     }
 
     .big-number {
-      font-size: 2rem;
+      display: block;
+      font-size: clamp(1.7rem, 2vw, 2.3rem);
       font-weight: 800;
       color: var(--green);
-      display: block;
       margin-top: 8px;
+      line-height: 1.1;
     }
 
     .panel {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 4px 12px var(--shadow);
       padding: 16px;
       margin-top: 18px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
     }
 
-    th, td {
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      font-size: 13px;
-    }
-
-    th {
-      background: #f2fbf3;
+    .panel-header h2, .panel-header h3 {
+      margin: 0;
       color: var(--green);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-
-    .good { color: var(--green); font-weight:700; }
-    .warn { color: var(--warning); font-weight:700; }
-    .bad { color: var(--danger); font-weight:700; }
-
-    .status {
-      padding: 10px 12px;
-      border-radius: 8px;
-      background: #f6faf7;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      margin-top: 12px;
-      font-size: 13px;
     }
 
     .muted { color: var(--muted); }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: white;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    thead th {
+      background: #f2fbf3;
+      color: var(--green);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tbody tr:hover { background: #fafefb; }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-weight: 700;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .grade-pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .grade-very-good { background: var(--success-bg); color: var(--success-fg); }
+    .grade-good { background: #e8f5e9; color: var(--green); }
+    .grade-medium { background: #fff8e1; color: var(--warn-fg); }
+    .grade-low { background: var(--danger-bg); color: var(--danger-fg); }
+
+    .status {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f6faf7;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat {
+      background: #f9fbf9;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-width: 140px;
+      flex: 1 1 140px;
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1.2;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .noprint { }
+    @media print {
+      body { background: white; }
+      .topbar, .toolbar, .noprint, .status, .cards { display: none !important; }
+      .wrap { max-width: 100%; margin: 0; padding: 0; }
+      .panel { box-shadow: none; border: none; padding: 0; }
+      th, td { font-size: 11px; }
+    }
+
     @media (max-width: 700px) {
       .topbar { align-items: flex-start; }
-      table { display:block; overflow:auto; }
-      .card-body { font-size: 13px; }
+      .toolbar { width: 100%; }
+      button, .file-label { width: 100%; }
+      .table-wrap { border-radius: 8px; }
     }
   </style>
 </head>
@@ -200,59 +304,64 @@
     <div class="brand">
       <div class="logo">N</div>
       <div>
+        <div style="font-size: 11px; opacity: 0.8; letter-spacing: 0.08em; text-transform: uppercase;">Gestion scolaire</div>
         <h1>GestiNotes</h1>
-        <div class="muted" style="color: rgba(255,255,255,.8); font-size: 12px;">Version utile — synthèse + CSV</div>
       </div>
     </div>
 
-    <div class="toolbar">
-      <button class="secondary" id="loadCurrentBtn">Recharger les données</button>
-      <button class="primary" id="exportCsvBtn">Exporter CSV</button>
-      <label class="secondary" style="display:inline-block; cursor:pointer;">
+    <div class="toolbar noprint">
+      <button class="secondary" id="reloadBtn">↻ Recharger</button>
+      <button class="primary" id="exportCsvBtn">📤 Export CSV</button>
+      <button class="blue" id="printBtn">🖨️ Imprimer</button>
+      <label class="secondary file-label">
         <input id="importCsvInput" type="file" accept=".csv,text/csv" style="display:none;" />
-        Importer CSV
+        📥 Import CSV
       </label>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="cards" id="summaryCards"></section>
+    <section class="cards" id="cards"></section>
 
     <section class="panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <h2 style="margin:0; color:var(--green);">Synthèse par élève</h2>
-        <div class="muted" id="sourceName">Aucune donnée chargée</div>
+      <div class="panel-header">
+        <h2>📊 Classement général</h2>
+        <div id="sourceInfo" class="muted">Aucune donnée chargée</div>
       </div>
-      <div id="tableWrap" style="overflow:auto; margin-top:12px;">
-        <table>
-          <thead>
-            <tr>
-              <th>Élève</th>
-              <th>T1</th>
-              <th>T2</th>
-              <th>T3</th>
-              <th>Moy. générale</th>
-              <th>Appréciation</th>
-            </tr>
-          </thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
-      <div class="status" id="statusBox">Aucune donnée encore importée. Les données de la version actuelle stockées dans le navigateur seront utilisées si elles existent.</div>
+      <div id="leaderboard" class="table-wrap"></div>
+      <div id="statusBox" class="status">Chargement des données…</div>
     </section>
   </main>
 
   <script>
-    const STORAGE_KEY = 'gestinotes_v4';
-    const LEGACY_KEY = 'gestinotes_v3';
+    const STORAGE_KEYS = ['gestinotes_v4', 'gestinotes_v3'];
 
-    const avg = (values) => {
-      const data = values.filter((n) => n !== null && n !== undefined && n !== '').map(Number).filter((n) => !Number.isNaN(n));
-      if (!data.length) return null;
-      return Number((data.reduce((a, b) => a + b, 0) / data.length).toFixed(2));
-    };
+    function readLocalData() {
+      for (const key of STORAGE_KEYS) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.classes) && parsed.classes.length) {
+            return parsed;
+          }
+        } catch (e) {
+          console.warn('Lecture locale impossible :', e);
+        }
+      }
+      return null;
+    }
 
-    const assessment = (value) => {
+    function avg(values) {
+      const nums = values
+        .filter((v) => v !== null && v !== undefined && v !== '')
+        .map((v) => Number(String(v).replace(',', '.')))
+        .filter((v) => !Number.isNaN(v));
+      if (!nums.length) return null;
+      return Number((nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(2));
+    }
+
+    function assessment(value) {
       if (value == null) return '—';
       if (value >= 17) return 'Très bien';
       if (value >= 14) return 'Bien';
@@ -261,168 +370,171 @@
       if (value >= 8) return 'Insuffisant';
       if (value >= 5) return 'Très insuffisant';
       return 'Faible';
-    };
-
-    const clamp = (n) => Math.max(0, Math.min(20, Number(n) || 0));
-
-    function readData() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.classes) && parsed.classes.length) return parsed;
-      } catch (e) {
-        console.warn('Impossible de lire les données locales.', e);
-      }
-      return null;
     }
 
-    function extractStudents(data) {
-      const classes = Array.isArray(data && data.classes) ? data.classes : [];
-      if (!classes.length) return [];
+    function assessmentClass(value) {
+      if (value == null) return 'grade-low';
+      if (value >= 17) return 'grade-very-good';
+      if (value >= 14) return 'grade-good';
+      if (value >= 12) return 'grade-good';
+      if (value >= 10) return 'grade-medium';
+      if (value >= 8) return 'grade-low';
+      if (value >= 5) return 'grade-low';
+      return 'grade-low';
+    }
 
-      const all = [];
+    function buildRows(data) {
+      const rows = [];
+      const classes = Array.isArray(data && data.classes) ? data.classes : [];
+
       classes.forEach((cls) => {
         const students = Array.isArray(cls.students) ? cls.students : [];
         students.forEach((student) => {
-          const cleanName = (student && student.name ? student.name.trim() : '').replace(/\s+/g, ' ');
-          if (!cleanName) return;
-          all.push({ className: cls.name || 'Classe', student });
+          const name = (student && student.name ? student.name.trim() : '').replace(/\s+/g, ' ');
+          if (!name) return;
+
+          const v1 = avg((student.notes && student.notes[1]) || []);
+          const v2 = avg((student.notes && student.notes[2]) || []);
+          const v3 = avg((student.notes && student.notes[3]) || []);
+          const all = [v1, v2, v3].filter((x) => x != null);
+          const moyenne = all.length ? Number((all.reduce((a, b) => a + b, 0) / all.length).toFixed(2)) : null;
+
+          rows.push({
+            name,
+            className: cls.name || 'Classe',
+            t1: v1,
+            t2: v2,
+            t3: v3,
+            moyenne,
+            appreciation: assessment(moyenne),
+            gradeClass: assessmentClass(moyenne)
+          });
         });
       });
 
-      return all;
+      return rows.sort((a, b) => (b.moyenne ?? -1) - (a.moyenne ?? -1));
     }
 
-    function buildSummaryRows() {
-      const data = readData();
-      const rows = [];
-      const students = extractStudents(data);
-
-      students.forEach(({ className, student }) => {
-        const termValues = [1, 2, 3].map((term) => {
-          const notes = Array.isArray(student.notes && student.notes[term]) ? student.notes[term] : [];
-          const clean = notes.map((n) => Number(String(n).replace(',', '.'))).filter((n) => !Number.isNaN(n));
-          return clean.length ? avg(clean) : null;
-        });
-
-        const overall = avg(termValues.filter((v) => v != null));
-        rows.push({
-          name: student.name,
-          className,
-          t1: termValues[0],
-          t2: termValues[1],
-          t3: termValues[2],
-          average: overall,
-          assessment: assessment(overall)
-        });
-      });
-
-      rows.sort((a, b) => {
-        if ((b.average ?? -1) === (a.average ?? -1)) return a.name.localeCompare(b.name, 'fr');
-        return (b.average ?? -1) - (a.average ?? -1);
-      });
-
-      return rows;
+    function withRank(rows) {
+      return rows.map((row, index) => ({ ...row, rank: index + 1 }));
     }
 
     function renderCards(rows) {
-      const totalStudents = rows.length;
-      const totalFilled = rows.filter((r) => r.average != null).length;
-      const classAverage = avg(rows.map((r) => r.average).filter((v) => v != null));
-      const best = rows.filter((r) => r.average != null).sort((a, b) => (b.average ?? 0) - (a.average ?? 0))[0];
+      const total = rows.length;
+      const valid = rows.filter((r) => r.moyenne != null);
+      const moyenneClasse = valid.length ? avg(valid.map((r) => r.moyenne)) : null;
+      const best = valid[0] || null;
+      const taux = total ? Math.round((valid.length / total) * 100) : 0;
 
       const cards = [
-        { label: 'Élèves', value: totalStudents },
-        { label: 'Moyenne classe', value: classAverage == null ? '—' : `${classAverage.toFixed(2).replace('.', ',')}` },
-        { label: 'Moyennes complètes', value: `${totalFilled}/${totalStudents}` },
-        { label: 'Meilleur profil', value: best ? best.name : '—' }
+        { label: 'Élèves', value: total },
+        { label: 'Moyenne classe', value: moyenneClasse == null ? '—' : moyenneClasse.toFixed(2).replace('.', ',') },
+        { label: 'Meilleur profil', value: best ? best.name : '—' },
+        { label: 'Moyennes complètes', value: `${valid.length}/${total}` }
       ];
 
-      const container = document.getElementById('summaryCards');
+      const container = document.getElementById('cards');
       container.innerHTML = cards.map((card) => `
         <div class="card">
           <div class="card-head">${card.label}</div>
           <div class="card-body">
             <span class="big-number">${card.value}</span>
+            <div class="muted" style="margin-top:6px; font-size: 12px;">${card.label === 'Moyennes complètes' ? `${taux}% du groupe` : 'Vue synthèse'}</div>
           </div>
         </div>
       `).join('');
     }
 
     function renderTable(rows) {
-      const tbody = document.getElementById('summaryBody');
+      const table = document.getElementById('leaderboard');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="muted">Aucune donnée disponible.</td></tr>';
+        table.innerHTML = '<div class="status">Aucune donnée disponible. Importez un CSV ou ouvrez la page avec une classe enregistrée.</div>';
         return;
       }
 
-      tbody.innerHTML = rows.map((row) => {
-        const t1 = row.t1 == null ? '—' : row.t1.toFixed(2).replace('.', ',');
-        const t2 = row.t2 == null ? '—' : row.t2.toFixed(2).replace('.', ',');
-        const t3 = row.t3 == null ? '—' : row.t3.toFixed(2).replace('.', ',');
-        const average = row.average == null ? '—' : row.average.toFixed(2).replace('.', ',');
-        return `
-          <tr>
-            <td>${row.name}</td>
-            <td>${t1}</td>
-            <td>${t2}</td>
-            <td>${t3}</td>
-            <td>${average}</td>
-            <td>${row.assessment}</td>
-          </tr>
-        `;
-      }).join('');
+      const html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Rang</th>
+              <th>Élève</th>
+              <th>Classe</th>
+              <th>T1</th>
+              <th>T2</th>
+              <th>T3</th>
+              <th>Moyenne</th>
+              <th>Appréciation</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td><span class="rank-badge">${row.rank}${row.rank === 1 ? 'er' : 'e'}</span></td>
+                <td><strong>${row.name}</strong></td>
+                <td>${row.className}</td>
+                <td>${row.t1 == null ? '—' : row.t1.toFixed(2).replace('.', ',')}</td>
+                <td>${row.t2 == null ? '—' : row.t2.toFixed(2).replace('.', ',')}</td>
+                <td>${row.t3 == null ? '—' : row.t3.toFixed(2).replace('.', ',')}</td>
+                <td><strong>${row.moyenne == null ? '—' : row.moyenne.toFixed(2).replace('.', ',')}</strong></td>
+                <td><span class="grade-pill ${row.gradeClass}">${row.appreciation}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      table.innerHTML = html;
     }
 
-    function updateStatus(message) {
+    function setStatus(message) {
       document.getElementById('statusBox').textContent = message;
     }
 
     function refresh() {
-      const data = readData();
-      const rows = buildSummaryRows();
+      const data = readLocalData();
+      const rows = withRank(buildRows(data || { classes: [] }));
       renderCards(rows);
       renderTable(rows);
 
       if (!data) {
-        document.getElementById('sourceName').textContent = 'Aucune donnée locale';
-        updateStatus('Aucune donnée encore importée. Les données de la version actuelle stockées dans le navigateur seront utilisées si elles existent.');
+        document.getElementById('sourceInfo').textContent = 'Aucune donnée locale';
+        setStatus('Aucune donnée chargée. Importez un CSV ou ouvrez la page après avoir enregistré des notes dans le navigateur.');
         return;
       }
 
       const firstClass = Array.isArray(data.classes) && data.classes[0] ? data.classes[0].name : 'Classe';
-      document.getElementById('sourceName').textContent = `Source : ${firstClass}`;
-      updateStatus(`Données chargées depuis le navigateur (${rows.length} élève(s) détecté(s)).`);
+      document.getElementById('sourceInfo').textContent = `Source : ${firstClass}`;
+      setStatus(`Données chargées : ${rows.length} élève(s) détecté(s).`);
     }
 
     function exportCsv() {
-      const rows = buildSummaryRows();
+      const data = readLocalData();
+      const rows = withRank(buildRows(data || { classes: [] }));
       if (!rows.length) {
-        updateStatus('Aucune donnée à exporter.');
+        setStatus('Aucune donnée à exporter.');
         return;
       }
 
-      const header = ['Nom', 'T1', 'T2', 'T3', 'Moyenne generale', 'Appreciation'];
-      const csv = [header.join(',')].concat(rows.map((r) => [
-        '"' + (r.name || '').replace(/"/g, '""') + '"',
-        r.t1 == null ? '' : r.t1.toFixed(2).replace('.', ','),
-        r.t2 == null ? '' : r.t2.toFixed(2).replace('.', ','),
-        r.t3 == null ? '' : r.t3.toFixed(2).replace('.', ','),
-        r.average == null ? '' : r.average.toFixed(2).replace('.', ','),
-        '"' + (r.assessment || '').replace(/"/g, '""') + '"'
+      const header = ['Rang', 'Élève', 'Classe', 'T1', 'T2', 'T3', 'Moyenne générale', 'Appréciation'];
+      const csv = [header.join(',')].concat(rows.map((row) => [
+        row.rank,
+        '"' + String(row.name || '').replace(/"/g, '""') + '"',
+        '"' + String(row.className || '').replace(/"/g, '""') + '"',
+        row.t1 == null ? '' : row.t1.toFixed(2).replace('.', ','),
+        row.t2 == null ? '' : row.t2.toFixed(2).replace('.', ','),
+        row.t3 == null ? '' : row.t3.toFixed(2).replace('.', ','),
+        row.moyenne == null ? '' : row.moyenne.toFixed(2).replace('.', ','),
+        '"' + String(row.appreciation || '').replace(/"/g, '""') + '"'
       ].join(','))).join('\n');
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'gestion-notes-synthese.csv';
+      a.href = URL.createObjectURL(blob);
+      a.download = 'gestinotes-synthese-' + new Date().toISOString().slice(0, 10) + '.csv';
       document.body.appendChild(a);
       a.click();
       a.remove();
-      URL.revokeObjectURL(url);
-      updateStatus('CSV exporté avec succès.');
+      URL.revokeObjectURL(a.href);
+      setStatus('CSV exporté avec succès.');
     }
 
     function importCsv(file) {
@@ -432,13 +544,10 @@
         try {
           const text = String(reader.result || '');
           const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-          if (!lines.length) {
-            updateStatus('Le fichier CSV est vide.');
-            return;
-          }
+          if (lines.length < 2) throw new Error('CSV vide');
 
           const rows = lines.slice(1).map((line) => {
-            const cells = line.split(',').map((cell) => cell.trim());
+            const cells = line.split(',').map((cell) => cell.trim().replace(/^"|"$/g, ''));
             return {
               name: cells[0] || '',
               t1: cells[1] || '',
@@ -447,14 +556,10 @@
             };
           }).filter((row) => row.name);
 
-          if (!rows.length) {
-            updateStatus('Aucune ligne exploitable dans le CSV.');
-            return;
-          }
+          if (!rows.length) throw new Error('Aucune donnée');
 
-          const className = 'Import CSV';
-          const studentList = rows.map((row, index) => ({
-            id: `csv-${Date.now()}-${index}`,
+          const students = rows.map((row, index) => ({
+            id: 'csv-' + Date.now() + '-' + index,
             name: row.name,
             notes: {
               1: [row.t1 || ''],
@@ -463,17 +568,17 @@
             }
           }));
 
-          const nextData = {
+          const payload = {
             classes: [{
-              id: `csv-class-${Date.now()}`,
-              name: className,
-              students: studentList,
-              evals: { 1: [{ type: 'IE', scale: 20, coef: 1, label: '', date: '' }], 2: [{ type: 'IE', scale: 20, coef: 1, label: '', date: '' }], 3: [{ type: 'IE', scale: 20, coef: 1, label: '', date: '' }] },
+              id: 'csv-class-' + Date.now(),
+              name: 'Classe importée',
+              students,
+              evals: { 1: [], 2: [], 3: [] },
               bmSessions: []
             }],
-            currentClassId: `csv-class-${Date.now()}`,
-            view: 'saisie',
+            currentClassId: 'csv-class-' + Date.now(),
             term: 1,
+            view: 'saisie',
             cur: 0,
             dark: false,
             zoom: 1,
@@ -484,19 +589,19 @@
             bmScope: 'points'
           };
 
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextData));
-          updateStatus(`CSV importé : ${rows.length} élève(s) ajoutés.`);
+          localStorage.setItem('gestinotes_v4', JSON.stringify(payload));
+          setStatus(`CSV importé : ${rows.length} élève(s) ajouté(s).`);
           refresh();
         } catch (error) {
-          console.error(error);
-          updateStatus('Le fichier CSV est invalide. Utilise Nom,T1,T2,T3.');
+          setStatus('Le fichier CSV est invalide. Utilisez le format : Nom,T1,T2,T3');
         }
       };
       reader.readAsText(file);
     }
 
+    document.getElementById('reloadBtn').addEventListener('click', refresh);
     document.getElementById('exportCsvBtn').addEventListener('click', exportCsv);
-    document.getElementById('loadCurrentBtn').addEventListener('click', refresh);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
     document.getElementById('importCsvInput').addEventListener('change', (event) => {
       const file = event.target.files && event.target.files[0];
       if (file) importCsv(file);
