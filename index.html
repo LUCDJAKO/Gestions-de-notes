@@ -8,8 +8,8 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
 <style>
 :root{--vert:#1b5e20;--vert2:#2e7d32;--or:#c9a227;--or2:#ffd54f;
---bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff8e1;--zebra:#fdf0c4;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#e8f5e9;--statb:#a5d6a7;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--malus:#fce4ec;--z:1}
-body.dark{--bg:#0b160d;--card:#152a18;--text:#eef3ee;--muted:#aebdae;--accent:#ffd54f;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3b3214;--cell:#2a2510;--zebra:#332d14;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3b3214;--stat:#1d3a21;--statb:#3f7a45;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3b3214;--malus:#3b1420}
+--bg:#e8f5e9;--card:#fff;--text:#1a1a1a;--muted:#555;--accent:#1b5e20;--border:#c8e6c9;--line:#e0e0e0;--line2:#cfd8dc;--thead:#e8f5e9;--tfoot:#fff8e1;--cell:#fff;--zebra:#f3faf3;--input:#fff;--inputb:#a5d6a7;--ph:#bbb;--panel:#fff8e1;--stat:#fff8e1;--statb:#ffd54f;--ok:#c8e6c9;--okt:#1b5e20;--ko:#ffcdd2;--kot:#b71c1c;--bonus:#fff8e1;--malus:#fce4ec;--z:1}
+body.dark{--bg:#0b160d;--card:#152a18;--text:#eef3ee;--muted:#aebdae;--accent:#ffd54f;--border:#2f5433;--line:#26402a;--line2:#3a5a3e;--thead:#1d3a21;--tfoot:#3b3214;--cell:#152a18;--zebra:#1b321e;--input:#0f2012;--inputb:#3f7a45;--ph:#6c7d6c;--panel:#3b3214;--stat:#2a2510;--statb:#8a7a2a;--ok:#1f5e28;--okt:#c8f5cf;--ko:#6e1f1f;--kot:#ffd0d0;--bonus:#3b3214;--malus:#3b1420}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{margin:0;font-family:system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;transition:background .3s,color .3s}
@@ -33,16 +33,6 @@ header small{display:block;font-size:11px;opacity:.9}
 select,input[type=text],input[type=date],textarea{padding:8px;border:1px solid var(--inputb);border-radius:6px;font-size:15px;background:var(--input);color:var(--text)}
 label.lbl{display:block;font-weight:700;color:var(--accent);margin:8px 0 3px;font-size:13px}
 
-/* Interface de saisie (config évaluation, notes, bonus/malus) aux couleurs du trimestre actif.
-   --termc et --termbg sont posées en JS sur le conteneur .term-themed (voir vue "saisie"). */
-.term-themed .panel{border-color:var(--termc);background:var(--termbg)}
-.term-themed .bulk-bar,.term-themed .bulk-bar.malus-bulk{border-color:var(--termc);background:var(--termbg)}
-.term-themed .bm-date-bar,.term-themed .bm-date-bar.malus-bar{border-color:var(--termc);background:var(--termbg)}
-.term-themed .panel input[type=date],.term-themed .panel input[type=text],.term-themed .bm-date-input,.term-themed .bm-date-input.malus-date,.term-themed .bm-reason-input,.term-themed .bulk-bar input.bulkval{border-color:var(--termc)}
-.term-themed .bm-toggle{border-color:var(--termc)}
-.term-themed .bm-toggle button.bm-scope,body.dark .term-themed .bm-toggle button.bm-scope{background:var(--termbg);color:var(--termc)}
-.term-themed .bm-toggle button.bm-scope.on,body.dark .term-themed .bm-toggle button.bm-scope.on{background:var(--termc);color:#fff}
-.term-themed .bm-session-label,.term-themed .bulk-count{color:var(--termc)}
 /* Onglets de trimestre — très visibles pour éviter toute confusion */
 .term-tabs-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin-bottom:0}
 .tab{padding:12px 18px;border-radius:10px 10px 0 0;font-weight:700;color:#fff;border:3px solid transparent;opacity:.5;filter:grayscale(.35) brightness(.92);cursor:pointer;font-size:14px;transform:scale(.96);transition:all .18s ease;position:relative}
@@ -77,7 +67,6 @@ tfoot td{position:sticky;bottom:0;z-index:4;background:var(--tfoot);font-weight:
 .st-chk{position:sticky;left:220px;z-index:2;background:var(--cell);width:42px;min-width:42px;vertical-align:top;padding-top:12px;text-align:center}
 thead .st-num,thead .st-name,thead .st-chk{background:var(--thead);z-index:6}
 tfoot .st-num,tfoot .st-name,tfoot .st-chk{background:var(--tfoot);z-index:6}
-tbody td{background:var(--cell)}
 tbody tr:nth-child(even) td{background:var(--zebra)}
 tbody tr.picked td{background:#fff3cd!important}
 body.dark tbody tr.picked td{background:#3d3516!important}
@@ -1351,10 +1340,7 @@ function App() {
         ),
 
         /* ==================== VUE SAISIE ==================== */
-        view === "saisie" && React.createElement("div", {
-          className: "term-themed",
-          style: { "--termc": termColor, "--termbg": termColor + (dark ? "33" : "1f") },
-        },
+        view === "saisie" && React.createElement("div", null,
           React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
             React.createElement("button", { className: "btn big", onClick: prevEval }, "◀"),
             React.createElement("select", {
@@ -1379,7 +1365,7 @@ function App() {
           !isBM && React.createElement(React.Fragment, null,
             React.createElement("div", {
               className: "panel noprint",
-              style: { borderLeft: "10px solid " + TYPES[curEval.type].color },
+              style: dark ? { borderColor: TYPES[curEval.type].color } : { background: TYPES[curEval.type].color + "66", borderColor: TYPES[curEval.type].color },
             },
               React.createElement("div", { className: "row", style: { marginBottom: 6 } },
                 React.createElement("b", { style: { fontSize: 16 } }, "N", curIdx + 1),
@@ -1484,7 +1470,7 @@ function App() {
           /* Saisie Bonus/Malus */
           isBM && React.createElement(React.Fragment, null,
             React.createElement("div", { className: "row noprint", style: { marginBottom: 8 } },
-              React.createElement("b", { style: { fontSize: 15, color: "var(--termc)" } }, "➕/➖ Bonus et Malus — ", TERMS[term].label),
+              React.createElement("b", { style: { fontSize: 15, color: "var(--accent)" } }, "➕/➖ Bonus et Malus — ", TERMS[term].label),
               React.createElement("div", { className: "bm-toggle" },
                 React.createElement("button", { className: "bm-bonus" + (bmMode === "bonus" ? " on" : ""), onClick: () => set({ bmMode: "bonus" }) }, "➕ Bonus"),
                 React.createElement("button", { className: "bm-malus" + (bmMode === "malus" ? " on" : ""), onClick: () => set({ bmMode: "malus" }) }, "➖ Malus")
@@ -2043,3 +2029,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(
 </script>
 </body>
 </html>
+
